@@ -55,6 +55,20 @@
               
               <h3> Communicating between Uno and IDE </h3>
               <p>In order to test the Arduino UNO and the IDE, we used example code “Blink.” This program caused an LED on the Arduino to blink. The LED on board is connected to pin13, which is also defined as LED_BUILTIN in the macro.</p>             
+              <code> // the setup function runs once when you press reset or power the board
+                      void setup() {
+                        // initialize digital pin LED_BUILTIN as an output.
+                        pinMode(LED_BUILTIN, OUTPUT);
+                      }
+                      
+                      // the loop function runs over and over again forever
+                      void loop() {
+                        digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
+                        delay(1000);                       // wait for a second
+                        digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
+                        delay(1000);                       // wait for a second
+                      }
+              </code>
               
               <h3> Modify the blink sketch </h3>
               <p>We modified the example code blink.ino so that it would work for an external LED. We tested the digital input ports 2-12 to make sure they were all functional. In order to switch which port is being sent information, we need to change LED_BUILTIN to the number of the port we need to access. The below code is set to work for an LED connected to port 2. 
