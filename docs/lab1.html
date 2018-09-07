@@ -54,7 +54,7 @@
   
               
               <h3> Communicating between Uno and IDE </h3>
-              <p>In order to test the Arduino UNO and the IDE, we used example code “Blink.” This program caused an LED on the Arduino to blink. The LED on board is connected to pin13, which is also defined as LED_BUILTIN in the macro.</p>             
+              <p>In order to test the Arduino UNO and the IDE, we used example code “Blink.” This program caused an LED on the Arduino to blink on and off every other second. The LED on board is connected to pin13, which is also defined as LED_BUILTIN in the macro. The delay loop takes the value of 1000 which corresponds to 1 second.</p>             
               <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab1/part 1.png" alt="">
               <code>
                 // the setup function runs once when you press reset or power the board <br>
@@ -139,7 +139,8 @@
               </code>
 
               <h3> Parallax Servos </h3>
-              <p>During this portion of the lab we practiced using servo motors in different ways with the aim of becoming more comfortable and experienced. Our chosen exercises were particularly the degree of control we had over the angle. In the first code was written to obtain a general understanding of what how servo motors moved. We found that the direction reversed after 90 degrees. The second code is another iteration of the first where we sought to see what would be the effect if the code never reached 90 degrees and found that it consequently did not change direction. In both codes we used the write method from the servo library which allows to control the servo motor as a function of degree.</p>
+              <p>During this portion of the lab we practiced using servo motors in different ways with the aim of becoming more comfortable and experienced. Our chosen exercises were particularly the degree of control we had over the angle. In the first code was written to obtain a general understanding of what how servo motors moved. Accoridng to the documentation, the servo would stop at value of 90. We then use this value to calibrate the servo using the small screw on the side of it. Note that when connected to the Aruidno board, the servos must be connected to the PWM pins.</p>
+              
               <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab1/part 5.png" alt="">
               <code>
                 #include Servo.h<br>
@@ -150,7 +151,7 @@
                 // the setup function runs once when you press reset or power the board<br>
                 void setup() {<br>
                   &emsp; Serial.begin(9600);<br>
-                  &emsp; servo_1.attach(3);<br>
+                  &emsp; servo_1.attach(9);<br>
                   &emsp; //servo_1.write(90);  // set servo to mid-point: <br>
                 }<br>
                 <br>
@@ -179,7 +180,7 @@
                 // the setup function runs once when you press reset or power the board<br>
                 void setup() {<br>
                   &emsp; Serial.begin(9600);<br>
-                  &emsp; servo_1.attach(3);<br>
+                  &emsp; servo_1.attach(9);<br>
                   &emsp; //servo_1.write(90);  // set servo to mid-point: <br>
                 }<br>
                 <br>
@@ -233,12 +234,14 @@
               <p> The Lab 1 Work Distribution is as follows: <br> 
                   &emsp; - On 8/31, Nathalia, Priya and Vini worked on steps 1-5 and began part 6.<br>
                   &emsp; - On 9/4, Priya and Nathalia attended open Lab to complete Part 6.<br>
+                  &emsp; - On 9/7, Joyce reassembled the robot and calibrate servo.<br>
                   The Lab Report Work Distribution is as follows: <br>
-                  &emsp; - Vini: Objective, Part 3, Part 4, Part 5, code snippets<br>
+                  &emsp; - Vini: Part 3, Part 4, Part 5, code snippets<br>
                   &emsp; - Priya: Materials Used, Part 1, Part 2, Part 6, code snippets<br>
                   &emsp; - Nathalia: Pictures and Videos<br>
                   The website work distribution is as follows: <br>
                   &emsp; - Nathalia: Website Set Up and Lab 1<br>
+                  &emsp; - Joyce: Overview, Website Design, index.html and css, parallex servo<br>
               </p>
             </div>
           </div>
