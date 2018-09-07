@@ -51,7 +51,9 @@
               <p class="item-intro text-muted"> This lab is an introduction to the Aruidno IDE. The team is split into two subteams to perform the same tasks. In the end of the lab, both subteams were able to control the LED and servo, which are then used to build the robot below.</p>
               <img class="img-fluid d-block mx-auto" src="img/lab1/Lab1 Robot.png" alt="">
               <h3> Communicating between Uno and IDE </h3>
-              <p>In order to test the Arduino UNO and the IDE, we used example code “Blink.” This program caused an LED on the Arduino to blink.<p>The code is an example from http://www.arduino.cc/en/Tutorial/Blink </p>
+              <p>In order to test the Arduino UNO and the IDE, we used example code “Blink.” This program caused an LED on the Arduino to blink. The LED on board is connected to pin13, which is also defined as LED_BUILTIN in the macro.
+
+The Arduino program requires two functions: setup() and loop(). The function setup() is the initial function which enables input and outputs, then Arduino runs loop until the program is shut down. In the setup function we set LED_BUILTIN as output by the following line: [add code snippets]. Then int he main loop, we first turns the LED on by calling digitalWrite() to set LED_BUILTIN to HIGH delay it for 1000ms, then turns it off by writing LOW. [add code snippets]<p>The code is an example from http://www.arduino.cc/en/Tutorial/Blink </p>
               
               <h3> Modify the blink sketch </h3>
               <p>We modified the example code blink.ino so that it would work for an external LED. We tested the digital input ports 2-12 to make sure they were all functional. In order to switch which port is being sent information, we need to change LED_BUILTIN to the number of the port we need to access. The below code is set to work for an LED connected to port 2. 
