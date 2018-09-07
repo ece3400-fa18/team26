@@ -59,16 +59,16 @@
               <code>
                 // the setup function runs once when you press reset or power the board <br>
                 void setup() {<br>
-                  &emsp;// initialize digital pin LED_BUILTIN as an output.<br>
-                  &emsp;pinMode(LED_BUILTIN, OUTPUT);<br>
+                  &emsp; // initialize digital pin LED_BUILTIN as an output.<br>
+                  &emsp; pinMode(LED_BUILTIN, OUTPUT);<br>
                 }<br>
                 <br>
                 // the loop function runs over and over again forever<br>
                 void loop() {<br>
-                  &emsp;&emsp;digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)<br>
-                  &emsp;delay(1000);                       // wait for a second<br>
-                  &emsp;digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW<br>
-                  &emsp;delay(1000);                       // wait for a second<br>
+                  &emsp; digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)<br>
+                  &emsp; delay(1000);                       // wait for a second<br>
+                  &emsp; digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW<br>
+                  &emsp; delay(1000);                       // wait for a second<br>
                 }
               </code>
               
@@ -76,6 +76,22 @@
               <p>We modified the example code blink.ino so that it would work for an external LED. We tested the digital input ports 2-12 to make sure they were all functional. In order to switch which port is being sent information, we need to change LED_BUILTIN to the number of the port we need to access. The below code is set to work for an LED connected to port 2. 
               (Note: When testing the different ports, we attempted to use ports 0 and 1 but were unable to do so -- we discovered that this is because ports 0 and 1 are typically used for serial communication.)</p>
               <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab1/part 2.png" alt="">
+              <code>
+                // the setup function runs once when you press reset or power the board<br>
+                void setup() {<br>
+                  &emsp; // initialize digital pin LED_BUILTIN as an output.<br>
+                  &emsp; pinMode(2, OUTPUT);<br>
+                  // int PINNAME = A2<br>
+                }<br>
+                <br>
+                // the loop function runs over and over again forever<br>
+                void loop() {<br>
+                  &emsp; digitalWrite(2, HIGH);   // turn the LED on (HIGH is the voltage level)<br>
+                  &emsp; delay(1000);             // wait for a second<br>
+                  &emsp; digitalWrite(2, LOW);    // turn the LED off by making the voltage LOW<br>
+                  &emsp; delay(1000);             // wait for a second<br>
+                }
+              </code>
               
               
               <h3> The Serial Monitor and the Analog Pins </h3>
