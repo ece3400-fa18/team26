@@ -29,17 +29,15 @@ void loop() {
   drive(FORWARD);
   if (line_R <= 400){
     turn(RIGHT); 
-    drive(FORWARD);
   }
   else if (line_L <= 400){
     turn (LEFT);
-    drive(FORWARD);
   }
   if (line_R >= 1000 || line_L >= 1000){
+    delay (200)
     drive(BACKWARD)
     delay (500)
     turn(RIGHT); 
-    drive(FORWARD);
   }
 }
 
