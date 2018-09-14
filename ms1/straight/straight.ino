@@ -9,8 +9,8 @@
 #define SERVO_BRAKE          90
 #define SERVO_L_FORWARD_MAX  100.0
 #define SERVO_R_FORWARD_MAX  80.0
-#define SERVO_L_INCR_FORWARD 2.0
-#define SERVO_R_INCR_FORWARD -2.0
+#define SERVO_L_INCR_FORWARD -2.0
+#define SERVO_R_INCR_FORWARD 2.0
 
 // Thresholds for each sensor to determine when over a line
 #define RIGHT_PID_THRESH     900
@@ -50,13 +50,18 @@ int   servo_turn_delays [] = {300, 0, 300, 900};
  * follows a line
  **/
 void move(){
-      right_turn_val = analogRead(right_turn); //signal from center right sensor
-      left_turn_val = analogRead(left_turn); //signal from center left sensor    
+//      right_turn_val = analogRead(right_turn); //signal from center right sensor
+//      left_turn_val = analogRead(left_turn); //signal from center left sensor    
 
 
     // Read analog values from two center sensors
     right_pid_val = analogRead(right_pid); // signal from center right sensor
     left_pid_val = analogRead(left_pid);   // signal from center left sensor  
+
+    Serial.print("right ");
+    Serial.println(right_pid_val);
+    Serial.println(left_pid_val);
+    Serial.println();
 
     // Print statements for debugging
       //Serial.println(right_pid_val);
@@ -90,17 +95,17 @@ void move(){
 
 void setup() {
   Serial.begin(9600);
-  right_servo.attach(RW);
-  left_servo.attach(LW);
+  right_servo.attach(10);
+  left_servo.attach(9);
   // Set up the select pins as outputs:
 
-  pinMode(A0, OUTPUT);
+  pinMode(A0, INPUT);
   digitalWrite(A0, HIGH);
-  pinMode(A1, OUTPUT);
+  pinMode(A1, INPUT);
   digitalWrite(A1, HIGH);
-  pinMode(A2, OUTPUT);
+  pinMode(A2, INPUT);
   digitalWrite(A2, HIGH);
-  pinMode(A3, OUTPUT);
+  pinMode(A3, INPUT);
   digitalWrite(A3, HIGH);
 
   right_servo.write(SERVO_BRAKE);
