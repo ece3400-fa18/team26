@@ -48,20 +48,21 @@
             <div class="lab-page">
               <!-- Project Details Go Here -->
               <h2 class="text-uppercase text-left">Milestone 1: Basic Movement</h2>
-              <p class="item-intro text-muted"> A robot that successfully follows a line and traverses a grid in a figure eight.</p>
+              <p class="item-intro text-muted"> The goal of this lab is to make the robot to follow the line and traverse in a figure 8. The robot is controlled using the reading from line sensor in order to make decisions regarding following lines and turning. We first created a simpler iteration that followed straight lines, and after a successful implementation we modified the code so the robot could follow turns, and ultimately traverse the figure 8.</p>
   
               <!--<iframe width="560" height="315" align="middle" src="https://www.youtube.com/embed/wf3T-4biOp0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>-->
   
               
               <h3> Line Sensors </h3>
-              <p>Utilizing the line sensors to follow a line. </p>             
+              <p>There are four line sensors attached to the front of the robot. Two line sensors are in the middle and two line sensors are on the outer side. For this part, we only need the middle ones for controlling the robot. The middle line sensors are on top of a white tape for following the straight line and making corrections. If either of them detects a value above the white tape threshold value, it means that the the robot is leaning towards one side. In this situation, the robot will make a slight correction by speeding up one of the servo by how much the robot is out of bound. The magnitude of how much the robot is out of bound is determined by the difference between the right middle sensor and the left middle sensor.  </p>             
               <!--<img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab1/part 1.png" alt="">-->
               <code>
                 INSERT CODE HERE
               </code>
               
-              <h3> Figure 8 </h3>
-              <p> A robot that successfully traverses a grid in a figure eight.</p> 
+              <h3> Figure 8 Traversal </h3>
+              <p> The two outer sensors are used to determine which direction to turn: if either sensor detects white, then the robot accordingly executes 90 degree turn in that direction. In the case where the robot sensors a white line in both the left and right direction (as in the vertex of a T), the robot defaults to right.</p>
+              <p>For the purpose of a figure eight, the robot was hard coded to go right for the first three turns and left for the second three turns. This implementation was an extension of the previous “Following Straight Lines” so the application of the inner sensors remains the same as specified above. </p> 
               <!--<img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab1/part 2.png" alt="">-->
               <code>
                 INSERT CODE HERE
@@ -84,14 +85,13 @@
               <h3> Work Distribution </h3>
               <p> The Milestone 1 Work Distribution is as follows: <br> 
                   &emsp; - On 9/7, Joyce, Nathalia, Priya, and Vini worked on in lab rebuild the robot.<br>
-                  &emsp; - On 9/10, Joyce, Nathalia, and Vini worked on rebuilding the robot and worked on the beginnings of the code. <br>
+                  &emsp; - On 9/10, Joyce, Nathalia, and Vini worked on rebuilding the robot and started the code. <br>
                   &emsp; - On 9/10, Nathalia went to open office hours and finished rebuilding the robot.<br>
                   The Lab Report Work Distribution is as follows: <br>
-                  &emsp; - <br>
+                  &emsp; - Joyce: Introduction and writeup<br>
                   &emsp; - Nathalia: Pictures and Videos<br>
                   The website work distribution is as follows: <br>
-                  &emsp; - <br>
-                  &emsp; - Nathalia: Website Set Up and Lab 1<br>
+                  &emsp; - Nathalia: Website Set Up and Milestone 1<br>
               </p>
             </div>
           </div>
