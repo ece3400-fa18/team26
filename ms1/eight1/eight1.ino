@@ -10,10 +10,10 @@ Servo right_servo;
 #define SERVO_R_INCR_FORWARD 2.0
 
 // Thresholds for each sensor to determine when over a line
-#define RIGHT_PID_THRESH     900
-#define LEFT_PID_THRESH      900
-#define RIGHT_TURN_THRESH    700
-#define LEFT_TURN_THRESH     700
+#define RIGHT_PID_THRESH     200
+#define LEFT_PID_THRESH      200
+#define RIGHT_TURN_THRESH    600
+#define LEFT_TURN_THRESH     600
 
 #define ERROR_RANGE          100
 
@@ -38,7 +38,7 @@ int left_turn_val     = 0;
 
 // Servo turn values
 float servo_turn_value[]   = {SERVO_R_FORWARD_MAX, 0 ,SERVO_L_FORWARD_MAX, SERVO_L_FORWARD_MAX};
-int   servo_turn_delays [] = {600, 0, 600, 900};
+int   servo_turn_delays [] = {300, 0, 300, 900};
 
 void move(int direction){
   // Turn if requested
@@ -53,31 +53,35 @@ void move(int direction){
     left_pid_val = analogRead(left_pid);
 
     // While center sensors are not over another line, continue turning
-    while((right_pid_val< RIGHT_PID_THRESH) || (left_pid_val< LEFT_PID_THRESH)){
+    while((right_pid_val> RIGHT_PID_THRESH) && (left_pid_val> LEFT_PID_THRESH)){
       right_pid_val = analogRead(right_pid);
-      left_pid_val = analogRead(left_pid);
+      left_pid_val = analogRead(left_pid); 
     }
+    Serial.println("break turn while");
   } // done turning
 
   // Reset intersection variables  
     right_turn_val = 0;
     left_turn_val = 0;
     counter = 50;
-    
+
+
   // After turn is complete, drive forward to the next intersection, making corrections as necessary
   // while-loop contains all line-following code
   while(right_turn_val < RIGHT_TURN_THRESH || left_turn_val < LEFT_TURN_THRESH){
-
+    Serial.print("inwhile");
     // Wait 50 while-loops for robot to be clear of starting intersection
     // Don't start searching for an intersection until the intersection sensors are clear of black line
     if (counter > 0){
-      right_turn_val = 0; //set so that while loop continues
-      left_turn_val = 0;  //set so that while loop continues 
+      right_turn_val =3000; //set so that while loop continues
+      left_turn_val = 3000;  //set so that while loop continues 
       counter = counter - 1;
+      Serial.print("waiting");
     }
     else {
-      right_turn_val = analogRead(right_turn); //signal from center right sensor
-      left_turn_val = analogRead(left_turn); //signal from center left sensor    
+      right_turn_val = analogRead(right_turn); //signal from outer right sensor
+      left_turn_val = analogRead(left_turn); //signal from outer left sensor 
+       
     }
 
     //following straight line
@@ -113,7 +117,8 @@ void move(int direction){
       right_servo.write(SERVO_R_FORWARD_MAX - error_magnitude*SERVO_R_INCR_FORWARD);
     }
     delay(10);
-  }
+  }//close while
+  Serial.println("found intersection");
   left_servo.write(SERVO_BRAKE);
   right_servo.write(SERVO_BRAKE);
 }
@@ -126,40 +131,27 @@ void setup() {
   left_servo.attach(LW);
   // Set up the select pins as outputs:
 
-  pinMode(A0, OUTPUT);
+  pinMode(A0, INPUT);
   digitalWrite(A0, HIGH);
-  pinMode(A1, OUTPUT);
+  pinMode(A1, INPUT);
   digitalWrite(A1, HIGH);
-  pinMode(A2, OUTPUT);
+  pinMode(A2, INPUT);
   digitalWrite(A2, HIGH);
-  pinMode(A3, OUTPUT);
+  pinMode(A3, INPUT);
   digitalWrite(A3, HIGH);
 
   right_servo.write(SERVO_BRAKE);
   left_servo.write(SERVO_BRAKE);
 
   delay(1000);
-
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
   // move in figure-8
-  move(1);   // forward one block
-  delay(50);
-  move(2);   // right one block
-  delay(50);
-  move(2);
-  delay(50);
-  move(2);
+  move(2);   // forward one block
   delay(50);
 
-//  move(1);   
-//  delay(50);
-  move(0);   // left one block
-  delay(50);
-  move(0);
-  delay(50);
-  move(0);
-  delay(50);
+
+
 }
