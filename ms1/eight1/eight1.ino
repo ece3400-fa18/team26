@@ -3,17 +3,11 @@
 Servo left_servo;
 Servo right_servo;
 
-////directions
-//#define right_turn 4
-//#define right_pid  3
-//#define left_pid   2
-//#define left_turn  1
-
 #define SERVO_BRAKE          90
 #define SERVO_L_FORWARD_MAX  100.0
 #define SERVO_R_FORWARD_MAX  80.0
-#define SERVO_L_INCR_FORWARD 2.0
-#define SERVO_R_INCR_FORWARD -2.0
+#define SERVO_L_INCR_FORWARD -2.0
+#define SERVO_R_INCR_FORWARD 2.0
 
 // Thresholds for each sensor to determine when over a line
 #define RIGHT_PID_THRESH     900
@@ -44,7 +38,7 @@ int left_turn_val     = 0;
 
 // Servo turn values
 float servo_turn_value[]   = {SERVO_R_FORWARD_MAX, 0 ,SERVO_L_FORWARD_MAX, SERVO_L_FORWARD_MAX};
-int   servo_turn_delays [] = {300, 0, 300, 900};
+int   servo_turn_delays [] = {600, 0, 600, 900};
 
 void move(int direction){
   // Turn if requested
@@ -86,6 +80,7 @@ void move(int direction){
       left_turn_val = analogRead(left_turn); //signal from center left sensor    
     }
 
+    //following straight line
     // Read analog values from two center sensors
     right_pid_val = analogRead(right_pid); // signal from center right sensor
     left_pid_val = analogRead(left_pid);   // signal from center left sensor  
@@ -159,8 +154,8 @@ void loop() {
   move(2);
   delay(50);
 
-  move(1);   
-  delay(50);
+//  move(1);   
+//  delay(50);
   move(0);   // left one block
   delay(50);
   move(0);
