@@ -51,7 +51,7 @@
               <p class="item-intro text-muted"> The goal of this lab is to make the robot to follow the line and traverse in a figure 8. The robot is controlled using the reading from line sensor in order to make decisions regarding following lines and turning. We first created a simpler iteration that followed straight lines, and after a successful implementation we modified the code so the robot could follow turns, and ultimately traverse the figure 8.</p>
   
               <!--<iframe width="560" height="315" align="middle" src="https://www.youtube.com/embed/wf3T-4biOp0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>-->
-  
+              <img class="img-fluid d-block mx-auto" width="800" height="160" src="./img/ms1/robot_side.jpg" alt="">
               
               <h3> Line Sensors </h3>
               <p>There are four line sensors attached to the front of the robot. Two line sensors are in the middle and two line sensors are on the outer side. For this part, we only need the middle ones for controlling the robot. The middle line sensors are on top of a white tape for following the straight line and making corrections. If either of them detects a value above the white tape threshold value, it means that the the robot is leaning towards one side. In this situation, the robot will make a slight correction by speeding up one of the servo by how much the robot is out of bound. The magnitude of how much the robot is out of bound is determined by the difference between the right middle sensor and the left middle sensor.  </p>             
