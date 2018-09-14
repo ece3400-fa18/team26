@@ -6,6 +6,8 @@ Team 26 - Joyce Huang, Nathalia, Lie, Priya Kattappurath, Vini Tripathii
 ### pin layout
 left wheel 9 <br />
 right wheel 10 <br />
-left line A0 <br />
-right line A1 <br />
+left outer A0 <br />
+left pid A1 <br />
+right pid A2 <br />
+right line A3 <br />
 
