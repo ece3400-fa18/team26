@@ -10,18 +10,14 @@ Servo right_servo;
 #define SERVO_R_INCR_FORWARD 2.0
 
 // Thresholds for each sensor to determine when over a line
-#define RIGHT_PID_THRESH     900
-#define LEFT_PID_THRESH      900
-#define RIGHT_TURN_THRESH    700
-#define LEFT_TURN_THRESH     700
+#define DARK 900
+#define WHITE 200
 
 #define ERROR_RANGE          100
 
 #define left 0
 #define forward 1
 #define right 2
-
-const int free_range = 50;
 
 //pins
 const int LW = 9; // Servo1
@@ -34,7 +30,7 @@ const int left_turn = A0;
 // Control variables for line following
 float error           = 0;
 float error_magnitude = 0;
-int   counter         = 0;
+int   i = 0;
 
 // Line sensor values
 int right_pid_val     = 0; 
@@ -43,8 +39,7 @@ int right_turn_val    = 0;
 int left_turn_val     = 0;
 
 // Servo turn values
-float servo_turn_value[]   = {SERVO_R_FORWARD_MAX, 0 ,SERVO_L_FORWARD_MAX, SERVO_L_FORWARD_MAX};
-int   servo_turn_delays [] = {300, 0, 300, 900};
+float servo_turn_value[]   = {SERVO_R_FORWARD_MAX, 0 ,SERVO_L_FORWARD_MAX};
 
 
 void read_pid(){
@@ -59,43 +54,33 @@ void read_turn(){
 
 void move(int direction){
   // Turn if requested
-  if (direction != 1){
+  if (direction != forward){
     left_servo.write(servo_turn_value[direction]);
     right_servo.write(servo_turn_value[direction]);
-    delay(servo_turn_delays[direction]); //force turn over line
+    delay(300); //force turn over line
 
-    // While center sensors are not over another line, continue turning
-    read_pid();
-    while((right_pid_val> RIGHT_PID_THRESH) && (left_pid_val> LEFT_PID_THRESH)){
+    while(1){
       read_pid();
+      if (left_pid_val < WHITE && right_pid_val < WHITE){
+        break; //found white line
+      }
     } //end while, done rutning
   } 
 
-  //looking for intersection
-  right_turn_val = 0;
-  left_turn_val = 0;
-  counter = free_range;
-  
-  while(right_turn_val < RIGHT_TURN_THRESH || left_turn_val < LEFT_TURN_THRESH){
-    if (counter > 0){ //force forward
-      right_turn_val =0; 
-      left_turn_val = 0;  
-      counter = counter - 1;
+  //look for intersection
+  while(1){
+    read_turn();
+    if (left_turn_val < WHITE && right_turn_val < WHITE){
+      break; //both turn sensors are on white line
     }
-    else {
-      read_turn();
-    }
-
     go_straight();
-    delay(10);
+    delay(50);
   }//close while; found intersection
 
-  //Serial.println("found intersection");
-  left_servo.write(SERVO_BRAKE);
-  right_servo.write(SERVO_BRAKE);
 }
 
 void go_straight(){
+  //modified from solution code
   //following straight line
   read_pid();
   error = left_pid_val - right_pid_val; // Positive position to right of line
@@ -128,9 +113,6 @@ void setup() {
   right_servo.attach(RW);
   left_servo.attach(LW);
 
-  /*
-  To be tested;
-  */
   //for analog setup
   pinMode(right_turn, INPUT);
   pinMode(right_pid, INPUT);
@@ -147,26 +129,20 @@ void setup() {
   left_servo.write(SERVO_BRAKE);
 
   delay(1000);
+  move(forward);
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
-  // move in figure-8
-  move(forward);   // forward one block
-  delay(free_range);
-  move(left);
-  delay(free_range);
-  move(left);
-  delay(free_range);
-  move(left);
-  delay(free_range);
 
-  move(forward);   // forward one block
-  delay(free_range);
-  move(right);
-  delay(free_range);
-  move(right);
-  delay(free_range);
-  move(right);
-  delay(free_range);
+void loop() {
+  while(i <4){
+    move(left);
+    i++;
+  } 
+  while(i < 8){
+    move(right);
+    i++;
+    if (i == 7){
+      i = 0;
+    }
+  }
 }

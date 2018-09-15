@@ -52,228 +52,63 @@
 
               <img class="img-fluid d-block mx-auto" width="600" height="100" src="./img/ms1/robot_side.jpg" alt="">
               
-              <h3> Line Sensors </h3>
-              <p>There are four line sensors attached to the front of the robot. Two line sensors are in the middle and two line sensors are on the outer side. For this part, we only need the middle ones for controlling the robot. The middle line sensors are on top of a white tape for following the straight line and making corrections. If either of them detects a value above the white tape threshold value, it means that the the robot is leaning towards one side. In this situation, the robot will make a slight correction by speeding up one of the servo by how much the robot is out of bound. The magnitude of how much the robot is out of bound is determined by the difference between the right middle sensor and the left middle sensor.  </p>             
+              <h3> Following a Straight Line </h3>
+              <p>There are four line sensors attached to the front of the robot. Two line sensors are in the middle and two line sensors are on the outer side. For this part, we only need the middle ones for controlling the robot. The middle line sensors are on top of a white tape for following the straight line and making corrections. If either of them detects a value above the white tape threshold value, it means that the the robot is leaning towards one side. In this situation, the robot will make a slight correction by slowing one of the servo by how much the robot is out of bound. The magnitude of how much the robot is out of bound is determined by the difference between the right middle sensor and the left middle sensor.  </p>             
               <!--<img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab1/part 1.png" alt="">-->
               <iframe width="560" height="315" src="https://www.youtube.com/embed/UUIaZkpNXYs" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
               <br>
-              <code>
-                void move(){<br>
-                  &emsp; // Read analog values from two center sensors<br>
-                  &emsp; right_pid_val = analogRead(right_pid); // signal from center right sensor<br>
-                  &emsp; left_pid_val = analogRead(left_pid);   // signal from center left sensor<br>
-                  &emsp; error = left_pid_val - right_pid_val; // Positive position to right of line<br>
-                  <br>
-                  &emsp; // Correct robot's driving direction according to position error<br>
-                  &emsp; if (abs(error) <= ERROR_RANGE){<br>
-                    &emsp; &emsp; left_servo.write(SERVO_L_FORWARD_MAX);<br>
-                    &emsp; &emsp; right_servo.write(SERVO_R_FORWARD_MAX);<br>
-                  &emsp; }<br>
-                  <br>
-                  &emsp; // Robot is too right of line<br>
-                  &emsp; else if (error > ERROR_RANGE) {<br>
-                    &emsp; &emsp; // Adjust left<br>
-                    &emsp; &emsp; error_magnitude = abs(error)/(float)ERROR_RANGE;<br>
-                    &emsp; &emsp; left_servo.write(SERVO_L_FORWARD_MAX - error_magnitude*SERVO_L_INCR_FORWARD);<br>
-                    &emsp; &emsp; right_servo.write(SERVO_R_FORWARD_MAX + error_magnitude*SERVO_R_INCR_FORWARD);<br>
-                  &emsp; }<br>
-                  <br>
-                  &emsp; // Robot is too left of line<br>
-                  &emsp; else if (error < -(ERROR_RANGE)) {<br>
-                    &emsp; &emsp; // Adjust right<br>
-                    &emsp; &emsp; error_magnitude = abs(error)/(float)ERROR_RANGE;<br>
-                    &emsp; &emsp; left_servo.write(SERVO_L_FORWARD_MAX + error_magnitude*SERVO_L_INCR_FORWARD);<br>
-                    &emsp; &emsp; right_servo.write(SERVO_R_FORWARD_MAX - error_magnitude*SERVO_R_INCR_FORWARD);<br>
-                  &emsp; }<br>
-                  &emsp; delay(10);<br>
-                }<br>
-              </code>
+              
+              <p>This piece of code is placed in the funciton go_straight() for future use.<p/>
               
               <h3> Figure 8 Traversal </h3>
-              <p> The two outer sensors are used to determine which direction to turn: if either sensor detects white, then the robot accordingly executes 90 degree turn in that direction. In the case where the robot sensors a white line in both the left and right direction (as in the vertex of a T), the robot defaults to right.</p>
-              <p>For the purpose of a figure eight, the robot was hard coded to go right for the first three turns and left for the second three turns. This implementation was an extension of the previous “Following Straight Lines” so the application of the inner sensors remains the same as specified above. </p>
+              <p>The robot traverses the 8 by making a total of 8 turns, 4 left and 4 right. In the very beginning of the program, we wait for one second to start the program and have the robot go straight. Then it will loop in the turns forever. This part is demonstrated in the main function. </p>
+              <div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">while</span>(i <span style="color: #333333">&lt;</span><span style="color: #0000DD; font-weight: bold">4</span>){
+    move(left);
+    i<span style="color: #333333">++</span>;
+  } 
+  <span style="color: #008800; font-weight: bold">while</span>(i <span style="color: #333333">&lt;</span> <span style="color: #0000DD; font-weight: bold">8</span>){
+    move(right);
+    i<span style="color: #333333">++</span>;
+    <span style="color: #008800; font-weight: bold">if</span> (i <span style="color: #333333">==</span> <span style="color: #0000DD; font-weight: bold">7</span>){
+      i <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">0</span>;
+    }
+  }
+</pre></div>
+
+              <p>The move method takes in one parameter, direction of type int. If the robot is requested to turn, the robot will begin to turn and stops turning only when both middle sensors detects a white line. However, we can only implement this stop detection method after the middle two sensors are off the white line. This is implemented by forcing the robot to turn without stop detection for th first 0.3 seconds. This delay time is experimentally determined. It is possible to further improve the accuracy of this by first setting a while loop for an off-white line detection, which allows the robot to turn no matter how wide the white tape is, how narrow the angle is or how fast the robot goes. However, this would be unnecessary for this milestone because the white taped line is always the same width and the turn degree is wide enough for a timing approximation.</p>
+
+             <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">if</span> (direction <span style="color: #333333">!=</span> forward){
+    left_servo.write(servo_turn_value[direction]);
+    right_servo.write(servo_turn_value[direction]);
+    delay(<span style="color: #0000DD; font-weight: bold">300</span>); <span style="color: #888888">//force turn over line</span>
+
+    <span style="color: #008800; font-weight: bold">while</span>(<span style="color: #0000DD; font-weight: bold">1</span>){
+      read_pid();
+      <span style="color: #008800; font-weight: bold">if</span> (left_pid_val <span style="color: #333333">&lt;</span> WHITE <span style="color: #333333">&amp;&amp;</span> right_pid_val <span style="color: #333333">&lt;</span> WHITE){
+        <span style="color: #008800; font-weight: bold">break</span>; <span style="color: #888888">//found white line</span>
+      }
+    } <span style="color: #888888">//end while, done rutning</span>
+  } 
+</pre></div>
+
+
+              <p>Once the robot is done turning, it will start to go in a straight line until it finds the next intersection. The finding intersection condition is used as the while loop condition, which breaks when both of the outer sensors are out of the dark area. After it finds the intersection, it goes ont to execture the next function in the main loop.</p>>
+
+              <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #888888">//look for intersection</span>
+  <span style="color: #008800; font-weight: bold">while</span>(<span style="color: #0000DD; font-weight: bold">1</span>){
+    read_turn();
+    <span style="color: #008800; font-weight: bold">if</span> (left_turn_val <span style="color: #333333">&lt;</span> WHITE <span style="color: #333333">&amp;&amp;</span> right_turn_val <span style="color: #333333">&lt;</span> WHITE){
+      <span style="color: #008800; font-weight: bold">break</span>; <span style="color: #888888">//both turn sensors are on white line</span>
+    }
+    go_straight();
+    delay(<span style="color: #0000DD; font-weight: bold">50</span>);
+  }<span style="color: #888888">//close while; found intersection</span>
+</pre></div>
+
               
               <!--<img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab1/part 2.png" alt="">-->
               <iframe width="560" height="315" src="https://www.youtube.com/embed/5_2vB0YuRrI" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-              
-              <p> Declaring variables in the beginning <br>
-              We first declare several variables. left_servo and right_servo indicate the servos on the left and right of the robot that turn the wheels. We then define several parameters that help us control the servo. When SERVO_BREAK is written to either servo, it will make the servo stop turning. The following definitions are called to make the servos spin in the directions that make the robot either go forward or backward.<br>
-              We then define the thresholds for each sensor to determine when it has crossed a line. In this case, we are specifically looking for a white line, so the robot can traverse the grid. The middle two sensors have a threshold of 200, indicating light colors, like white, and the outside two sensors have a threshold of 600, indicating the darker grey background. <br>
-              We have also defined the pins for each servo and each sensor as constants.
-              </p>
-              
-              <code>
-              Servo left_servo;<br>
-              Servo right_servo;<br>
-              <br>
-              #define SERVO_BRAKE          90<br>
-              #define SERVO_L_FORWARD_MAX  100.0<br>
-              #define SERVO_R_FORWARD_MAX  80.0<br>
-              #define SERVO_L_INCR_FORWARD -2.0<br>
-              #define SERVO_R_INCR_FORWARD 2.0<br>
-              <br>
-              // Thresholds for each sensor to determine when over a line<br>
-              #define RIGHT_PID_THRESH     200<br>
-              #define LEFT_PID_THRESH      200<br>
-              #define RIGHT_TURN_THRESH    600<br>
-              #define LEFT_TURN_THRESH     600<br>
-              <br>
-              #define ERROR_RANGE          100<br>
-              <br>
-              //pins<br>
-              const int LW = 9; // Servo1<br>
-              const int RW = 10; // Servo2<br>
-              const int right_turn = A3;<br>
-              const int right_pid = A2;<br>
-              const int left_pid = A1;<br>
-              const int left_turn = A0;<br>
-              <br>
-              // Control variables for line following<br>
-              float error           = 0;<br>
-              float error_magnitude = 0;<br>
-              int   counter         = 0;<br>
-              <br>
-              // Line sensor values<br>
-              int right_pid_val     = 0;<br>
-              int left_pid_val      = 0;<br>
-              int right_turn_val    = 0;<br>
-              int left_turn_val     = 0;<br>
-              <br>
-              // Servo turn values<br>
-              float servo_turn_value[]   = {SERVO_R_FORWARD_MAX, 0 ,SERVO_L_FORWARD_MAX, SERVO_L_FORWARD_MAX};<br>
-              int   servo_turn_delays [] = {300, 0, 300, 900};<br>
-              </code>
-              <br>
-              
-              
-              <p> The main move method <br>
-              The main move method takes in one parameter, direction of type int. If the robot is requested to move (indicated by direction not being equal to 1), the servo will being turning until the sensors read that the robot is off of the current line, and will continue turning the robot until it reaches its destination line. Similarly to the code above for the robot to follow a straight line, we also include error-correction, so the robot is able to correct itself when it starts to veer away from the line.<br>
-              NOTE: some of the snippets below are intentionally left as pseudocode.
-              </p>
-              
-              <code>
-              void move(int direction){<br>
-                &emsp; // Turn if requested<br>
-                &emsp; if (direction != 1){<br>
-                  &emsp; &emsp; // Start turning until off the current line<br>
-                  <!--left_servo.write(servo_turn_value[direction]);<br>-->
-                  <!--right_servo.write(servo_turn_value[direction]);<br>-->
-                  <!--delay(servo_turn_delays[direction]);<br>-->
-                  <!--<br>-->
-                  &emsp; &emsp; // Read values from center line sensors<br>
-                  <!--right_pid_val = analogRead(right_pid);<br>-->
-                  <!--left_pid_val = analogRead(left_pid);<br>-->
-                  <br>
-                  &emsp; &emsp; // While center sensors are not over another line, continue turning<br>
-                  &emsp; &emsp; while((right_pid_val> RIGHT_PID_THRESH) && (left_pid_val> LEFT_PID_THRESH)){<br>
-                    <!--right_pid_val = analogRead(right_pid);<br>-->
-                    <!--left_pid_val = analogRead(left_pid); <br>-->
-                  &emsp; &emsp; }<br>
-                &emsp; } // done turning<br>
-                <br>
-                &emsp; // Reset intersection variables  <br>
-                  &emsp; &emsp; right_turn_val = 0;<br>
-                  &emsp; &emsp; left_turn_val = 0;<br>
-                  &emsp; &emsp; counter = 50;<br>
-                <br>
-                <br>
-                &emsp; // After turn is complete, drive forward to the next intersection, making corrections as necessary<br>
-                &emsp; // while-loop contains all line-following code<br>
-                &emsp; while(right_turn_val < RIGHT_TURN_THRESH || left_turn_val < LEFT_TURN_THRESH){<br>
-                  &emsp; &emsp; // Wait 50 while-loops for robot to be clear of starting intersection<br>
-                  &emsp; &emsp; // Don't start searching for an intersection until the intersection sensors are clear of black line<br>
-                  &emsp; &emsp; if (counter > 0){<br>
-                    &emsp; &emsp; &emsp; right_turn_val =3000; //set so that while loop continues<br>
-                    &emsp; &emsp; &emsp; left_turn_val = 3000;  //set so that while loop continues <br>
-                    &emsp; &emsp; &emsp; counter = counter - 1;<br>
-                  &emsp; &emsp; }<br>
-                  &emsp; &emsp; else {<br>
-                    &emsp; &emsp; &emsp; right_turn_val = analogRead(right_turn); //signal from outer right sensor<br>
-                    &emsp; &emsp; &emsp; left_turn_val = analogRead(left_turn); //signal from outer left sensor <br>
-                  &emsp; &emsp; }<br>
-                  <br>
-                  &emsp; &emsp; //following straight line<br>
-                  &emsp; &emsp; // Read analog values from two center sensors<br>
-                  &emsp; &emsp; right_pid_val = analogRead(right_pid); // signal from center right sensor<br>
-                  &emsp; &emsp; left_pid_val = analogRead(left_pid);   // signal from center left sensor <br>
-                  <br>
-                  <!--// Print statements for debugging<br>-->
-                  <!--  //Serial.println(right_pid_val);<br>-->
-                  <!--  //Serial.println(left_pid_val);  <br>-->
-                  <!--  //Serial.println();  <br>-->
-                  <!--  <br>-->
-                  &emsp; &emsp; error = left_pid_val - right_pid_val; // Positive position to right of line<br>
-                <br>
-                  &emsp; // Correct robot's driving direction according to position error<br>
-                  &emsp; if (abs(error) <= ERROR_RANGE){<br>
-                    &emsp; &emsp; left_servo.write(SERVO_L_FORWARD_MAX);<br>
-                    &emsp; &emsp; right_servo.write(SERVO_R_FORWARD_MAX);<br>
-                  &emsp; }<br>
-                  <br>
-                  &emsp; // Robot is too right<br>
-                  &emsp; else if (error > ERROR_RANGE) {<br>
-                    &emsp; &emsp; // Adjust left<br>
-                    <!--error_magnitude = abs(error)/(float)ERROR_RANGE;<br>-->
-                    <!--left_servo.write(SERVO_L_FORWARD_MAX - error_magnitude*SERVO_L_INCR_FORWARD);<br>-->
-                    <!--right_servo.write(SERVO_R_FORWARD_MAX + error_magnitude*SERVO_R_INCR_FORWARD);<br>-->
-                  &emsp; }<br>
-                  &emsp; // Robot is too left of line<br>
-                  &emsp; else if (error < -(ERROR_RANGE)) {<br>
-                  &emsp; &emsp; // Adjust right<br>
-                    <!--error_magnitude = abs(error)/(float)ERROR_RANGE;<br>-->
-                    <!--left_servo.write(SERVO_L_FORWARD_MAX + error_magnitude*SERVO_L_INCR_FORWARD);<br>-->
-                    <!--right_servo.write(SERVO_R_FORWARD_MAX - error_magnitude*SERVO_R_INCR_FORWARD);<br>-->
-                  &emsp; }<br>
-                  &emsp; delay(10);<br>
-                &emsp; }<br>
-                &emsp; left_servo.write(SERVO_BRAKE);<br>
-                &emsp; right_servo.write(SERVO_BRAKE);<br>
-              }<br>
-              </code>
-              <br><br>
-              
-              
-              <p> Set up the hardware and all I/Os <br>
-              In this section, we connect the servos and the sensors to the pins defined above.</p>
-              
-              <code>
-              void setup() {<br>
-                &emsp; // put your setup code here, to run once:<br>
-                &emsp; Serial.begin(9600);<br>
-                &emsp; right_servo.attach(RW);<br>
-                &emsp; left_servo.attach(LW);<br>
-                <br>
-                &emsp; // Set up the select pins as outputs:<br>
-                &emsp; pinMode(A0, INPUT);<br>
-                &emsp; digitalWrite(A0, HIGH);<br>
-                &emsp; pinMode(A1, INPUT);<br>
-                &emsp; digitalWrite(A1, HIGH);<br>
-                &emsp; pinMode(A2, INPUT);<br>
-                &emsp; digitalWrite(A2, HIGH);<br>
-                &emsp; pinMode(A3, INPUT);<br>
-                &emsp; digitalWrite(A3, HIGH);<br>
-                <br>
-                &emsp; right_servo.write(SERVO_BRAKE);<br>
-                &emsp; left_servo.write(SERVO_BRAKE);<br>
-                <br>
-                &emsp; delay(1000);<br>
-              }<br>   
-              </code>
-              <br>
-
-              <p> Main Code to run repeatedly <br>
-              Due to the fact that all the set-up and helper functions are already implemented, the main loop merely calls on the subroutines to run the entire program. It assumes the behavior of running in a straight line, and then calls the turn functions when it encounters an intersection (left or right specific, nevertheless both sides implemented in the same fashion).</p>
-              
-              <code>
-              void loop() {<br>
-                &emsp; // move in figure-8<br>
-                &emsp; move(2);   // forward one block<br>
-                &emsp; delay(50);<br>
-              }<br>
-              </code>
-              <br><br>
-              
-              
+                        
               
               <h3> Work Distribution </h3>
               <p> The Milestone 1 Work Distribution is as follows: <br> 
