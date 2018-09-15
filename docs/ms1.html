@@ -50,6 +50,7 @@
               <h2 class="text-uppercase text-left">Milestone 1: Basic Movement</h2>
               <p class="item-intro text-muted"> The goal of this lab is to make the robot to follow the line and traverse in a figure 8. The robot is controlled using the reading from line sensor in order to make decisions regarding following lines and turning. We first created a simpler iteration that followed straight lines, and after a successful implementation we modified the code so the robot could follow turns, and ultimately traverse the figure 8.</p>  
 
+              <img class="img-fluid d-block mx-auto" width="600" height="100" src="./img/ms1/robot_side.jpg" alt="">
               
               <h3> Line Sensors </h3>
               <p>There are four line sensors attached to the front of the robot. Two line sensors are in the middle and two line sensors are on the outer side. For this part, we only need the middle ones for controlling the robot. The middle line sensors are on top of a white tape for following the straight line and making corrections. If either of them detects a value above the white tape threshold value, it means that the the robot is leaning towards one side. In this situation, the robot will make a slight correction by speeding up one of the servo by how much the robot is out of bound. The magnitude of how much the robot is out of bound is determined by the difference between the right middle sensor and the left middle sensor.  </p>             
@@ -95,32 +96,181 @@
               
               <!--<img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab1/part 2.png" alt="">-->
               <iframe width="560" height="315" src="https://www.youtube.com/embed/5_2vB0YuRrI" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+              
+              <p> Declaring variables in the beginning  </p>
               <code>
-                INSERT CODE HERE
-                <!--// the setup function runs once when you press reset or power the board<br>-->
-                <!--void setup() {<br>-->
-                <!--  &emsp; // initialize digital pin LED_BUILTIN as an output.<br>-->
-                <!--  &emsp; pinMode(2, OUTPUT);<br>-->
-                <!--  // int PINNAME = A2<br>-->
-                <!--}<br>-->
-                <!--<br>-->
-                <!--// the loop function runs over and over again forever<br>-->
-                <!--void loop() {<br>-->
-                <!--  &emsp; digitalWrite(2, HIGH);   // turn the LED on (HIGH is the voltage level)<br>-->
-                <!--  &emsp; delay(1000);             // wait for a second<br>-->
-                <!--  &emsp; digitalWrite(2, LOW);    // turn the LED off by making the voltage LOW<br>-->
-                <!--  &emsp; delay(1000);             // wait for a second<br>-->
-                <!--}-->
+              Servo left_servo;<br>
+              Servo right_servo;<br>
+              <br>
+              #define SERVO_BRAKE          90<br>
+              #define SERVO_L_FORWARD_MAX  100.0<br>
+              #define SERVO_R_FORWARD_MAX  80.0<br>
+              #define SERVO_L_INCR_FORWARD -2.0<br>
+              #define SERVO_R_INCR_FORWARD 2.0<br>
+              <br>
+              // Thresholds for each sensor to determine when over a line<br>
+              #define RIGHT_PID_THRESH     200<br>
+              #define LEFT_PID_THRESH      200<br>
+              #define RIGHT_TURN_THRESH    600<br>
+              #define LEFT_TURN_THRESH     600<br>
+              <br>
+              #define ERROR_RANGE          100<br>
+              <br>
+              //pins<br>
+              const int LW = 9; // Servo1<br>
+              const int RW = 10; // Servo2<br>
+              const int right_turn = A3;<br>
+              const int right_pid = A2;<br>
+              const int left_pid = A1;<br>
+              const int left_turn = A0;<br>
+              <br>
+              // Control variables for line following<br>
+              float error           = 0;<br>
+              float error_magnitude = 0;<br>
+              int   counter         = 0;<br>
+              <br>
+              // Line sensor values<br>
+              int right_pid_val     = 0;<br>
+              int left_pid_val      = 0;<br>
+              int right_turn_val    = 0;<br>
+              int left_turn_val     = 0;<br>
+              <br>
+              // Servo turn values<br>
+              float servo_turn_value[]   = {SERVO_R_FORWARD_MAX, 0 ,SERVO_L_FORWARD_MAX, SERVO_L_FORWARD_MAX};<br>
+              int   servo_turn_delays [] = {300, 0, 300, 900};<br>
+              </code>
+              
+              <p> The main move method  </p>
+              <code>
+              void move(int direction){<br>
+                // Turn if requested<br>
+                if (direction != 1){<br>
+                  // Start turning until off the current line<br>
+                  left_servo.write(servo_turn_value[direction]);<br>
+                  right_servo.write(servo_turn_value[direction]);<br>
+                  delay(servo_turn_delays[direction]);<br>
+                  <br>
+                  // Read values from center line sensors<br>
+                  right_pid_val = analogRead(right_pid);<br>
+                  left_pid_val = analogRead(left_pid);<br>
+                  <br>
+                  // While center sensors are not over another line, continue turning<br>
+                  while((right_pid_val> RIGHT_PID_THRESH) && (left_pid_val> LEFT_PID_THRESH)){<br>
+                    right_pid_val = analogRead(right_pid);<br>
+                    left_pid_val = analogRead(left_pid); <br>
+                  }<br>
+                } // done turning<br>
+                <br>
+                // Reset intersection variables  <br>
+                  right_turn_val = 0;<br>
+                  left_turn_val = 0;<br>
+                  counter = 50;<br>
+                <br>
+                <br>
+                // After turn is complete, drive forward to the next intersection, making corrections as necessary<br>
+                // while-loop contains all line-following code<br>
+                while(right_turn_val < RIGHT_TURN_THRESH || left_turn_val < LEFT_TURN_THRESH){<br>
+                  Serial.print("inwhile");<br>
+                  // Wait 50 while-loops for robot to be clear of starting intersection<br>
+                  // Don't start searching for an intersection until the intersection sensors are clear of black line<br>
+                  if (counter > 0){<br>
+                    right_turn_val =3000; //set so that while loop continues<br>
+                    left_turn_val = 3000;  //set so that while loop continues <br>
+                    counter = counter - 1;<br>
+                    Serial.print("waiting");<br>
+                  }<br>
+                  else {<br>
+                    right_turn_val = analogRead(right_turn); //signal from outer right sensor<br>
+                    left_turn_val = analogRead(left_turn); //signal from outer left sensor <br>
+                  }<br>
+                  <br>
+                  //following straight line<br>
+                  // Read analog values from two center sensors<br>
+                  right_pid_val = analogRead(right_pid); // signal from center right sensor<br>
+                  left_pid_val = analogRead(left_pid);   // signal from center left sensor <br>
+                  <br>
+                  // Print statements for debugging<br>
+                    //Serial.println(right_pid_val);<br>
+                    //Serial.println(left_pid_val);  <br>
+                    //Serial.println();  <br>
+                    <br>
+                  error = left_pid_val - right_pid_val; // Positive position to right of line<br>
+                <br>
+                  // Correct robot's driving direction according to position error<br>
+                  if (abs(error) <= ERROR_RANGE){<br>
+                    left_servo.write(SERVO_L_FORWARD_MAX);<br>
+                    right_servo.write(SERVO_R_FORWARD_MAX);<br>
+                  }<br>
+                  <br>
+                  // Robot is too right<br>
+                  else if (error > ERROR_RANGE) {<br>
+                    // Adjust left<br>
+                    error_magnitude = abs(error)/(float)ERROR_RANGE;<br>
+                    left_servo.write(SERVO_L_FORWARD_MAX - error_magnitude*SERVO_L_INCR_FORWARD);<br>
+                    right_servo.write(SERVO_R_FORWARD_MAX + error_magnitude*SERVO_R_INCR_FORWARD);<br>
+                  }<br>
+                  // Robot is too left of line<br>
+                  else if (error < -(ERROR_RANGE)) {<br>
+                    // Adjust right<br>
+                    error_magnitude = abs(error)/(float)ERROR_RANGE;<br>
+                    left_servo.write(SERVO_L_FORWARD_MAX + error_magnitude*SERVO_L_INCR_FORWARD);<br>
+                    right_servo.write(SERVO_R_FORWARD_MAX - error_magnitude*SERVO_R_INCR_FORWARD);<br>
+                  }<br>
+                  delay(10);<br>
+                }<br>
+                left_servo.write(SERVO_BRAKE);<br>
+                right_servo.write(SERVO_BRAKE);<br>
+              }<br>
+              </code>
+              
+              <p> Set up the hardware and all I/  </p>
+              <code>
+              void setup() {
+                // put your setup code here, to run once:
+                Serial.begin(9600);
+                right_servo.attach(RW);
+                left_servo.attach(LW);
+                
+                // Set up the select pins as outputs:
+                pinMode(A0, INPUT);
+                digitalWrite(A0, HIGH);
+                pinMode(A1, INPUT);
+                digitalWrite(A1, HIGH);
+                pinMode(A2, INPUT);
+                digitalWrite(A2, HIGH);
+                pinMode(A3, INPUT);
+                digitalWrite(A3, HIGH);
+              
+                right_servo.write(SERVO_BRAKE);
+                left_servo.write(SERVO_BRAKE);
+              
+                delay(1000);
+              }   
               </code>
 
+              <p> Main Code to run repeatedly </p>
+              <code>
+              void loop() {
+                // move in figure-8
+                move(2);   // forward one block
+                delay(50);
+              }
+              </code>
+              
+              
+              
               <h3> Work Distribution </h3>
               <p> The Milestone 1 Work Distribution is as follows: <br> 
                   &emsp; - On 9/7, Joyce, Nathalia, Priya, and Vini worked on in lab rebuild the robot.<br>
                   &emsp; - On 9/10, Joyce, Nathalia, and Vini worked on rebuilding the robot and started the code. <br>
                   &emsp; - On 9/10, Nathalia went to open office hours and finished rebuilding the robot.<br>
+                  &emsp; - On 9/14, Joyce, Nathalia, Priya, and Vini worked on in lab to complete the milestone.<br>
+                  
                   The Lab Report Work Distribution is as follows: <br>
-                  &emsp; - Joyce: Introduction and writeup<br>
+                  &emsp; - Joyce: Introduction and code explanations<br>
+                  &emsp; - Priya: Section Write Ups<br>
                   &emsp; - Nathalia: Pictures and Videos<br>
+                  
                   The website work distribution is as follows: <br>
                   &emsp; - Nathalia: Website Set Up and Milestone 1<br>
               </p>
