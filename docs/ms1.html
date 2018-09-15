@@ -96,7 +96,12 @@
               <!--<img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab1/part 2.png" alt="">-->
               <iframe width="560" height="315" src="https://www.youtube.com/embed/5_2vB0YuRrI" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
               
-              <p> Declaring variables in the beginning  </p>
+              <p> Declaring variables in the beginning  </p><br>
+              <p> We first declare several variables. left_servo and right_servo indicate the servos on the left and right of the robot that turn the wheels. We then define several parameters that help us control the servo. When SERVO_BREAK is written to either servo, it will make the servo stop turning. The following definitions are called to make the servos spin in the directions that make the robot either go forward or backward.<br>
+              We then define the thresholds for each sensor to determine when it has crossed a line. In this case, we are specifically looking for a white line, so the robot can traverse the grid. The middle two sensors have a threshold of 200, indicating light colors, like white, and the outside two sensors have a threshold of 600, indicating the darker grey background. <br>
+              We have also defined the pins for each servo and each sensor as constants.
+              </p>
+              
               <code>
               Servo left_servo;<br>
               Servo right_servo;<br>
@@ -140,7 +145,11 @@
               </code>
               <br>
               
-              <p> The main move method  </p>
+              
+              <p> The main move method  </p> <br>
+              <p> The main move method takes in one parameter, direction of type int. If the robot is requested to move (indicated by direction not being equal to 1), the servo will being turning until the sensors read that the robot is off of the current line, and will continue turning the robot until it reaches its destination line. Similarly to the code above for the robot to follow a straight line, we also include error-correction, so the robot is able to correct itself when it starts to veer away from the line.
+              </p>
+              
               <code>
               void move(int direction){<br>
                 &emsp; // Turn if requested<br>
@@ -222,6 +231,9 @@
               </code>
               
               <p> Set up the hardware and all I/Os  </p><br>
+              <p> In this section, we connect the servos and the sensors to the pins defined above.</p>
+              </p>
+              
               <code>
               void setup() {<br>
                 &emsp; // put your setup code here, to run once:<br>
@@ -247,6 +259,8 @@
               </code>
 
               <p> Main Code to run repeatedly </p>
+              <p> Due to the fact that all the set-up and helper functions are already implemented, the main loop merely calls on the subroutines to run the entire program. It assumes the behavior of running in a straight line, and then calls the turn functions when it encounters an intersection (left or right specific, nevertheless both sides implemented in the same fashion).</p>
+              
               <code>
               void loop() {<br>
                 &emsp; // move in figure-8<br>
