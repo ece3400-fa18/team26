@@ -66,27 +66,26 @@
                   <br>
                   &emsp; // Correct robot's driving direction according to position error<br>
                   &emsp; if (abs(error) <= ERROR_RANGE){<br>
-                    &emsp; left_servo.write(SERVO_L_FORWARD_MAX);<br>
-                    &emsp; right_servo.write(SERVO_R_FORWARD_MAX);<br>
+                    &emsp; &emsp; left_servo.write(SERVO_L_FORWARD_MAX);<br>
+                    &emsp; &emsp; right_servo.write(SERVO_R_FORWARD_MAX);<br>
                   &emsp; }<br>
                   <br>
                   &emsp; // Robot is too right of line<br>
                   &emsp; else if (error > ERROR_RANGE) {<br>
-                    &emsp; // Adjust left<br>
-                    &emsp; error_magnitude = abs(error)/(float)ERROR_RANGE;<br>
-                    &emsp; left_servo.write(SERVO_L_FORWARD_MAX - error_magnitude*SERVO_L_INCR_FORWARD);<br>
-                    &emsp; right_servo.write(SERVO_R_FORWARD_MAX + error_magnitude*SERVO_R_INCR_FORWARD);<br>
+                    &emsp; &emsp; // Adjust left<br>
+                    &emsp; &emsp; error_magnitude = abs(error)/(float)ERROR_RANGE;<br>
+                    &emsp; &emsp; left_servo.write(SERVO_L_FORWARD_MAX - error_magnitude*SERVO_L_INCR_FORWARD);<br>
+                    &emsp; &emsp; right_servo.write(SERVO_R_FORWARD_MAX + error_magnitude*SERVO_R_INCR_FORWARD);<br>
                   &emsp; }<br>
                   <br>
                   &emsp; // Robot is too left of line<br>
                   &emsp; else if (error < -(ERROR_RANGE)) {<br>
-                    &emsp; // Adjust right<br>
-                    &emsp; error_magnitude = abs(error)/(float)ERROR_RANGE;
-                    &emsp; left_servo.write(SERVO_L_FORWARD_MAX + error_magnitude*SERVO_L_INCR_FORWARD);<br>
-                    &emsp; right_servo.write(SERVO_R_FORWARD_MAX - error_ma<br>gnitude*SERVO_R_INCR_FORWARD);<br>
+                    &emsp; &emsp; // Adjust right<br>
+                    &emsp; &emsp; error_magnitude = abs(error)/(float)ERROR_RANGE;<br>
+                    &emsp; &emsp; left_servo.write(SERVO_L_FORWARD_MAX + error_magnitude*SERVO_L_INCR_FORWARD);<br>
+                    &emsp; &emsp; right_servo.write(SERVO_R_FORWARD_MAX - error_magnitude*SERVO_R_INCR_FORWARD);<br>
                   &emsp; }<br>
                   &emsp; delay(10);<br>
-                  <br>
                 }<br>
               </code>
               
@@ -139,122 +138,121 @@
               float servo_turn_value[]   = {SERVO_R_FORWARD_MAX, 0 ,SERVO_L_FORWARD_MAX, SERVO_L_FORWARD_MAX};<br>
               int   servo_turn_delays [] = {300, 0, 300, 900};<br>
               </code>
+              <br>
               
               <p> The main move method  </p>
               <code>
               void move(int direction){<br>
-                // Turn if requested<br>
-                if (direction != 1){<br>
-                  // Start turning until off the current line<br>
-                  left_servo.write(servo_turn_value[direction]);<br>
-                  right_servo.write(servo_turn_value[direction]);<br>
-                  delay(servo_turn_delays[direction]);<br>
+                &emsp; // Turn if requested<br>
+                &emsp; if (direction != 1){<br>
+                  &emsp; &emsp; // Start turning until off the current line<br>
+                  <!--left_servo.write(servo_turn_value[direction]);<br>-->
+                  <!--right_servo.write(servo_turn_value[direction]);<br>-->
+                  <!--delay(servo_turn_delays[direction]);<br>-->
+                  <!--<br>-->
+                  &emsp; &emsp; // Read values from center line sensors<br>
+                  <!--right_pid_val = analogRead(right_pid);<br>-->
+                  <!--left_pid_val = analogRead(left_pid);<br>-->
                   <br>
-                  // Read values from center line sensors<br>
-                  right_pid_val = analogRead(right_pid);<br>
-                  left_pid_val = analogRead(left_pid);<br>
-                  <br>
-                  // While center sensors are not over another line, continue turning<br>
-                  while((right_pid_val> RIGHT_PID_THRESH) && (left_pid_val> LEFT_PID_THRESH)){<br>
-                    right_pid_val = analogRead(right_pid);<br>
-                    left_pid_val = analogRead(left_pid); <br>
-                  }<br>
-                } // done turning<br>
+                  &emsp; &emsp; // While center sensors are not over another line, continue turning<br>
+                  &emsp; &emsp; while((right_pid_val> RIGHT_PID_THRESH) && (left_pid_val> LEFT_PID_THRESH)){<br>
+                    <!--right_pid_val = analogRead(right_pid);<br>-->
+                    <!--left_pid_val = analogRead(left_pid); <br>-->
+                  &emsp; &emsp; }<br>
+                &emsp; } // done turning<br>
                 <br>
-                // Reset intersection variables  <br>
-                  right_turn_val = 0;<br>
-                  left_turn_val = 0;<br>
-                  counter = 50;<br>
+                &emsp; // Reset intersection variables  <br>
+                  &emsp; &emsp; right_turn_val = 0;<br>
+                  &emsp; &emsp; left_turn_val = 0;<br>
+                  &emsp; &emsp; counter = 50;<br>
                 <br>
                 <br>
-                // After turn is complete, drive forward to the next intersection, making corrections as necessary<br>
-                // while-loop contains all line-following code<br>
-                while(right_turn_val < RIGHT_TURN_THRESH || left_turn_val < LEFT_TURN_THRESH){<br>
-                  Serial.print("inwhile");<br>
-                  // Wait 50 while-loops for robot to be clear of starting intersection<br>
-                  // Don't start searching for an intersection until the intersection sensors are clear of black line<br>
-                  if (counter > 0){<br>
-                    right_turn_val =3000; //set so that while loop continues<br>
-                    left_turn_val = 3000;  //set so that while loop continues <br>
-                    counter = counter - 1;<br>
-                    Serial.print("waiting");<br>
-                  }<br>
-                  else {<br>
-                    right_turn_val = analogRead(right_turn); //signal from outer right sensor<br>
-                    left_turn_val = analogRead(left_turn); //signal from outer left sensor <br>
-                  }<br>
+                &emsp; // After turn is complete, drive forward to the next intersection, making corrections as necessary<br>
+                &emsp; // while-loop contains all line-following code<br>
+                &emsp; while(right_turn_val < RIGHT_TURN_THRESH || left_turn_val < LEFT_TURN_THRESH){<br>
+                  &emsp; &emsp; // Wait 50 while-loops for robot to be clear of starting intersection<br>
+                  &emsp; &emsp; // Don't start searching for an intersection until the intersection sensors are clear of black line<br>
+                  &emsp; &emsp; if (counter > 0){<br>
+                    &emsp; &emsp; &emsp; right_turn_val =3000; //set so that while loop continues<br>
+                    &emsp; &emsp; &emsp; left_turn_val = 3000;  //set so that while loop continues <br>
+                    &emsp; &emsp; &emsp; counter = counter - 1;<br>
+                  &emsp; &emsp; }<br>
+                  &emsp; &emsp; else {<br>
+                    &emsp; &emsp; &emsp; right_turn_val = analogRead(right_turn); //signal from outer right sensor<br>
+                    &emsp; &emsp; &emsp; left_turn_val = analogRead(left_turn); //signal from outer left sensor <br>
+                  &emsp; &emsp; }<br>
                   <br>
-                  //following straight line<br>
-                  // Read analog values from two center sensors<br>
-                  right_pid_val = analogRead(right_pid); // signal from center right sensor<br>
-                  left_pid_val = analogRead(left_pid);   // signal from center left sensor <br>
+                  &emsp; &emsp; //following straight line<br>
+                  &emsp; &emsp; // Read analog values from two center sensors<br>
+                  &emsp; &emsp; right_pid_val = analogRead(right_pid); // signal from center right sensor<br>
+                  &emsp; &emsp; left_pid_val = analogRead(left_pid);   // signal from center left sensor <br>
                   <br>
-                  // Print statements for debugging<br>
-                    //Serial.println(right_pid_val);<br>
-                    //Serial.println(left_pid_val);  <br>
-                    //Serial.println();  <br>
-                    <br>
-                  error = left_pid_val - right_pid_val; // Positive position to right of line<br>
+                  <!--// Print statements for debugging<br>-->
+                  <!--  //Serial.println(right_pid_val);<br>-->
+                  <!--  //Serial.println(left_pid_val);  <br>-->
+                  <!--  //Serial.println();  <br>-->
+                  <!--  <br>-->
+                  &emsp; &emsp; error = left_pid_val - right_pid_val; // Positive position to right of line<br>
                 <br>
-                  // Correct robot's driving direction according to position error<br>
-                  if (abs(error) <= ERROR_RANGE){<br>
-                    left_servo.write(SERVO_L_FORWARD_MAX);<br>
-                    right_servo.write(SERVO_R_FORWARD_MAX);<br>
-                  }<br>
+                  &emsp; // Correct robot's driving direction according to position error<br>
+                  &emsp; if (abs(error) <= ERROR_RANGE){<br>
+                    &emsp; &emsp; left_servo.write(SERVO_L_FORWARD_MAX);<br>
+                    &emsp; &emsp; right_servo.write(SERVO_R_FORWARD_MAX);<br>
+                  &emsp; }<br>
                   <br>
-                  // Robot is too right<br>
-                  else if (error > ERROR_RANGE) {<br>
-                    // Adjust left<br>
-                    error_magnitude = abs(error)/(float)ERROR_RANGE;<br>
-                    left_servo.write(SERVO_L_FORWARD_MAX - error_magnitude*SERVO_L_INCR_FORWARD);<br>
-                    right_servo.write(SERVO_R_FORWARD_MAX + error_magnitude*SERVO_R_INCR_FORWARD);<br>
-                  }<br>
-                  // Robot is too left of line<br>
-                  else if (error < -(ERROR_RANGE)) {<br>
-                    // Adjust right<br>
-                    error_magnitude = abs(error)/(float)ERROR_RANGE;<br>
-                    left_servo.write(SERVO_L_FORWARD_MAX + error_magnitude*SERVO_L_INCR_FORWARD);<br>
-                    right_servo.write(SERVO_R_FORWARD_MAX - error_magnitude*SERVO_R_INCR_FORWARD);<br>
-                  }<br>
-                  delay(10);<br>
-                }<br>
-                left_servo.write(SERVO_BRAKE);<br>
-                right_servo.write(SERVO_BRAKE);<br>
+                  &emsp; // Robot is too right<br>
+                  &emsp; else if (error > ERROR_RANGE) {<br>
+                    &emsp; &emsp; // Adjust left<br>
+                    <!--error_magnitude = abs(error)/(float)ERROR_RANGE;<br>-->
+                    <!--left_servo.write(SERVO_L_FORWARD_MAX - error_magnitude*SERVO_L_INCR_FORWARD);<br>-->
+                    <!--right_servo.write(SERVO_R_FORWARD_MAX + error_magnitude*SERVO_R_INCR_FORWARD);<br>-->
+                  &emsp; }<br>
+                  &emsp; // Robot is too left of line<br>
+                  &emsp; else if (error < -(ERROR_RANGE)) {<br>
+                  &emsp; &emsp; // Adjust right<br>
+                    <!--error_magnitude = abs(error)/(float)ERROR_RANGE;<br>-->
+                    <!--left_servo.write(SERVO_L_FORWARD_MAX + error_magnitude*SERVO_L_INCR_FORWARD);<br>-->
+                    <!--right_servo.write(SERVO_R_FORWARD_MAX - error_magnitude*SERVO_R_INCR_FORWARD);<br>-->
+                  &emsp; }<br>
+                  &emsp; delay(10);<br>
+                &emsp; }<br>
+                &emsp; left_servo.write(SERVO_BRAKE);<br>
+                &emsp; right_servo.write(SERVO_BRAKE);<br>
               }<br>
               </code>
               
-              <p> Set up the hardware and all I/  </p>
+              <p> Set up the hardware and all I/Os  </p><br>
               <code>
-              void setup() {
-                // put your setup code here, to run once:
-                Serial.begin(9600);
-                right_servo.attach(RW);
-                left_servo.attach(LW);
-                
-                // Set up the select pins as outputs:
-                pinMode(A0, INPUT);
-                digitalWrite(A0, HIGH);
-                pinMode(A1, INPUT);
-                digitalWrite(A1, HIGH);
-                pinMode(A2, INPUT);
-                digitalWrite(A2, HIGH);
-                pinMode(A3, INPUT);
-                digitalWrite(A3, HIGH);
-              
-                right_servo.write(SERVO_BRAKE);
-                left_servo.write(SERVO_BRAKE);
-              
-                delay(1000);
-              }   
+              void setup() {<br>
+                &emsp; // put your setup code here, to run once:<br>
+                &emsp; Serial.begin(9600);<br>
+                &emsp; right_servo.attach(RW);<br>
+                &emsp; left_servo.attach(LW);<br>
+                <br>
+                &emsp; // Set up the select pins as outputs:<br>
+                &emsp; pinMode(A0, INPUT);<br>
+                &emsp; digitalWrite(A0, HIGH);<br>
+                &emsp; pinMode(A1, INPUT);<br>
+                &emsp; digitalWrite(A1, HIGH);<br>
+                &emsp; pinMode(A2, INPUT);<br>
+                &emsp; digitalWrite(A2, HIGH);<br>
+                &emsp; pinMode(A3, INPUT);<br>
+                &emsp; digitalWrite(A3, HIGH);<br>
+                <br>
+                &emsp; right_servo.write(SERVO_BRAKE);<br>
+                &emsp; left_servo.write(SERVO_BRAKE);<br>
+                <br>
+                &emsp; delay(1000);<br>
+              }<br>   
               </code>
 
               <p> Main Code to run repeatedly </p>
               <code>
-              void loop() {
-                // move in figure-8
-                move(2);   // forward one block
-                delay(50);
-              }
+              void loop() {<br>
+                &emsp; // move in figure-8<br>
+                &emsp; move(2);   // forward one block<br>
+                &emsp; delay(50);<br>
+              }<br>
               </code>
               
               
