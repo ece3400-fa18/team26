@@ -49,23 +49,11 @@ int   servo_turn_delays [] = {300, 0, 300, 900};
  * follows a line
  **/
 void move(){
-//      right_turn_val = analogRead(right_turn); //signal from center right sensor
-//      left_turn_val = analogRead(left_turn); //signal from center left sensor    
-
-
     // Read analog values from two center sensors
     right_pid_val = analogRead(right_pid); // signal from center right sensor
     left_pid_val = analogRead(left_pid);   // signal from center left sensor  
-
-    Serial.print("right ");
-    Serial.println(right_pid_val);
-    Serial.println(left_pid_val);
-    Serial.println();
-
-    // Print statements for debugging
-      //Serial.println(right_pid_val);
-      //Serial.println(left_pid_val);  
-      //Serial.println();  
+    // right_pid_val = digitalRead(right_pid); // signal from center right sensor
+    // left_pid_val = digitalRead(left_pid);   // signal from center left sensor  
       
     error = left_pid_val - right_pid_val; // Positive position to right of line
 
@@ -98,14 +86,16 @@ void setup() {
   left_servo.attach(9);
   // Set up the select pins as outputs:
 
-  pinMode(A0, INPUT);
-  digitalWrite(A0, HIGH);
-  pinMode(A1, INPUT);
-  digitalWrite(A1, HIGH);
-  pinMode(A2, INPUT);
-  digitalWrite(A2, HIGH);
-  pinMode(A3, INPUT);
-  digitalWrite(A3, HIGH);
+  pinMode(right_turn, INPUT);
+  pinMode(right_pid, INPUT);
+  pinMode(left_pid, INPUT);
+  pinMode(left_turn, INPUT);
+
+  //for digital setup turn on
+  digitalWrite(right_pid, HIGH);
+  digitalWrite(left_pid, HIGH);
+  digitalWrite(right_tunr, HIGH);
+  digitalWrite(left_turn, HIGH);
 
   right_servo.write(SERVO_BRAKE);
   left_servo.write(SERVO_BRAKE);
