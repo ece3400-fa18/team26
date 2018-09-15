@@ -94,7 +94,7 @@ void setup() {
   //for digital setup turn on
   digitalWrite(right_pid, HIGH);
   digitalWrite(left_pid, HIGH);
-  digitalWrite(right_tunr, HIGH);
+  digitalWrite(right_turn, HIGH);
   digitalWrite(left_turn, HIGH);
 
   right_servo.write(SERVO_BRAKE);
