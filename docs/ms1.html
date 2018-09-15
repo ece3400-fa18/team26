@@ -55,8 +55,37 @@
               <p>There are four line sensors attached to the front of the robot. Two line sensors are in the middle and two line sensors are on the outer side. For this part, we only need the middle ones for controlling the robot. The middle line sensors are on top of a white tape for following the straight line and making corrections. If either of them detects a value above the white tape threshold value, it means that the the robot is leaning towards one side. In this situation, the robot will make a slight correction by speeding up one of the servo by how much the robot is out of bound. The magnitude of how much the robot is out of bound is determined by the difference between the right middle sensor and the left middle sensor.  </p>             
               <!--<img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab1/part 1.png" alt="">-->
               <iframe width="560" height="315" src="https://www.youtube.com/embed/UUIaZkpNXYs" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+              <br>
               <code>
-                INSERT CODE HERE
+                void move(){
+                  // Read analog values from two center sensors
+                  right_pid_val = analogRead(right_pid); // signal from center right sensor
+                  left_pid_val = analogRead(left_pid);   // signal from center left sensor
+                  error = left_pid_val - right_pid_val; // Positive position to right of line
+                  
+                  // Correct robot's driving direction according to position error
+                  if (abs(error) <= ERROR_RANGE){
+                    left_servo.write(SERVO_L_FORWARD_MAX);
+                    right_servo.write(SERVO_R_FORWARD_MAX);
+                  }
+                  
+                  // Robot is too right of line
+                  else if (error > ERROR_RANGE) {
+                    // Adjust left
+                    error_magnitude = abs(error)/(float)ERROR_RANGE;
+                    left_servo.write(SERVO_L_FORWARD_MAX - error_magnitude*SERVO_L_INCR_FORWARD);
+                    right_servo.write(SERVO_R_FORWARD_MAX + error_magnitude*SERVO_R_INCR_FORWARD);
+                  }
+                  // Robot is too left of line
+                  else if (error < -(ERROR_RANGE)) {
+                    // Adjust right
+                    error_magnitude = abs(error)/(float)ERROR_RANGE;
+                    left_servo.write(SERVO_L_FORWARD_MAX + error_magnitude*SERVO_L_INCR_FORWARD);
+                    right_servo.write(SERVO_R_FORWARD_MAX - error_magnitude*SERVO_R_INCR_FORWARD);
+                  }
+                  delay(10);
+                  
+                }
               </code>
               
               <h3> Figure 8 Traversal </h3>

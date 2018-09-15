@@ -1,10 +1,8 @@
-/**
- * ECE3400 Fall 2018
- */
-
 #include <Servo.h>
 
-// Servo speed definitions
+Servo left_servo;
+Servo right_servo;
+
 #define SERVO_BRAKE          90
 #define SERVO_L_FORWARD_MAX  100.0
 #define SERVO_R_FORWARD_MAX  80.0
@@ -12,17 +10,16 @@
 #define SERVO_R_INCR_FORWARD 2.0
 
 // Thresholds for each sensor to determine when over a line
-#define RIGHT_PID_THRESH     900
-#define LEFT_PID_THRESH      900
-#define RIGHT_TURN_THRESH    700
-#define LEFT_TURN_THRESH     700
+#define RIGHT_PID_THRESH     200
+#define LEFT_PID_THRESH      200
+#define RIGHT_TURN_THRESH    600
+#define LEFT_TURN_THRESH     600
 
 #define ERROR_RANGE          100
 
-// Servo objects
-Servo left_servo;
-Servo right_servo;
-
+//pins
+const int LW = 9; // Servo1
+const int RW = 10; // Servo2
 const int right_turn = A3;
 const int right_pid = A2;
 const int left_pid = A1;
@@ -43,24 +40,54 @@ int left_turn_val     = 0;
 float servo_turn_value[]   = {SERVO_R_FORWARD_MAX, 0 ,SERVO_L_FORWARD_MAX, SERVO_L_FORWARD_MAX};
 int   servo_turn_delays [] = {300, 0, 300, 900};
 
+void move(int direction){
+  // Turn if requested
+  if (direction != 1){
+    // Start turning until off the current line
+    left_servo.write(servo_turn_value[direction]);
+    right_servo.write(servo_turn_value[direction]);
+    delay(servo_turn_delays[direction]);
 
-/**
- * function move() 
- * follows a line
- **/
-void move(){
-//      right_turn_val = analogRead(right_turn); //signal from center right sensor
-//      left_turn_val = analogRead(left_turn); //signal from center left sensor    
+    // Read values from center line sensors
+    right_pid_val = analogRead(right_pid);
+    left_pid_val = analogRead(left_pid);
+
+    // While center sensors are not over another line, continue turning
+    while((right_pid_val> RIGHT_PID_THRESH) && (left_pid_val> LEFT_PID_THRESH)){
+      right_pid_val = analogRead(right_pid);
+      left_pid_val = analogRead(left_pid); 
+    }
+    Serial.println("break turn while");
+  } // done turning
+
+  // Reset intersection variables  
+    right_turn_val = 0;
+    left_turn_val = 0;
+    counter = 50;
 
 
+  // After turn is complete, drive forward to the next intersection, making corrections as necessary
+  // while-loop contains all line-following code
+  while(right_turn_val < RIGHT_TURN_THRESH || left_turn_val < LEFT_TURN_THRESH){
+    Serial.print("inwhile");
+    // Wait 50 while-loops for robot to be clear of starting intersection
+    // Don't start searching for an intersection until the intersection sensors are clear of black line
+    if (counter > 0){
+      right_turn_val =3000; //set so that while loop continues
+      left_turn_val = 3000;  //set so that while loop continues 
+      counter = counter - 1;
+      Serial.print("waiting");
+    }
+    else {
+      right_turn_val = analogRead(right_turn); //signal from outer right sensor
+      left_turn_val = analogRead(left_turn); //signal from outer left sensor 
+       
+    }
+
+    //following straight line
     // Read analog values from two center sensors
     right_pid_val = analogRead(right_pid); // signal from center right sensor
     left_pid_val = analogRead(left_pid);   // signal from center left sensor  
-
-    Serial.print("right ");
-    Serial.println(right_pid_val);
-    Serial.println(left_pid_val);
-    Serial.println();
 
     // Print statements for debugging
       //Serial.println(right_pid_val);
@@ -90,12 +117,18 @@ void move(){
       right_servo.write(SERVO_R_FORWARD_MAX - error_magnitude*SERVO_R_INCR_FORWARD);
     }
     delay(10);
+  }//close while
+  Serial.println("found intersection");
+  left_servo.write(SERVO_BRAKE);
+  right_servo.write(SERVO_BRAKE);
 }
 
+
 void setup() {
+  // put your setup code here, to run once:
   Serial.begin(9600);
-  right_servo.attach(10);
-  left_servo.attach(9);
+  right_servo.attach(RW);
+  left_servo.attach(LW);
   // Set up the select pins as outputs:
 
   pinMode(A0, INPUT);
@@ -110,11 +143,15 @@ void setup() {
   right_servo.write(SERVO_BRAKE);
   left_servo.write(SERVO_BRAKE);
 
-  // Wait at start for 1 second
   delay(1000);
 }
 
 void loop() {
-  
-  move();
+  // put your main code here, to run repeatedly:
+  // move in figure-8
+  move(2);   // forward one block
+  delay(50);
+
+
+
 }
