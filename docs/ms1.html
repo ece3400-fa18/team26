@@ -57,35 +57,36 @@
               <iframe width="560" height="315" src="https://www.youtube.com/embed/UUIaZkpNXYs" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
               <br>
               <code>
-                void move(){
-                  // Read analog values from two center sensors
-                  right_pid_val = analogRead(right_pid); // signal from center right sensor
-                  left_pid_val = analogRead(left_pid);   // signal from center left sensor
-                  error = left_pid_val - right_pid_val; // Positive position to right of line
-                  
-                  // Correct robot's driving direction according to position error
-                  if (abs(error) <= ERROR_RANGE){
-                    left_servo.write(SERVO_L_FORWARD_MAX);
-                    right_servo.write(SERVO_R_FORWARD_MAX);
-                  }
-                  
-                  // Robot is too right of line
-                  else if (error > ERROR_RANGE) {
-                    // Adjust left
-                    error_magnitude = abs(error)/(float)ERROR_RANGE;
-                    left_servo.write(SERVO_L_FORWARD_MAX - error_magnitude*SERVO_L_INCR_FORWARD);
-                    right_servo.write(SERVO_R_FORWARD_MAX + error_magnitude*SERVO_R_INCR_FORWARD);
-                  }
-                  // Robot is too left of line
-                  else if (error < -(ERROR_RANGE)) {
-                    // Adjust right
-                    error_magnitude = abs(error)/(float)ERROR_RANGE;
-                    left_servo.write(SERVO_L_FORWARD_MAX + error_magnitude*SERVO_L_INCR_FORWARD);
-                    right_servo.write(SERVO_R_FORWARD_MAX - error_magnitude*SERVO_R_INCR_FORWARD);
-                  }
-                  delay(10);
-                  
-                }
+                void move(){<br>
+                  &emsp; // Read analog values from two center sensors<br>
+                  &emsp; right_pid_val = analogRead(right_pid); // signal from center right sensor<br>
+                  &emsp; left_pid_val = analogRead(left_pid);   // signal from center left sensor<br>
+                  &emsp; error = left_pid_val - right_pid_val; // Positive position to right of line<br>
+                  <br>
+                  &emsp; // Correct robot's driving direction according to position error<br>
+                  &emsp; if (abs(error) <= ERROR_RANGE){<br>
+                    &emsp; left_servo.write(SERVO_L_FORWARD_MAX);<br>
+                    &emsp; right_servo.write(SERVO_R_FORWARD_MAX);<br>
+                  &emsp; }<br>
+                  <br>
+                  &emsp; // Robot is too right of line<br>
+                  &emsp; else if (error > ERROR_RANGE) {<br>
+                    &emsp; // Adjust left<br>
+                    &emsp; error_magnitude = abs(error)/(float)ERROR_RANGE;<br>
+                    &emsp; left_servo.write(SERVO_L_FORWARD_MAX - error_magnitude*SERVO_L_INCR_FORWARD);<br>
+                    &emsp; right_servo.write(SERVO_R_FORWARD_MAX + error_magnitude*SERVO_R_INCR_FORWARD);<br>
+                  &emsp; }<br>
+                  <br>
+                  &emsp; // Robot is too left of line<br>
+                  &emsp; else if (error < -(ERROR_RANGE)) {<br>
+                    &emsp; // Adjust right<br>
+                    &emsp; error_magnitude = abs(error)/(float)ERROR_RANGE;
+                    &emsp; left_servo.write(SERVO_L_FORWARD_MAX + error_magnitude*SERVO_L_INCR_FORWARD);<br>
+                    &emsp; right_servo.write(SERVO_R_FORWARD_MAX - error_ma<br>gnitude*SERVO_R_INCR_FORWARD);<br>
+                  &emsp; }<br>
+                  &emsp; delay(10);<br>
+                  <br>
+                }<br>
               </code>
               
               <h3> Figure 8 Traversal </h3>
