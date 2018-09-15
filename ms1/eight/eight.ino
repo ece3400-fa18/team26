@@ -4,14 +4,14 @@ Servo left_servo;
 Servo right_servo;
 
 #define SERVO_BRAKE          90
-#define SERVO_L_FORWARD_MAX  100.0
-#define SERVO_R_FORWARD_MAX  80.0
-#define SERVO_L_INCR_FORWARD -2.0
-#define SERVO_R_INCR_FORWARD 2.0
+#define SERVO_L_FORWARD_MAX  95.0
+#define SERVO_R_FORWARD_MAX  85.0
+#define SERVO_L_INCR_FORWARD 2.0
+#define SERVO_R_INCR_FORWARD -2.0
 
 // Thresholds for each sensor to determine when over a line
 #define DARK 900
-#define WHITE 200
+#define WHITE 700
 
 #define ERROR_RANGE          100
 
@@ -22,10 +22,10 @@ Servo right_servo;
 //pins
 const int LW = 9; // Servo1
 const int RW = 10; // Servo2
-const int right_turn = A3;
-const int right_pid = A2;
-const int left_pid = A1;
-const int left_turn = A0;
+const int right_turn = A5;
+const int right_pid = A5;
+const int left_pid = A4;
+const int left_turn = A4;
 
 // Control variables for line following
 float error           = 0;
@@ -55,16 +55,28 @@ void read_turn(){
 void move(int direction){
   // Turn if requested
   if (direction != forward){
-    left_servo.write(servo_turn_value[direction]);
-    right_servo.write(servo_turn_value[direction]);
-    delay(300); //force turn over line
-
+    delay(500);
+    left_servo.write(95);
+    right_servo.write(85);
+    Serial.println("turn");
+    if(direction == right){
+      while(analogRead(left_turn) > WHITE);
+      while(analogRead(left_turn) < WHITE);
+      Serial.println("done turn");
+    }
+    if(direction == left){
+      while(analogRead(right_turn) > WHITE);
+      while(analogRead(right_turn) < WHITE);
+      Serial.println("done turn");
+    }
+    /*
     while(1){
       read_pid();
       if (left_pid_val < WHITE && right_pid_val < WHITE){
         break; //found white line
       }
     } //end while, done rutning
+    */
   } 
 
   //look for intersection
@@ -72,6 +84,7 @@ void move(int direction){
     read_turn();
     if (left_turn_val < WHITE && right_turn_val < WHITE){
       break; //both turn sensors are on white line
+      Serial.println("1");
     }
     go_straight();
     delay(50);
@@ -104,6 +117,7 @@ void go_straight(){
     left_servo.write(SERVO_L_FORWARD_MAX + error_magnitude*SERVO_L_INCR_FORWARD);
     right_servo.write(SERVO_R_FORWARD_MAX - error_magnitude*SERVO_R_INCR_FORWARD);
   }
+  delay(10);
 }
 
 
@@ -134,9 +148,10 @@ void setup() {
 
 
 void loop() {
-  while(i <4){
+  /*while(i <4){
     move(left);
     i++;
+    delay(1000);
   } 
   while(i < 8){
     move(right);
@@ -144,5 +159,10 @@ void loop() {
     if (i == 7){
       i = 0;
     }
-  }
+  }*/
+  Serial.println("hi");
+  move(left);
+  move(left);
+  move(left);
+  move(left);
 }

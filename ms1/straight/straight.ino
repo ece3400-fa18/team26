@@ -6,10 +6,10 @@
 
 // Servo speed definitions
 #define SERVO_BRAKE          90
-#define SERVO_L_FORWARD_MAX  100.0
-#define SERVO_R_FORWARD_MAX  80.0
-#define SERVO_L_INCR_FORWARD -2.0
-#define SERVO_R_INCR_FORWARD 2.0
+#define SERVO_L_FORWARD_MAX  95
+#define SERVO_R_FORWARD_MAX  85
+#define SERVO_L_INCR_FORWARD 2.0
+#define SERVO_R_INCR_FORWARD -2.0
 
 // Thresholds for each sensor to determine when over a line
 #define RIGHT_PID_THRESH     900
@@ -23,10 +23,10 @@
 Servo left_servo;
 Servo right_servo;
 
-const int right_turn = A3;
-const int right_pid = A2;
-const int left_pid = A1;
-const int left_turn = A0;
+const int right_turn = A5;
+const int right_pid = A5;
+const int left_pid = A4;
+const int left_turn = A4;
 
 // Control variables for line following
 float error           = 0;
@@ -54,9 +54,12 @@ void move(){
     left_pid_val = analogRead(left_pid);   // signal from center left sensor  
     // right_pid_val = digitalRead(right_pid); // signal from center right sensor
     // left_pid_val = digitalRead(left_pid);   // signal from center left sensor  
-      
+
+          
     error = left_pid_val - right_pid_val; // Positive position to right of line
 
+    Serial.println(right_pid_val);
+    Serial.println(left_pid_val);
     // Correct robot's driving direction according to position error
     if (abs(error) <= ERROR_RANGE){
       left_servo.write(SERVO_L_FORWARD_MAX);
@@ -66,6 +69,7 @@ void move(){
     // Robot is too right
     else if (error > ERROR_RANGE) {
       // Adjust left
+      Serial.println("too right");
       error_magnitude = abs(error)/(float)ERROR_RANGE;
       left_servo.write(SERVO_L_FORWARD_MAX - error_magnitude*SERVO_L_INCR_FORWARD);
       right_servo.write(SERVO_R_FORWARD_MAX + error_magnitude*SERVO_R_INCR_FORWARD);
@@ -73,6 +77,7 @@ void move(){
     // Robot is too left of line
     else if (error < -(ERROR_RANGE)) {
       // Adjust right
+      Serial.println("too left");
       error_magnitude = abs(error)/(float)ERROR_RANGE;
       left_servo.write(SERVO_L_FORWARD_MAX + error_magnitude*SERVO_L_INCR_FORWARD);
       right_servo.write(SERVO_R_FORWARD_MAX - error_magnitude*SERVO_R_INCR_FORWARD);
@@ -91,11 +96,7 @@ void setup() {
   pinMode(left_pid, INPUT);
   pinMode(left_turn, INPUT);
 
-  //for digital setup turn on
-  digitalWrite(right_pid, HIGH);
-  digitalWrite(left_pid, HIGH);
-  digitalWrite(right_turn, HIGH);
-  digitalWrite(left_turn, HIGH);
+
 
   right_servo.write(SERVO_BRAKE);
   left_servo.write(SERVO_BRAKE);
