@@ -52,62 +52,66 @@
 
               <img class="img-fluid d-block mx-auto" width="600" height="100" src="./img/ms1/robot_side.jpg" alt="">
               
+              <!-- FOLLOWING A STRAIGHT LINE -->
               <h3> Following a Straight Line </h3>
-              <p>There are four line sensors attached to the front of the robot. Two line sensors are in the middle and two line sensors are on the outer side. For this part, we only need the middle ones for controlling the robot. The middle line sensors are on top of a white tape for following the straight line and making corrections. If either of them detects a value above the white tape threshold value, it means that the the robot is leaning towards one side. In this situation, the robot will make a slight correction by slowing one of the servo by how much the robot is out of bound. The magnitude of how much the robot is out of bound is determined by the difference between the right middle sensor and the left middle sensor.  </p>             
-              <!--<img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab1/part 1.png" alt="">-->
+              <p>There are four line sensors attached to the front of the robot. Two line sensors are in the middle and two line sensors are on the outer side. For this part, we only need the middle ones for controlling the robot. The middle line sensors are on top of a white tape for following the straight line and making corrections. If either of them detects a value above the white tape threshold value, it means that the the robot is leaning towards one side. In this situation, the robot will make a slight correction by slowing one of the servo by how much the robot is out of bound. The magnitude of how much the robot is out of bound is determined by the difference between the right middle sensor and the left middle sensor.<br>
+              <br>
+              This piece of code is placed in the funciton go_straight() for future use.</p>
+              
               <iframe width="560" height="315" src="https://www.youtube.com/embed/UUIaZkpNXYs" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
               <br>
               
-              <p>This piece of code is placed in the funciton go_straight() for future use.<p/>
               
+              <!-- FIGURE 8 TRAVERSAL -->
               <h3> Figure 8 Traversal </h3>
               <p>The robot traverses the 8 by making a total of 8 turns, 4 left and 4 right. In the very beginning of the program, we wait for one second to start the program and have the robot go straight. Then it will loop in the turns forever. This part is demonstrated in the main function. </p>
+              
               <div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">while</span>(i <span style="color: #333333">&lt;</span><span style="color: #0000DD; font-weight: bold">4</span>){
-    move(left);
-    i<span style="color: #333333">++</span>;
-  } 
-  <span style="color: #008800; font-weight: bold">while</span>(i <span style="color: #333333">&lt;</span> <span style="color: #0000DD; font-weight: bold">8</span>){
-    move(right);
-    i<span style="color: #333333">++</span>;
-    <span style="color: #008800; font-weight: bold">if</span> (i <span style="color: #333333">==</span> <span style="color: #0000DD; font-weight: bold">7</span>){
-      i <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">0</span>;
-    }
-  }
-</pre></div>
+                move(left);
+                i<span style="color: #333333">++</span>;
+              } 
+              <span style="color: #008800; font-weight: bold">while</span>(i <span style="color: #333333">&lt;</span> <span style="color: #0000DD; font-weight: bold">8</span>){
+                move(right);
+                i<span style="color: #333333">++</span>;
+                <span style="color: #008800; font-weight: bold">if</span> (i <span style="color: #333333">==</span> <span style="color: #0000DD; font-weight: bold">7</span>){
+                  i <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">0</span>;
+                }
+              }
+              </pre></div>
 
               <p>The move method takes in one parameter, direction of type int. If the robot is requested to turn, the robot will begin to turn and stops turning only when both middle sensors detects a white line. However, we can only implement this stop detection method after the middle two sensors are off the white line. This is implemented by forcing the robot to turn without stop detection for th first 0.3 seconds. This delay time is experimentally determined. It is possible to further improve the accuracy of this by first setting a while loop for an off-white line detection, which allows the robot to turn no matter how wide the white tape is, how narrow the angle is or how fast the robot goes. However, this would be unnecessary for this milestone because the white taped line is always the same width and the turn degree is wide enough for a timing approximation.</p>
 
              <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">if</span> (direction <span style="color: #333333">!=</span> forward){
-    left_servo.write(servo_turn_value[direction]);
-    right_servo.write(servo_turn_value[direction]);
-    delay(<span style="color: #0000DD; font-weight: bold">300</span>); <span style="color: #888888">//force turn over line</span>
-
-    <span style="color: #008800; font-weight: bold">while</span>(<span style="color: #0000DD; font-weight: bold">1</span>){
-      read_pid();
-      <span style="color: #008800; font-weight: bold">if</span> (left_pid_val <span style="color: #333333">&lt;</span> WHITE <span style="color: #333333">&amp;&amp;</span> right_pid_val <span style="color: #333333">&lt;</span> WHITE){
-        <span style="color: #008800; font-weight: bold">break</span>; <span style="color: #888888">//found white line</span>
-      }
-    } <span style="color: #888888">//end while, done rutning</span>
-  } 
-</pre></div>
+                left_servo.write(servo_turn_value[direction]);
+                right_servo.write(servo_turn_value[direction]);
+                delay(<span style="color: #0000DD; font-weight: bold">300</span>); <span style="color: #888888">//force turn over line</span>
+            
+                <span style="color: #008800; font-weight: bold">while</span>(<span style="color: #0000DD; font-weight: bold">1</span>){
+                  read_pid();
+                  <span style="color: #008800; font-weight: bold">if</span> (left_pid_val <span style="color: #333333">&lt;</span> WHITE <span style="color: #333333">&amp;&amp;</span> right_pid_val <span style="color: #333333">&lt;</span> WHITE){
+                    <span style="color: #008800; font-weight: bold">break</span>; <span style="color: #888888">//found white line</span>
+                  }
+                } <span style="color: #888888">//end while, done rutning</span>
+              } 
+            </pre></div>
 
 
               <p>Once the robot is done turning, it will start to go in a straight line until it finds the next intersection. The finding intersection condition is used as the while loop condition, which breaks when both of the outer sensors are out of the dark area. After it finds the intersection, it goes ont to execture the next function in the main loop.</p>>
 
-              <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #888888">//look for intersection</span>
-  <span style="color: #008800; font-weight: bold">while</span>(<span style="color: #0000DD; font-weight: bold">1</span>){
-    read_turn();
-    <span style="color: #008800; font-weight: bold">if</span> (left_turn_val <span style="color: #333333">&lt;</span> WHITE <span style="color: #333333">&amp;&amp;</span> right_turn_val <span style="color: #333333">&lt;</span> WHITE){
-      <span style="color: #008800; font-weight: bold">break</span>; <span style="color: #888888">//both turn sensors are on white line</span>
-    }
-    go_straight();
-    delay(<span style="color: #0000DD; font-weight: bold">50</span>);
-  }<span style="color: #888888">//close while; found intersection</span>
-</pre></div>
+              <!-- HTML generated using hilite.me --><
+              div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #888888">//look for intersection</span>
+                <span style="color: #008800; font-weight: bold">while</span>(<span style="color: #0000DD; font-weight: bold">1</span>){
+                  read_turn();
+                  <span style="color: #008800; font-weight: bold">if</span> (left_turn_val <span style="color: #333333">&lt;</span> WHITE <span style="color: #333333">&amp;&amp;</span> right_turn_val <span style="color: #333333">&lt;</span> WHITE){
+                    <span style="color: #008800; font-weight: bold">break</span>; <span style="color: #888888">//both turn sensors are on white line</span>
+                  }
+                  go_straight();
+                  delay(<span style="color: #0000DD; font-weight: bold">50</span>);
+                }<span style="color: #888888">//close while; found intersection</span>
+              </pre></div>
 
-              
-              <!--<img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab1/part 2.png" alt="">-->
-              <iframe width="560" height="315" src="https://www.youtube.com/embed/5_2vB0YuRrI" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+            
+              <iframe width="560" height="315" src="https://www.youtube.com/embed/9PGAGNSYI2w" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
                         
               
               <h3> Work Distribution </h3>
@@ -116,14 +120,15 @@
                   &emsp; - On 9/10, Joyce, Nathalia, and Vini worked on rebuilding the robot and started the code. <br>
                   &emsp; - On 9/10, Nathalia went to open office hours and finished rebuilding the robot.<br>
                   &emsp; - On 9/14, Joyce, Nathalia, Priya, and Vini worked on in lab to complete the milestone.<br>
+                  &emsp; - Joyce completed the final finish of the figure 8using line sensor and turning capabilities.<br>
                   
                   The Lab Report Work Distribution is as follows: <br>
-                  &emsp; - Joyce: Introduction and code explanations<br>
-                  &emsp; - Priya: Code Section Write Ups<br>
+                  &emsp; - Joyce: Introduction and Code Explanations<br>
+                  &emsp; - Priya: Code Section Write Up Drafts<br>
                   &emsp; - Nathalia: Pictures and Videos<br>
                   
                   The website work distribution is as follows: <br>
-                  &emsp; - Nathalia: Website Set Up and Milestone 1<br>
+                  &emsp; - Nathalia: Website Milestone 1 Set Up and Maintenance<br>
               </p>
             </div>
           </div>
