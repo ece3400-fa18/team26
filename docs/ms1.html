@@ -56,7 +56,7 @@
               <h3> Following a Straight Line </h3>
               <p>There are four line sensors attached to the front of the robot. Two line sensors are in the middle and two line sensors are on the outer side. For this part, we only need the middle ones for controlling the robot. The middle line sensors are on top of a white tape for following the straight line and making corrections. If either of them detects a value above the white tape threshold value, it means that the the robot is leaning towards one side. In this situation, the robot will make a slight correction by slowing one of the servo by how much the robot is out of bound. The magnitude of how much the robot is out of bound is determined by the difference between the right middle sensor and the left middle sensor.<br>
               <br>
-              This piece of code is placed in the funciton go_straight() for future use.</p>
+              This piece of code is placed in the function go_straight() for future use.</p>
               
               <iframe width="560" height="315" src="https://www.youtube.com/embed/UUIaZkpNXYs" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
               <br>
@@ -91,15 +91,15 @@
                   <span style="color: #008800; font-weight: bold">if</span> (left_pid_val <span style="color: #333333">&lt;</span> WHITE <span style="color: #333333">&amp;&amp;</span> right_pid_val <span style="color: #333333">&lt;</span> WHITE){
                     <span style="color: #008800; font-weight: bold">break</span>; <span style="color: #888888">//found white line</span>
                   }
-                } <span style="color: #888888">//end while, done rutning</span>
+                } <span style="color: #888888">//end while, done turning</span>
               } 
             </pre></div>
 
 
-              <p>Once the robot is done turning, it will start to go in a straight line until it finds the next intersection. The finding intersection condition is used as the while loop condition, which breaks when both of the outer sensors are out of the dark area. After it finds the intersection, it goes ont to execture the next function in the main loop.</p>>
+              <p>Once the robot is done turning, it will start to go in a straight line until it finds the next intersection. The finding intersection condition is used as the while loop condition, which breaks when both of the outer sensors are out of the dark area. After it finds the intersection, it goes on to execute the next function in the main loop.</p>>
 
               <!-- HTML generated using hilite.me --><
-              div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #888888">//look for intersection</span>
+              <div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #888888">//look for intersection</span>
                 <span style="color: #008800; font-weight: bold">while</span>(<span style="color: #0000DD; font-weight: bold">1</span>){
                   read_turn();
                   <span style="color: #008800; font-weight: bold">if</span> (left_turn_val <span style="color: #333333">&lt;</span> WHITE <span style="color: #333333">&amp;&amp;</span> right_turn_val <span style="color: #333333">&lt;</span> WHITE){
@@ -120,7 +120,7 @@
                   &emsp; - On 9/10, Joyce, Nathalia, and Vini worked on rebuilding the robot and started the code. <br>
                   &emsp; - On 9/10, Nathalia went to open office hours and finished rebuilding the robot.<br>
                   &emsp; - On 9/14, Joyce, Nathalia, Priya, and Vini worked on in lab to complete the milestone.<br>
-                  &emsp; - Joyce completed the final finish of the figure 8using line sensor and turning capabilities.<br>
+                  &emsp; - Joyce completed the final finish of the figure 8 using line sensor and turning capabilities.<br>
                   
                   The Lab Report Work Distribution is as follows: <br>
                   &emsp; - Joyce: Introduction and Code Explanations<br>
