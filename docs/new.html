@@ -1,0 +1,58 @@
+<!-- FIGURE 8 TRAVERSAL -->
+              <h3> Figure 8 Traversal </h3>
+              <p>The robot traverses the 8 by making a total of 8 turns, 4 left and 4 right. In the very beginning of the program, we wait for one second to start the program and have the robot go straight. Then it will loop in the turns forever. This part is demonstrated in the main function. The delay function is added for buffering, it is not a timing constraint for robot control.</p>
+              
+              <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">loop</span>() {
+  Serial.println(<span style="background-color: #fff0f0">&quot;hi&quot;</span>);
+  move(left);
+  delay(<span style="color: #0000DD; font-weight: bold">50</span>);
+  move(left);
+  delay(<span style="color: #0000DD; font-weight: bold">50</span>);
+  move(left);
+  delay(<span style="color: #0000DD; font-weight: bold">50</span>);
+  move(left);
+  delay(<span style="color: #0000DD; font-weight: bold">50</span>);
+  
+  move(right);
+  delay(<span style="color: #0000DD; font-weight: bold">50</span>);
+  move(right);
+  delay(<span style="color: #0000DD; font-weight: bold">50</span>);
+  move(right);
+  delay(<span style="color: #0000DD; font-weight: bold">50</span>);
+  move(right);
+  delay(<span style="color: #0000DD; font-weight: bold">50</span>);
+}
+</pre></div>
+
+
+              <p>The move method takes in one parameter, direction of type int. Our original design was that if the robot is requested to turn, the robot will begin to turn and stops turning only when both middle sensors detects a white line. However, we ran out of analog sensors. When trying to set up the digital lines sensors, we figured they have different responses (50 for white and 130 for black; 1800 for white and 2700 for black). One of the error range was too small. While it can still be implemented, I am not as confident in using a sensor with such a small detecting range. </p>
+
+              <p>From there I resovled to a different method: using only two line sensors that are just right by the edge of the line. When both sensors detect a white, that means it encounters a horizontla line and therefore should make a turn. </p>
+
+              <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #888888">//look for intersection</span>
+  <span style="color: #008800; font-weight: bold">while</span>(<span style="color: #0000DD; font-weight: bold">1</span>){
+    Serial.println(<span style="background-color: #fff0f0">&quot;looking&quot;</span>);
+    read_turn();
+    <span style="color: #008800; font-weight: bold">if</span> (left_turn_val <span style="color: #333333">&lt;</span> WHITE <span style="color: #333333">&amp;&amp;</span> right_turn_val <span style="color: #333333">&lt;</span> WHITE){
+      i <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">0</span>;
+      Serial.println(<span style="background-color: #fff0f0">&quot;found intersection&quot;</span>);
+      <span style="color: #008800; font-weight: bold">while</span>(i <span style="color: #333333">&lt;</span> <span style="color: #0000DD; font-weight: bold">30</span>){
+        go_straight();
+        i<span style="color: #333333">++</span>;
+      }
+      Serial.println(<span style="background-color: #fff0f0">&quot;delay&quot;</span>);
+      <span style="color: #008800; font-weight: bold">break</span>; <span style="color: #888888">//both turn sensors are on white line</span>
+    }
+    go_straight();
+    delay(<span style="color: #0000DD; font-weight: bold">10</span>);
+  }<span style="color: #888888">//close while; found intersection</span>
+</pre></div>
+
+
+              <p>However, since we don't have the middle sensors to detect when the robot is on the white line again, we wouldn't know when to stop. To solve this, we don't make the robot turn immediately. Instead, the robot will travel a little bit further straght after it detects a white by using a counter for delaying. The delay function could not be used because the robot need to still be doing straight line correction. Then, the robot will begin to turn. For each direction, the respective inner sensor will detect a dark first and then the white line the robot needs to be on, and then after it go over the line the robot can travel straight again with straght line correction.</p>
+
+             
+              <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">while</span>(analogRead(right_turn) <span style="color: #333333">&gt;</span> WHITE);
+      <span style="color: #008800; font-weight: bold">while</span>(analogRead(right_turn) <span style="color: #333333">&lt;</span> WHITE);
+      Serial.println(<span style="background-color: #fff0f0">&quot;done turn left&quot;</span>);
+</pre></div>
