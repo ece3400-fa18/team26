@@ -48,81 +48,44 @@
             <div class="lab-page">
               <!-- Project Details Go Here -->
               <h2 class="text-uppercase text-left">Lab 2: Analog Circuitry and FFTs</h2>
-              <p class="item-intro text-muted"> In this lab, we added sensors to your robot. One is a microphone circuit that will detect a 660Hz whistle blow signifying the beginning of the maze mapping. The other will capture inputs from an IR sensor to detect nearby robots emitting IR at 6.08kHz, and distinguish them from decoys emitting at 18kHz.</p>
+              <p class="item-intro text-muted"> In this lab, we added sensors to the robot. <br>
+              One is a microphone circuit that will detect a 660Hz whistle blow signifying the beginning of the maze mapping. The other will capture inputs from an IR sensor to detect nearby robots emitting IR at 6.08kHz, and distinguish them from decoys emitting at 18kHz.</p>
   
-              <iframe width="560" height="315" align="middle" src="https://www.youtube.com/embed/wf3T-4biOp0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-  
-              
+              <!--<iframe width="560" height="315" align="middle" src="https://www.youtube.com/embed/wf3T-4biOp0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>-->
+                
               <h3> Acoustic Team </h3>
               <p> Assemble microphone circuit. </p>             
               <!--<img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab1/part 1.png" alt="">-->
               <code>
-                // the setup function runs once when you press reset or power the board <br>
-                void setup() {<br>
-                  &emsp; // initialize digital pin LED_BUILTIN as an output.<br>
-                  &emsp; pinMode(LED_BUILTIN, OUTPUT);<br>
-                }<br>
-                <br>
-                // the loop function runs over and over again forever<br>
-                void loop() {<br>
-                  &emsp; digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)<br>
-                  &emsp; delay(1000);                       // wait for a second<br>
-                  &emsp; digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW<br>
-                  &emsp; delay(1000);                       // wait for a second<br>
-                }
+                INSERT CODE HERE
+                <!--// the setup function runs once when you press reset or power the board <br>-->
+                <!--void setup() {<br>-->
+                <!--  &emsp; // initialize digital pin LED_BUILTIN as an output.<br>-->
+                <!--  &emsp; pinMode(LED_BUILTIN, OUTPUT);<br>-->
+                <!--}<br>-->
+                <!--<br>-->
+                <!--// the loop function runs over and over again forever<br>-->
+                <!--void loop() {<br>-->
+                <!--  &emsp; digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)<br>-->
+                <!--  &emsp; delay(1000);                       // wait for a second<br>-->
+                <!--  &emsp; digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW<br>-->
+                <!--  &emsp; delay(1000);                       // wait for a second<br>-->
+                <!--}-->
               </code>
               
               <h3> Optical Team </h3>
               <p> Assembling the IR Circuit </p>
-              <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab1/part 2.png" alt="">
+              <!--<img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab1/part 2.png" alt="">-->
               <code>
-                // the setup function runs once when you press reset or power the board<br>
-                void setup() {<br>
-                  &emsp; // initialize digital pin LED_BUILTIN as an output.<br>
-                  &emsp; pinMode(2, OUTPUT);<br>
-                  // int PINNAME = A2<br>
-                }<br>
-                <br>
-                // the loop function runs over and over again forever<br>
-                void loop() {<br>
-                  &emsp; digitalWrite(2, HIGH);   // turn the LED on (HIGH is the voltage level)<br>
-                  &emsp; delay(1000);             // wait for a second<br>
-                  &emsp; digitalWrite(2, LOW);    // turn the LED off by making the voltage LOW<br>
-                  &emsp; delay(1000);             // wait for a second<br>
-                }
+                INSERT CODE HERE
               </code>
               
             
 
-              <h3> Analog Output </h3>
-              <p>This was an extension of Part 3. Here, as before we used analogRead to get values from the potentiometer. We then used the analogWrite function so that the brightness of the LED would be dependant on the potentiometer readings. As in the modified blink code, the pin corresponding to the LED was set to output in the setup. To compensate for the difference in the range of possible analogRead (0-1023)  and analogWrite (0-255) values the value assigned to the LED was one-fourth the value read by the potentiometer; thus while there was a direct relationship between the potentiometer readings and brightness it was not one-to-one.</p>
-              <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab1/part 4.png" alt="">
-              <code>
-                int pinPot = A0; <br>
-                int val = 0; <br>
-                int ledpin = 3;<br>
-                 
-                
-                // the setup function runs once when you press reset or power the board<br>
-                void setup() {<br>
-                 &emsp; pinMode(ledpin, OUTPUT);   // sets the pin as output <br>
-                 &emsp; Serial.begin(9600);      // open the serial port at 9600 bps: <br>
-                }<br>
-                <br>
-                // the loop function runs over and over again forever<br>
-                void loop() {<br>
-                   &emsp; val = analogRead(pinPot);   // read the input pin<br>
-                   &emsp; Serial.println(val);<br>
-                   &emsp; analogWrite(ledpin, val / 4);  // analogRead values go from 0 to 1023, analogWrite values from 0 to 255<br>
-                   &emsp; delay (100);c
-                }<br>
-              </code>
-
-
               <h3> Work Distribution </h3>
-              <p> The Lab 1 Work Distribution is as follows: <br> 
+              <p> The Lab 2 Work Distribution is as follows: <br> 
                   &emsp; -  <br>
-                  The Lab Report Work Distribution is as follows: <br>
+                  The Lab 2 Report Work Distribution is as follows: <br>
                   &emsp; -  <br>
                   The website work distribution is as follows: <br>
                   &emsp; - Nathalia: Website Set Up and Lab 2<br>
