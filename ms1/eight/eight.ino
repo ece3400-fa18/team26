@@ -23,8 +23,6 @@ Servo right_servo;
 const int LW = 9; // Servo1
 const int RW = 10; // Servo2
 const int right_turn = A5;
-const int right_pid = A5;
-const int left_pid = A4;
 const int left_turn = A4;
 
 // Control variables for line following
@@ -32,20 +30,12 @@ float error           = 0;
 float error_magnitude = 0;
 int   i = 0;
 
+volatile long SENSOR0_TIMER;
+volatile long SENSOR1_TIMER;
+
 // Line sensor values
-int right_pid_val     = 0; 
-int left_pid_val      = 0;
 int right_turn_val    = 0;
 int left_turn_val     = 0;
-
-// Servo turn values
-float servo_turn_value[]   = {SERVO_R_FORWARD_MAX, 0 ,SERVO_L_FORWARD_MAX};
-
-
-void read_pid(){
-  right_pid_val = analogRead(right_pid);
-  left_pid_val = analogRead(left_pid);
-}
 
 void read_turn(){
   right_turn_val = analogRead(right_turn); //signal from outer right sensor
@@ -54,49 +44,50 @@ void read_turn(){
 
 void move(int direction){
   // Turn if requested
-  if (direction != forward){
-    delay(500);
-    left_servo.write(95);
-    right_servo.write(85);
-    Serial.println("turn");
     if(direction == right){
+      left_servo.write(95);
+      right_servo.write(95);
       while(analogRead(left_turn) > WHITE);
       while(analogRead(left_turn) < WHITE);
-      Serial.println("done turn");
+      Serial.println("done turn right");
     }
+    
     if(direction == left){
+      left_servo.write(85);
+      right_servo.write(85);
       while(analogRead(right_turn) > WHITE);
       while(analogRead(right_turn) < WHITE);
-      Serial.println("done turn");
+      Serial.println("done turn left");
     }
-    /*
-    while(1){
-      read_pid();
-      if (left_pid_val < WHITE && right_pid_val < WHITE){
-        break; //found white line
-      }
-    } //end while, done rutning
-    */
-  } 
-
+  
+  go_straight();
+  delay(50);
+  
   //look for intersection
   while(1){
+    Serial.println("looking");
     read_turn();
     if (left_turn_val < WHITE && right_turn_val < WHITE){
+      i = 0;
+      Serial.println("found intersection");
+      while(i < 30){
+        go_straight();
+        i++;
+      }
+      Serial.println("delay");
       break; //both turn sensors are on white line
-      Serial.println("1");
     }
     go_straight();
-    delay(50);
+    delay(10);
   }//close while; found intersection
-
+  Serial.println("back to main");
 }
 
 void go_straight(){
   //modified from solution code
   //following straight line
-  read_pid();
-  error = left_pid_val - right_pid_val; // Positive position to right of line
+  read_turn();
+  error = left_turn_val - right_turn_val; // Positive position to right of line
 
   // Correct robot's driving direction according to position error
   if (abs(error) <= ERROR_RANGE){
@@ -107,15 +98,15 @@ void go_straight(){
   else if (error > ERROR_RANGE) {
     // Adjust left
     error_magnitude = abs(error)/(float)ERROR_RANGE;
-    left_servo.write(SERVO_L_FORWARD_MAX - error_magnitude*SERVO_L_INCR_FORWARD);
-    right_servo.write(SERVO_R_FORWARD_MAX + error_magnitude*SERVO_R_INCR_FORWARD);
+    left_servo.write(SERVO_L_FORWARD_MAX - 2);//error_magnitude*SERVO_L_INCR_FORWARD*0.2);
+    right_servo.write(SERVO_R_FORWARD_MAX - 2);//error_magnitude*SERVO_R_INCR_FORWARD*0.2);
   }
   // Robot is too left of line
   else if (error < -(ERROR_RANGE)) {
     // Adjust right
     error_magnitude = abs(error)/(float)ERROR_RANGE;
-    left_servo.write(SERVO_L_FORWARD_MAX + error_magnitude*SERVO_L_INCR_FORWARD);
-    right_servo.write(SERVO_R_FORWARD_MAX - error_magnitude*SERVO_R_INCR_FORWARD);
+    left_servo.write(SERVO_L_FORWARD_MAX +2);
+    right_servo.write(SERVO_R_FORWARD_MAX + 2);
   }
   delay(10);
 }
@@ -129,40 +120,33 @@ void setup() {
 
   //for analog setup
   pinMode(right_turn, INPUT);
-  pinMode(right_pid, INPUT);
-  pinMode(left_pid, INPUT);
-  pinMode(left_turn, INPUT);
-
-  //for digital setup turn on
-  digitalWrite(right_pid, HIGH);
-  digitalWrite(left_pid, HIGH);
-  digitalWrite(right_turn, HIGH);
-  digitalWrite(left_turn, HIGH);
+  pinMode(left_turn, INPUT); 
 
   right_servo.write(SERVO_BRAKE);
   left_servo.write(SERVO_BRAKE);
 
   delay(1000);
-  move(forward);
 }
 
 
 void loop() {
-  /*while(i <4){
-    move(left);
-    i++;
-    delay(1000);
-  } 
-  while(i < 8){
-    move(right);
-    i++;
-    if (i == 7){
-      i = 0;
-    }
-  }*/
   Serial.println("hi");
   move(left);
+  delay(50);
   move(left);
+  delay(50);
   move(left);
+  delay(50);
   move(left);
+  delay(50);
+  
+  move(right);
+  delay(50);
+  move(right);
+  delay(50);
+  move(right);
+  delay(50);
+  move(right);
+  delay(50);
 }
+
