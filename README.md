@@ -6,11 +6,10 @@ Team 26 - Joyce Huang, Nathalia Lie, Priya Kattappurath, Vini Tripathii
 ### pin layout (arduino 1)
 left wheel 9 <br />
 right wheel 10 <br />
-left outer A0 <br />
-left pid A1 <br />
-right pid A2 <br />
-right line A3 <br />
+optical A0
+left outer A5 <br />
+right outer A6 <br />
 
 ### pin layout (arduino 2)
-microphone A0 <br />
+microphone A1 <br />
 
