@@ -40,18 +40,12 @@ void loop() {
     fft_run();
     fft_mag_log();
     sei(); //turns interrupts back on
-
     
-    //for (byte i = 0; i < FFT_N/2; i++){
-    //  Serial.println(fft_log_out[i]);
-    //}
-    //Serial.println("basdfasdfjkahdflkasdfhkaljdfa");
-    trasureDetect();
+    treasureDetect();
   }
-
 }
 
-void trasureDetect(){
+void treasureDetect(){
   int max_7_bin = 0;
   for (int i = 46; i < 50; i++){
     int x = (int) fft_log_out[i];
