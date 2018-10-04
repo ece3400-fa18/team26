@@ -55,27 +55,14 @@
                 
               <h3> Acoustic Team </h3>
               <p> Priya and Vini worked on the acoustic functionalities. <br>
-              Assemble microphone circuit. </p>             
+              Assembling the microphone circuit. </p>             
               <!--<img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab1/part 1.png" alt="">-->
-              <code>
-                INSERT CODE HERE
-                <!--// the setup function runs once when you press reset or power the board <br>-->
-                <!--void setup() {<br>-->
-                <!--  &emsp; // initialize digital pin LED_BUILTIN as an output.<br>-->
-                <!--  &emsp; pinMode(LED_BUILTIN, OUTPUT);<br>-->
-                <!--}<br>-->
-                <!--<br>-->
-                <!--// the loop function runs over and over again forever<br>-->
-                <!--void loop() {<br>-->
-                <!--  &emsp; digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)<br>-->
-                <!--  &emsp; delay(1000);                       // wait for a second<br>-->
-                <!--  &emsp; digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW<br>-->
-                <!--  &emsp; delay(1000);                       // wait for a second<br>-->
-                <!--}-->
-              </code>
+
+
               
               <h3> Optical Team </h3>
-              <p> Assembling the IR Circuit </p>
+              <p> Joyce and Nathalia worked on the optical functionalities. <br>
+              Assembling the IR Circuit </p>
               
               <img class="img-fluid d-block mx-auto" width="250" height="80" src="./img/lab2/optics schematic 1.jpg" alt="">
               <p> We first connected the photoresistor according to the circuit above. When powered up, we checked for functionality using our phone cameras. Because the cameras don’t have an IR filter, the photoresistor would glow blue, even though our naked eyes wouldn’t pick up anything.</p>
@@ -87,9 +74,50 @@
               <p> Consequently, we had to add an operational amplifier.
               To only detect the 7kHz signal. We compute the bin number of which 7kHz would be present. We determined the bin number is 45 to 50, so we read values from those bin only. When they peak, we output that the treasure is detected.</p>
               
-              
-              
-            
+              <p> Main loop </p>
+              <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">void loop() {
+
+  <span style="color: #008800; font-weight: bold">while</span>(<span style="color: #0000DD; font-weight: bold">1</span>){
+    cli(); <span style="color: #333333">//</span>UDRE interrupt
+    <span style="color: #008800; font-weight: bold">for</span>(<span style="color: #007020">int</span> i <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">0</span>; i <span style="color: #333333">&lt;</span> <span style="color: #0000DD; font-weight: bold">512</span>; i<span style="color: #333333">+=</span><span style="color: #0000DD; font-weight: bold">2</span>){
+      <span style="color: #008800; font-weight: bold">while</span>(<span style="color: #FF0000; background-color: #FFAAAA">!</span>(ADCSRA <span style="color: #333333">&amp;</span> <span style="color: #005588; font-weight: bold">0x10</span>)); <span style="color: #333333">//</span>waiting <span style="color: #008800; font-weight: bold">for</span> adc to be ready
+      ADCSRA <span style="color: #333333">=</span> <span style="color: #005588; font-weight: bold">0xf5</span>; <span style="color: #333333">//</span>restart ADC
+      byte m <span style="color: #333333">=</span> ADCL;
+      byte j <span style="color: #333333">=</span> ADCH;
+      <span style="color: #007020">int</span> k <span style="color: #333333">=</span> (j <span style="color: #333333">&lt;&lt;</span> <span style="color: #0000DD; font-weight: bold">8</span>) <span style="color: #333333">|</span> m;
+      k <span style="color: #333333">-=</span> <span style="color: #005588; font-weight: bold">0x0200</span>;
+      k <span style="color: #333333">&lt;&lt;=</span> <span style="color: #0000DD; font-weight: bold">6</span>;
+      fft_input[i] <span style="color: #333333">=</span> k;
+      fft_input[i<span style="color: #333333">+</span><span style="color: #0000DD; font-weight: bold">1</span>] <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">0</span>;
+    } 
+
+    fft_window();
+    fft_reorder();
+    fft_run();
+    fft_mag_log();
+    sei(); <span style="color: #333333">//</span>turns interrupts back on
+
+    Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;start treasure hunt&quot;</span>);
+    <span style="color: #008800; font-weight: bold">for</span> (byte i <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">0</span>; i <span style="color: #333333">&lt;</span> FFT_N<span style="color: #333333">/</span><span style="color: #0000DD; font-weight: bold">2</span>; i<span style="color: #333333">++</span>){
+      Serial<span style="color: #333333">.</span>println(fft_log_out[i]);
+    }
+    
+    trasureDetect();
+  }
+
+}
+</pre></div>
+
+              <p> An example of one loop inside the treasure detection subroutine. This is repeated of bin sizes of 7 (as below), 12, and 17. </p>
+              <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">  <span style="color: #007020">int</span> max_7_bin <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">0</span>;
+  <span style="color: #008800; font-weight: bold">for</span> (<span style="color: #007020">int</span> i <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">46</span>; i <span style="color: #333333">&lt;</span> <span style="color: #0000DD; font-weight: bold">50</span>; i<span style="color: #333333">++</span>){
+    <span style="color: #007020">int</span> x <span style="color: #333333">=</span> (<span style="color: #007020">int</span>) fft_log_out[i];
+    <span style="color: #008800; font-weight: bold">if</span>(x <span style="color: #333333">&gt;</span> max_7_bin){
+      max_7_bin <span style="color: #333333">=</span> x;
+    }
+  }
+</pre></div>
+
 
               <h3> Work Distribution </h3>
               <p> The Lab 2 Work Distribution is as follows: <br> 
