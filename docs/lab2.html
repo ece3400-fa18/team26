@@ -54,7 +54,8 @@
               <!--<iframe width="560" height="315" align="middle" src="https://www.youtube.com/embed/wf3T-4biOp0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>-->
                 
               <h3> Acoustic Team </h3>
-              <p> Assemble microphone circuit. </p>             
+              <p> Priya and Vini worked on the acoustic functionalities. <br>
+              Assemble microphone circuit. </p>             
               <!--<img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab1/part 1.png" alt="">-->
               <code>
                 INSERT CODE HERE
@@ -75,10 +76,18 @@
               
               <h3> Optical Team </h3>
               <p> Assembling the IR Circuit </p>
-              <!--<img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab1/part 2.png" alt="">-->
-              <code>
-                INSERT CODE HERE
-              </code>
+              
+              <img class="img-fluid d-block mx-auto" width="250" height="80" src="./img/lab2/optics schematic 1.jpg" alt="">
+              <p> We first connected the photoresistor according to the circuit above. When powered up, we checked for functionality using our phone cameras. Because the cameras don’t have an IR filter, the photoresistor would glow blue, even though our naked eyes wouldn’t pick up anything.</p>
+              
+              <img class="img-fluid d-block mx-auto" width="250" height="80" src="./img/lab2/optics circuit 1.jpg" alt="">
+              <p> We didn't have the 9V battery so we connect the IR hat to the DC power supply, set to 9V. The oscilloscope is connected to the output and the ground to measure the signal. This unit test is done without additional circuit.</p>
+              
+              <img class="img-fluid d-block mx-auto" width="250" height="80" src="./img/lab2/optics circuit 2.jpg" alt="">
+              <p> Consequently, we had to add an operational amplifier.
+              To only detect the 7kHz signal. We compute the bin number of which 7kHz would be present. We determined the bin number is 45 to 50, so we read values from those bin only. When they peak, we output that the treasure is detected.</p>
+              
+              
               
             
 
