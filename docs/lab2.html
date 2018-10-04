@@ -55,10 +55,56 @@
                 
               <h3> Acoustic Team </h3>
               <p> Priya and Vini worked on the acoustic functionalities. <br>
-              Assembling the microphone circuit. </p>             
-              <!--<img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab1/part 1.png" alt="">-->
+              Assembling the microphone circuit. </p>
+              Materials Used:
+              &emsp; - 1 Arduino Uno
+              &emsp; - Electret microphone
+              &emsp; - 1 µF capacitor, 6.8µF capacitor
+              &emsp; - various resistors
+              &emsp; - LM358 Op Amp
+              &emsp; - Various wires
+            
+              <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab2/acoustic/microphone schematic initial.png" alt="">
+              <p> We first connected the microphone to the arduino using the diagram above as reference. We used a 3.24KΩ Resistor and a 1µF Capacitor. We connected the output to pin A1.<br>
+              We hooked up the function generator to the Input of the circuit to test which bin the 660Hz signal would fall in. <br>
+              We used the following code, modified from Team Alpha, to collect values: </p>
+              <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">void setup() {
+  Serial<span style="color: #333333">.</span>begin(<span style="color: #0000DD; font-weight: bold">115200</span>); <span style="color: #333333">//</span> use the serial port
+}
 
+void loop() {
+  <span style="color: #008800; font-weight: bold">while</span>(<span style="color: #0000DD; font-weight: bold">1</span>) {
+    cli();
+    <span style="color: #008800; font-weight: bold">for</span> (<span style="color: #007020">int</span> i <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">0</span> ; i <span style="color: #333333">&lt;</span> <span style="color: #0000DD; font-weight: bold">512</span> ; i <span style="color: #333333">+=</span> <span style="color: #0000DD; font-weight: bold">2</span>) {
+      fft_input[i] <span style="color: #333333">=</span> analogRead(A1);
+      fft_input[i<span style="color: #333333">+</span><span style="color: #0000DD; font-weight: bold">1</span>] <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">0</span>;
+    }
+    fft_window();
+    fft_reorder();
+    fft_run();
+    fft_mag_log();
+    sei();
+    Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;start&quot;</span>);
+    <span style="color: #008800; font-weight: bold">for</span> (byte i <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">0</span> ; i <span style="color: #333333">&lt;</span> FFT_N<span style="color: #333333">/</span><span style="color: #0000DD; font-weight: bold">2</span> ; i<span style="color: #333333">++</span>) {
+      Serial<span style="color: #333333">.</span>println(fft_log_out[i]);
+    }
+  }
+}
+</pre></div>
 
+              <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab2/acoustic/with and without amp with axis labels.png" alt="">
+              <p>The 660Hz input from the function generator peaked at bin 20, whereas the 500Hz signal peaked at bin 15 and the 750Hz signal peaked at bin 22. This shows that the circuit can decipher between signals that are close together. <br>
+              We also see peaks at bins 1 and 2 for all signals, due to DC values at the input. Since these are consistent for all frequencies, we can ignore these peaks. </p>
+
+              <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab2/acoustic/microphone amplifier schematic.png" alt="">
+              <p> We then added the above amplifier circuit, from Team Alpha, as recommended by the TA’s. <br>
+              The exact resistor values are: 328Ω, 3.24kΩ, 391kΩ, 9.85kΩ, 9.8kΩ </p>
+              
+              <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab2/acoustic/660,500,750 with axis labels.png" alt="">
+              <p> We then tested the microphone with a 660Hz tone being played, instead of directly inputting a signal from the function generator. We collected the values using the same code as before. As seen in the graph above, without the amplifier the 660Hz tone blends in with the other signals. With the amplifier connected, we can see a peak at bin 20, which is where we saw the 660Hz peak with the function generator. There are also peaks at bin 39 and 58, most likely due to background noise in the lab. This shows that the circuit is successful in amplifying the 660Hz value above noise, and can identify the 660Hz tone based on which bin it appears in (bin 20).
+              </p>
+              
+              
               
               <h3> Optical Team </h3>
               <p> Joyce and Nathalia worked on the optical functionalities. <br>
@@ -73,6 +119,34 @@
               <img class="img-fluid d-block mx-auto" width="250" height="80" src="./img/lab2/optics circuit 2.jpg" alt="">
               <p> Consequently, we had to add an operational amplifier.
               To only detect the 7kHz signal. We compute the bin number of which 7kHz would be present. We determined the bin number is 45 to 50, so we read values from those bin only. When they peak, we output that the treasure is detected.</p>
+              
+              <img class="img-fluid d-block mx-auto" width="250" height="80" src="./img/lab2/optics schematic 1.jpg" alt="">
+              <table style="width:100%">
+              <tr>
+                <th>Component Part</th>
+                <th>Value</th> 
+              </tr>
+              <tr>
+                <td>R1</td>
+                <td>1.34 kΩ</td>
+              </tr>
+              <tr>
+                <td>R2</td>
+                <td>6.79 kΩ</td>
+              </tr>
+              <tr>
+                <td>R3</td>
+                <td>6.73 kΩ</td>
+              </tr>
+              <tr>
+                <td>R4</td>
+                <td>39.93 kΩ</td>
+              </tr>
+              <tr>
+                <td>C1</td>
+                <td>3.3 nF</td>
+              </tr>
+            </table>
               
               <p> Main loop </p>
               <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">void loop() {
