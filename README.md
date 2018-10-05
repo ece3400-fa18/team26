@@ -8,5 +8,6 @@ left wheel 9 <br />
 right wheel 10 <br />
 optical A0 <br />
 microphone A1 <br />
+short distance sensor A2 <br />
 left outer A4 <br />
 right outer A5 <br />
