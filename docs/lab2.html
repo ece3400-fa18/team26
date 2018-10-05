@@ -50,8 +50,7 @@
               <h2 class="text-uppercase text-left">Lab 2: Analog Circuitry and FFTs</h2>
               <p class="item-intro text-muted"> In this lab, we added sensors to the robot. <br>
               One is a microphone circuit that will detect a 660Hz whistle blow signifying the beginning of the maze mapping. The other will capture inputs from an IR sensor to detect nearby robots emitting IR at 6.08kHz, and distinguish them from decoys emitting at 18kHz.</p>
-  
-              <!--<iframe width="560" height="315" align="middle" src="https://www.youtube.com/embed/wf3T-4biOp0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>-->
+
                 
               <h3> Acoustic Team </h3>
               <p> Priya and Vini worked on the acoustic functionalities. <br>
@@ -100,10 +99,11 @@ void loop() {
               <p> We then added the above amplifier circuit, from Team Alpha, as recommended by the TA’s. <br>
               The exact resistor values are: 328Ω, 3.24kΩ, 391kΩ, 9.85kΩ, 9.8kΩ </p>
               
-              <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab2/acoustic/660,500,750 with axis labels.png" alt="">
+              <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab2/acoustic/660,500,750 with axis labels.PNG" alt="">              
               <p> We then tested the microphone with a 660Hz tone being played, instead of directly inputting a signal from the function generator. We collected the values using the same code as before. As seen in the graph above, without the amplifier the 660Hz tone blends in with the other signals. With the amplifier connected, we can see a peak at bin 20, which is where we saw the 660Hz peak with the function generator. There are also peaks at bin 39 and 58, most likely due to background noise in the lab. This shows that the circuit is successful in amplifying the 660Hz value above noise, and can identify the 660Hz tone based on which bin it appears in (bin 20).
               </p>
               
+                          
               
               
               <h3> Optical Team </h3>
@@ -120,7 +120,7 @@ void loop() {
               <p> Consequently, we had to add an operational amplifier.
               To only detect the 7kHz signal. We compute the bin number of which 7kHz would be present. We determined the bin number is 45 to 50, so we read values from those bin only. When they peak, we output that the treasure is detected.</p>
               
-              <img class="img-fluid d-block mx-auto" width="250" height="80" src="./img/lab2/optics schematic 2.jpg" alt="">
+              <img class="img-fluid d-block mx-auto" width="400" height="100" src="./img/lab2/optics schematic 2.jpg" alt="">
               <table style="width:40%">
               <tr>
                 <th>Component Part</th>
@@ -192,6 +192,9 @@ void loop() {
     }
   }
 </pre></div>
+              
+              <div style="position:relative;height:0;padding-bottom:75.0%"><iframe src="https://www.youtube.com/embed/_xo2b0c2bpM?ecver=2" width="480" height="360" frameborder="0" allow="autoplay; encrypted-media" style="position:absolute;width:100%;height:100%;left:0" allowfullscreen></iframe></div>
+
 
 
               <h3> Work Distribution </h3>
