@@ -114,10 +114,14 @@ void go_straight(){
 
 bool wallDetected(){
   int distance = analogRead(front_wall);
-  Serial.println("d=" + distance);
+  Serial.println(distance);
   return (distance > 400);
 }
 
+void servos_stop(){
+  right_servo.write(SERVO_BRAKE);
+  left_servo.write(SERVO_BRAKE);
+}
 
 void setup() {
   // put your setup code here, to run once:
@@ -139,14 +143,12 @@ void setup() {
 
 void loop() {
   go_straight();
-  delay(1000);
-  Serial.println("wd=" + wallDetected());
+
   if (wallDetected() == true){
-    move(right);
+    move(left);
     if(wallDetected() == true){
-      move(right);
+      move(left);
     }
   else go_straight;
   }
-
 }
