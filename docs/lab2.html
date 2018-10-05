@@ -99,7 +99,7 @@ void loop() {
               <p> We then added the above amplifier circuit, from Team Alpha, as recommended by the TA’s. <br>
               The exact resistor values are: 328Ω, 3.24kΩ, 391kΩ, 9.85kΩ, 9.8kΩ </p>
               
-              <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab2/acoustic/660,500,750 with axis labels.PNG" alt="">              
+              <img class="img-fluid d-block mx-auto" width="650" height="100" src="./img/lab2/acoustic/660,500,750 with axis labels.PNG" alt="">              
               <p> We then tested the microphone with a 660Hz tone being played, instead of directly inputting a signal from the function generator. We collected the values using the same code as before. As seen in the graph above, without the amplifier the 660Hz tone blends in with the other signals. With the amplifier connected, we can see a peak at bin 20, which is where we saw the 660Hz peak with the function generator. There are also peaks at bin 39 and 58, most likely due to background noise in the lab. This shows that the circuit is successful in amplifying the 660Hz value above noise, and can identify the 660Hz tone based on which bin it appears in (bin 20).
               </p>
               
@@ -111,13 +111,14 @@ void loop() {
               Assembling the IR Circuit </p>
               
               <img class="img-fluid d-block mx-auto" width="225" height="80" src="./img/lab2/optics schematic 1.JPG" alt="">              
-              <p> We first connected the photoresistor according to the circuit above. When powered up, we checked for functionality using our phone cameras. Because the cameras don’t have an IR filter, the photoresistor would glow blue, even though our naked eyes wouldn’t pick up anything.</p>
+              <p> The first step of unit testing was understanding the phototransistor. We know that phototransistors measure the light intensity and lets more current pass the more light it receives. As given in the prompt, the IR hat emits 6.08kHz and we need to ignore decoys of 18kHz.<br>
+              We first connected the photoresistor according to the circuit above. When powered up, we checked for functionality using our phone cameras. Because the cameras don’t have an IR filter, the photoresistor would glow blue, even though our naked eyes wouldn’t pick up anything. </p>
               
               <img class="img-fluid d-block mx-auto" width="500" height="160" src="./img/lab2/optics circuit 1.jpg" alt="">
               <p> We didn't have the 9V battery so we connect the IR hat to the DC power supply, set to 9V. The oscilloscope is connected to the output and the ground to measure the signal. This unit test is done without additional circuit.</p>
               
               <img class="img-fluid d-block mx-auto" width="400" height="100" src="./img/lab2/optics circuit 2.jpg" alt="">
-              <p> Consequently, we had to add an operational amplifier.
+              <p> Consequently, we had to add an operational amplifier. Without an op amp, the sensor cannot detect the IR waves unless the emitting source is in close proximity. 
               To only detect the 7kHz signal. We compute the bin number of which 7kHz would be present. We determined the bin number is 45 to 50, so we read values from those bin only. When they peak, we output that the treasure is detected.</p>
               
               <img class="img-fluid d-block mx-auto" width="400" height="100" src="./img/lab2/optics schematic 2.jpg" alt="">
@@ -183,7 +184,7 @@ void loop() {
 }
 </pre></div>
 
-              <p> An example of one loop inside the treasure detection subroutine. This is repeated of bin sizes of 7 (as below), 12, and 17. </p>
+              <p> An example of one loop inside the treasure detection subroutine. This is repeated of bin sizes of 7 (as below), 12, and 17. Once the value for each bin's maximum value is tested for, the code runs through a conditional loop to compare the max value to the constant value thresholds. Should the stored value be greater than the threshold, it prints to the serial monitor the corresponding treasure value. </p>
               <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">  <span style="color: #007020">int</span> max_7_bin <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">0</span>;
   <span style="color: #008800; font-weight: bold">for</span> (<span style="color: #007020">int</span> i <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">46</span>; i <span style="color: #333333">&lt;</span> <span style="color: #0000DD; font-weight: bold">50</span>; i<span style="color: #333333">++</span>){
     <span style="color: #007020">int</span> x <span style="color: #333333">=</span> (<span style="color: #007020">int</span>) fft_log_out[i];
@@ -193,15 +194,18 @@ void loop() {
   }
 </pre></div>
               
-              <div style="position:relative;height:0;padding-bottom:75.0%"><iframe src="https://www.youtube.com/embed/_xo2b0c2bpM?ecver=2" width="480" height="360" frameborder="0" allow="autoplay; encrypted-media" style="position:absolute;width:100%;height:100%;left:0" allowfullscreen></iframe></div>
-
-
+              <div style="position:relative;height:0;padding-bottom:75.0%"><iframe src="https://www.youtube.com/embed/_xo2b0c2bpM?ecver=2" width="400" height="300" frameborder="0" allow="autoplay; encrypted-media" style="position:absolute;width:100%;height:100%;left:0" allowfullscreen></iframe></div>
+              <br>
 
               <h3> Work Distribution </h3>
               <p> The Lab 2 Work Distribution is as follows: <br> 
-                  &emsp; -  <br>
+                  &emsp; - Priya and Vini worked on the acoustics circuit <br>
+                  &emsp; - Joyce and Nathalia worked on the optical circuit <br>
                   The Lab 2 Report Work Distribution is as follows: <br>
-                  &emsp; -  <br>
+                  &emsp; - Priya and Vini worked on the acoustics circuit write up <br>
+                  &emsp; - Priya finished the acoustics graphs <br>
+                  &emsp; - Joyce and Nathalia worked on the optical circuit <br>
+                  &emsp; - Joyce filmed the video <br>
                   The website work distribution is as follows: <br>
                   &emsp; - Nathalia: Website Set Up and Lab 2<br>
               </p>
