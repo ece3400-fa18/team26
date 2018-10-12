@@ -134,9 +134,9 @@ void loop(void)
 //    bool ok = radio.write( "0,0,north=true,west=true,south=true", sizeof(unsigned long) );
 
     //sending hard-coded message
-    unsigned long message = 1234;
+    unsigned long message = 12345678;
     printf("now sending %lu...",message);
-    bool ok = radio.write(message, sizeof(unsigned long));
+    bool ok = radio.write(&message, sizeof(unsigned long));
 
     if (ok)
       printf("ok...");
