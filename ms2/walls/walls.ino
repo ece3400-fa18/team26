@@ -143,12 +143,7 @@ void setup() {
 
 void loop() {
   go_straight();
-<<<<<<< HEAD
-  delay(1000);
-  Serial.println(wallDetected());
-=======
 
->>>>>>> 13143f5ab2569913af3d67d661db0e702fe24f69
   if (wallDetected() == true){
     move(left);
     if(wallDetected() == true){
