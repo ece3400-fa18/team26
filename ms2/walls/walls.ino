@@ -114,7 +114,7 @@ void go_straight(){
 
 bool wallDetected(){
   int distance = analogRead(front_wall);
-  Serial.println("d=" + distance);
+  Serial.println(distance);
   return (distance > 400);
 }
 
@@ -140,7 +140,7 @@ void setup() {
 void loop() {
   go_straight();
   delay(1000);
-  Serial.println("wd=" + wallDetected());
+  Serial.println(wallDetected());
   if (wallDetected() == true){
     move(right);
     if(wallDetected() == true){
