@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>ECE 3400 Team 26</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+
+    <!-- Custom styles for this template -->
+    <link href="css/agency.css" rel="stylesheet">
+
+  </head>
+
+  <body id="page-top">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="index.html">Home</a>
+        
+      </div>
+    </nav>
+
+    <!-- Header -->
+     <div class="pagehead">
+      <div class="container">
+        <h2>  </h2>
+      </div>
+    </div> 
+
+    <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+            <div class="lab-page">
+              <!-- Project Details Go Here -->
+              <h2 class="text-uppercase text-left">Milestone 2: Detection</h2>
+              <p class="item-intro text-muted"> The goal of this milestone is to make the robot successfully circle an arbitrary set of walls and successfully avoid other robots by stopping when it detects another IR emitting hat.
+              </p>  
+
+              <!--<img class="img-fluid d-block mx-auto" width="600" height="100" src="./img/ms1/robot_side.jpg" alt="">-->
+              
+              <!-- WALL FOLLOWING -->
+              <h3> Wall Following </h3>
+              <h5>Hardware</h5>
+              <p>The wall detection was done using a distance measuring sensor unit, composed of an integrated combination of PSD (position sensitive detector), IR-LED (infrared emitting diode) and signal processing circuit. Datasheet here. We positioned the sensor at the front of the robot, and attached it with a 3D printed plastic piece.
+             	The sensor is communicating with the Arduino through port A2. <br>
+              This piece of code is placed in the function go_straight() for future use.</p>
+
+              <h5>Software</h5>
+              <p>Most of the code was already implemented from line following and motor servo behavior. However, they all had to be synthesized together and incorporated with the aforementioned distance sensor. </p>
+              
+              <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">void loop() {
+  go_straight();
+
+  <span style="color: #008800; font-weight: bold">if</span> (wallDetected() <span style="color: #333333">==</span> true){
+    move(left);
+    <span style="color: #008800; font-weight: bold">if</span>(wallDetected() <span style="color: #333333">==</span> true){
+      move(left);
+    }
+  <span style="color: #008800; font-weight: bold">else</span> go_straight;
+  }
+}
+</pre></div>
+
+              <p>Wall Detection is a simple subroutine that returns a boolean on whether a wall is detected in front of the robot or not. This is based on reading the analog value that the sensor returns.</p>
+              
+              <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #007020">bool</span> wallDetected(){
+  <span style="color: #007020">int</span> distance <span style="color: #333333">=</span> analogRead(front_wall);
+  Serial<span style="color: #333333">.</span>println(distance);
+  <span style="color: #008800; font-weight: bold">return</span> (distance <span style="color: #333333">&gt;</span> <span style="color: #0000DD; font-weight: bold">400</span>);
+}
+</pre></div>
+
+
+              
+              
+              <!-- DETECTING OTHER ROBOTS -->
+              <h3> Avoiding other Robots </h3>
+              <p> Using the phototransistors to sense other IR hats. </p>
+
+
+           
+              
+              <h3> Work Distribution </h3>
+              <p> The Milestone 2 Work Distribution is as follows: <br> 
+                  &emsp; - <br>
+                  
+                  The Lab Report Work Distribution is as follows: <br>
+                  &emsp; - <br>
+                  
+                  The Website Work distribution is as follows: <br>
+                  &emsp; - Nathalia: Website Milestone 2 Set Up and Maintenance<br>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4">
+            <span class="copyright">Copyright &copy; Your Website 2018</span>
+          </div>
+          <div class="col-md-4">
+            <ul class="list-inline social-buttons">
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fab fa-twitter"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fab fa-facebook-f"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fab fa-linkedin-in"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="col-md-4">
+            <ul class="list-inline quicklinks">
+              <li class="list-inline-item">
+                <a href="#">Privacy Policy</a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">Terms of Use</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+ 
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Contact form JavaScript -->
+    <script src="js/jqBootstrapValidation.js"></script>
+    <script src="js/contact_me.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="js/agency.min.js"></script>
+
+  </body>
+
+</html>

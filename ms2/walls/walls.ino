@@ -118,6 +118,10 @@ bool wallDetected(){
   return (distance > 400);
 }
 
+void servos_stop(){
+  right_servo.write(SERVO_BRAKE);
+  left_servo.write(SERVO_BRAKE);
+}
 
 void setup() {
   // put your setup code here, to run once:
@@ -139,14 +143,17 @@ void setup() {
 
 void loop() {
   go_straight();
+<<<<<<< HEAD
   delay(1000);
   Serial.println(wallDetected());
+=======
+
+>>>>>>> 13143f5ab2569913af3d67d661db0e702fe24f69
   if (wallDetected() == true){
-    move(right);
+    move(left);
     if(wallDetected() == true){
-      move(right);
+      move(left);
     }
   else go_straight;
   }
-
 }

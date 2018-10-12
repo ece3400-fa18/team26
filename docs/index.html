@@ -31,6 +31,10 @@
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
       <div class="container">
         <a class="navbar-brand js-scroll-trigger" href="#page-top">Team 26</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Menu
+          <i class="fas fa-bars"></i>
+        </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav text-uppercase ml-auto">
             <li class="nav-item">
@@ -50,6 +54,7 @@
         </div>
       </div>
     </nav>
+    
 
     <!-- Header -->
     <header class="masthead">
@@ -60,9 +65,84 @@
         </div>
       </div>
     </header>
+    
+    <!-- Labs -->
+    <section class="bg-light" id="Labs">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12 text-center">
+            <h2 class="section-heading text-uppercase">Labs</h2>
+            <h3 class="section-subheading text-muted"> Robot under construction...</h3>
+          </div>
+        </div>
+        <div class="row">
+          
+          <div class="col-sm-3 portfolio-item">
+            <a class="portfolio-link" data-toggle="modal" href="lab1.html">
+              <div class="portfolio-hover">
+                <div class="portfolio-hover-content">
+                  <i class="fas fa-plus fa-3x"></i>
+                </div>
+              </div>
+              <img class="img-fluid" src="img/about/cute robot.jpg" alt="">
+            </a>
+            <div class="portfolio-caption">
+              <h4>Lab 1</h4>
+              <p class="text-muted">Microcontroller</p>
+            </div>
+          </div>
+          
+          <div class="col-sm-3 portfolio-item">
+            <a class="portfolio-link" data-toggle="modal" href="lab2.html">
+              <div class="portfolio-hover">
+                <div class="portfolio-hover-content">
+                  <i class="fas fa-plus fa-3x"></i>
+                </div>
+              </div>
+              <img class="img-fluid" src="img/about/cute robot.jpg" alt="">
+            </a>
+            <div class="portfolio-caption">
+              <h4>Lab 2</h4>
+              <p class="text-muted">Analog Circuitry and FFTs</p>
+            </div>
+          </div>
+
+          
+          <div class="col-sm-3 portfolio-item">
+            <a class="portfolio-link" data-toggle="modal" href="#portfolioModal5">
+              <div class="portfolio-hover">
+                <div class="portfolio-hover-content">
+                  <i class="fas fa-plus fa-3x"></i>
+                </div>
+              </div>
+              <img class="img-fluid" src="img/about/cute robot.jpg" alt="">
+            </a>
+            <div class="portfolio-caption">
+              <h4>Lab 3</h4>
+              <p class="text-muted">Radio Communication and Map Drawing</p>
+            </div>
+          </div>
+          
+          <div class="col-sm-3 portfolio-item">
+            <a class="portfolio-link" data-toggle="modal" href="#portfolioModal6">
+              <div class="portfolio-hover">
+                <div class="portfolio-hover-content">
+                  <i class="fas fa-plus fa-3x"></i>
+                </div>
+              </div>
+              <img class="img-fluid" src="img/about/cute robot.jpg" alt="">
+            </a>
+            <div class="portfolio-caption">
+              <h4>Lab 4</h4>
+              <p class="text-muted">FPGA and Vision</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- Labs -->
-    <section id="Labs">
+<!--    <section id="Labs">
       <div class="container">
         <div class="row">
           <div class="col-lg-12 text-center">
@@ -128,19 +208,19 @@
                     <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!</p>
                   </div>
                 </div>
-<!--              </li>
+            </li>
               <li class="timeline-inverted">
                 <div class="timeline-image">
                   <h4>Hello!
                     <br>I am a
                     <br>Robot!</h4>
                 </div>
-              </li>-->
+              </li>
             </ul>
           </div>
         </div>
       </div>
-    </section>
+    </section>-->
     
     <!-- Milestone -->
     <section id="Milestones">
@@ -170,15 +250,15 @@
               </li>
               <li class="timeline-inverted">
                 <div class="timeline-image">
-                  <img class="rounded-circle img-fluid" src="img/about/cute robot.jpg" alt="">
+                  <a href = "ms2.html"><img class="rounded-circle img-fluid" src="img/about/cute robot.jpg" alt=""></a>
                 </div>
                 <div class="timeline-panel">
                   <div class="timeline-heading">
-                    <h4>Milestone 2</h4>
+                    <a href = "ms2.html"><h4>Milestone 2</h4></a>
                     <h4 class="subheading">Detection</h4>
                   </div>
                   <div class="timeline-body">
-                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!</p>
+                    <p class="text-muted">A robot that successfully follows a wall and detects other robots. </p>
                   </div>
                 </div>
               </li>
@@ -217,11 +297,11 @@
 
 
     <!-- Team -->
-    <section class="bg-light" id="team">
+<!--    <section class="bg-light" id="team">
       <div class="container">
         <div class="row">
           <div class="col-lg-12 text-center">
-            <h2 class="section-heading text-uppercase">Our Amazing Team</h2>
+            <h2 class="section-heading text-uppercase">Members</h2>
             
             <p><b>Joyce Huang</b></p>
             <p>     Joyce Huang is a senior studying Electrical and Computer Engineering. She is from the bay area and specializes in signal processing and communication systems. Outside of school, she likes to play basketball and search for good food places in Ithaca (which is a rather difficult task).</p>
@@ -235,13 +315,93 @@
           </div>
         </div>
       </div>
+    </section>-->
+    
+    
+    <!-- Team -->
+    <section class="bg-light" id="team">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12 text-center">
+            <h2 class="section-heading text-uppercase"> Team Members </h2>
+          </div>
+        </div>
+        <div class="row">
+          
+          <div class="col-sm-3">
+            <div class="team-member">
+              <img class="mx-auto rounded-circle" src="img/about/profile avatar.png" alt="">
+              <h4>Joyce Huang</h4>
+              <p class="text-muted">ECE '19</p>
+              <ul class="list-inline social-buttons">
+                <li class="list-inline-item">
+                  <a href="#">
+                    <i class="fab fa-linkedin-in"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="col-sm-3">
+            <div class="team-member">
+              <img class="mx-auto rounded-circle" src="img/about/profile avatar.png" alt="">
+              <h4>Nathalia Lie</h4>
+              <p class="text-muted">CS '20</p>
+              <ul class="list-inline social-buttons">
+                <li class="list-inline-item">
+                  <a href="#">
+                    <i class="fab fa-linkedin-in"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="col-sm-3">
+            <div class="team-member">
+              <img class="mx-auto rounded-circle" src="img/about/profile avatar.png" alt="">
+              <h4>Priya Kattappurath</h4>
+              <p class="text-muted">ECE '20</p>
+              <ul class="list-inline social-buttons">
+                <li class="list-inline-item">
+                  <a href="#">
+                    <i class="fab fa-linkedin-in"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="col-sm-3">
+            <div class="team-member">
+              <img class="mx-auto rounded-circle" src="img/about/profile avatar.png" alt="">
+              <h4>Vini Tipathii</h4>
+              <p class="text-muted">ECE '20</p>
+              <ul class="list-inline social-buttons">
+                <li class="list-inline-item">
+                  <a href="#">
+                    <i class="fab fa-linkedin-in"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-8 mx-auto text-center"
+          </div>
+        </div>
+      </div>
     </section>
+    
 
     <section class="bg-light" id="documents">
       <div class="container">
         <h2 class="section-heading text-uppercase text-center"> Documents </h2>
         <ul>
-          <a href="https://docs.google.com/document/d/1eccuDlNw2xkbDJ6rYjj3qfbuV_SsTpKgxttlGTqCwvk/edit#">Team Contract</a>
+          <!--<a href="https://docs.google.com/document/d/1eccuDlNw2xkbDJ6rYjj3qfbuV_SsTpKgxttlGTqCwvk/edit#">Team Contract</a>-->
+          <a href = "teamContract.html">Team Contract</a>
         </ul>
         <ul>
           <a href = "https://github.com/ece3400-fa18/team26">Github</a>

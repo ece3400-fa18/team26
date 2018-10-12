@@ -51,7 +51,10 @@
               <p class="item-intro text-muted"> In this lab, we added sensors to the robot. <br>
               One is a microphone circuit that will detect a 660Hz whistle blow signifying the beginning of the maze mapping. The other will capture inputs from an IR sensor to detect nearby robots emitting IR at 6.08kHz, and distinguish them from decoys emitting at 18kHz.</p>
 
-                
+              <h3> Open Music Labs FFT Library </h3>
+              <p> Data was collected from the ADC (for the optics team) or from analogRead (for the acoustics team) and transformed via the FFT library. The Arduino FFT library allows users to quickly transform signal data gathered over a period of time from the Arduino into its various frequency.
+              </p>
+              
               <h3> Acoustic Team </h3>
               <p> Priya and Vini worked on the acoustic functionalities. <br>
               Assembling the microphone circuit. </p>
@@ -65,6 +68,7 @@
             
               <img class="img-fluid d-block mx-auto" width="250" height="70" src="./img/lab2/acoustic/microphone schematic initial.png" alt="">
               <p> We first connected the microphone to the arduino using the diagram above as reference. We used a 3.24KΩ Resistor and a 1µF Capacitor. We connected the output to pin A1.<br>
+              In Arduino the ADC clock is preset to 16 MHz/128 = 125 KHz (though the sampling rate can be increased). Each conversion in AVR takes 13 ADC clocks so so the equivalent frequency is 125 KHz /13 = 9615 Hz. The ‘start’ is signaled by 660Hz, so analogRead is sufficient to fulfill the Nyquist Criteria which requires that the sampling frequency is at least twice the highest frequency component to avoid aliasing. The frequency of the human speech 85-180 Hz for males and 165-255 for females, and so should not interfere with sensing the start signal. <br>
               We hooked up the function generator to the Input of the circuit to test which bin the 660Hz signal would fall in. <br>
               We used the following code, modified from Team Alpha, to collect values: </p>
               <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">void setup() {
@@ -121,7 +125,7 @@ void loop() {
               <p> Consequently, we had to add an operational amplifier. Without an op amp, the sensor cannot detect the IR waves unless the emitting source is in close proximity. 
               To only detect the 7kHz signal. We compute the bin number of which 7kHz would be present. We determined the bin number is 45 to 50, so we read values from those bin only. When they peak, we output that the treasure is detected.</p>
               
-              <img class="img-fluid d-block mx-auto" width="400" height="100" src="./img/lab2/optics schematic 2.jpg" alt="">
+              <img class="img-fluid d-block mx-auto" width="400" height="100" src="./img/lab2/Lab 2 Optic Schematic v2.jpg" alt="">
               <table style="width:40%">
               <tr>
                 <th>Component Part</th>
