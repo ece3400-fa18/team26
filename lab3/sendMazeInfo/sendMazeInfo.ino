@@ -161,11 +161,11 @@ void loop(void)
     else
     {
       // Grab the response, compare, and send to debugging spew
-      unsigned long got_time;
-      radio.read( &got_time, sizeof(unsigned long) );
+      unsigned long got_message;
+      radio.read( &got_message, sizeof(unsigned long) );
 
       // Spew it
-      printf("Got response %lu, round-trip delay: %lu\n\r",got_time,millis()-got_time);
+      printf("Got response %lu, round-trip delay: %lu\n\r",got_message,millis());
     }
 
     // Try again 1s later
@@ -182,15 +182,15 @@ void loop(void)
     if ( radio.available() )
     {
       // Dump the payloads until we've gotten everything
-      unsigned long got_time;
+      unsigned long got_message;
       bool done = false;
       while (!done)
       {
         // Fetch the payload, and see if this was the last one.
-        done = radio.read( &got_time, sizeof(unsigned long) );
+        done = radio.read( &got_message, sizeof(unsigned long) );
 
         // Spew it
-        printf("Got payload %lu...",got_time);
+        printf("Got payload %lu...",got_message);
 
         // Delay just a little bit to let the other unit
         // make the transition to receiver
@@ -202,7 +202,7 @@ void loop(void)
       radio.stopListening();
 
       // Send the final one back.
-      radio.write( &got_time, sizeof(unsigned long) );
+      radio.write( &got_message, sizeof(unsigned long) );
       printf("Sent response.\n\r");
 
       // Now, resume listening so we catch the next packets.
