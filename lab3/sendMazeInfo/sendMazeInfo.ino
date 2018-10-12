@@ -128,10 +128,15 @@ void loop(void)
     // First, stop listening so we can talk.
     radio.stopListening();
 
-    // Take the time, and send it.  This will block until complete
-    unsigned long time = millis();
-    printf("Now sending %lu...",time);
-    bool ok = radio.write( "0,0,north=true,west=true,south=true", sizeof(unsigned long) );
+//    // Take the time, and send it.  This will block until complete
+//    unsigned long time = millis();
+//    printf("Now sending %lu...",time);
+//    bool ok = radio.write( "0,0,north=true,west=true,south=true", sizeof(unsigned long) );
+
+    //sending hard-coded message
+    unsigned long message = 1234;
+    printf("now sending %lu...",message);
+    bool ok = radio.write(message, sizeof(unsigned long));
 
     if (ok)
       printf("ok...");
