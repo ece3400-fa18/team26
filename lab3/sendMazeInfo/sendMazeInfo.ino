@@ -120,7 +120,7 @@ void setup(void)
 void loop(void)
 {
   //
-  // Ping out role.  Repeatedly senrd the current time
+  // Ping out role.  Repeatedly send the current time
   //
 
   if (role == role_ping_out)
