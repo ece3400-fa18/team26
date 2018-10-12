@@ -162,7 +162,7 @@ void loop(void)
     {
       // Grab the response, compare, and send to debugging spew
       unsigned long got_message;
-      radio.read( &got_message, sizeof(unsigned long) );
+      radio.read( &got_message, sizeof(unsigned long));
 
       // Spew it
       printf("Got response %lu, round-trip delay: %lu\n\r",got_message,millis());
