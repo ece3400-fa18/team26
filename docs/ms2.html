@@ -90,10 +90,43 @@
               
               <!-- DETECTING OTHER ROBOTS -->
               <h3> Avoiding other Robots </h3>
-              <p> Using the phototransistors to sense other IR hats. </p>
+              <p> Using the phototransistors to sense other IR hats. We created an RC low pass filter to avoid decoy signals. 
+                After confirming that the circuit was safe and functioning correctly on the function generator, the threshold and bin number were determined by graphing the magnitude of the bins. The data was read from the serial monitor. </p>
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;start&quot;</span>);
+<span style="color: #008800; font-weight: bold">for</span> (byte i <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">0</span> ; i <span style="color: #333333">&lt;</span> FFT_N<span style="color: #333333">/</span><span style="color: #0000DD; font-weight: bold">2</span> ; i<span style="color: #333333">++</span>) { 
+     Serial<span style="color: #333333">.</span>println(fft_log_out[i]); <span style="color: #333333">//</span> send out the data
+}
+Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;done&quot;</span>);
+</pre></div>
 
+              <p> The chosen sampling frequency is 115200; plotting data indicated that while bins 44, 45, and 46 all increased in size when 6.0kHz was played, the highest peak occurred in bin 45 so it was determined that bin 45 would be used as an indicator of the signal. </p>    
+              
+<!--          magnitude graph image      -->
+              
+              <p> Lastly, the thresholds for different distances were measured so the robot would not only be able to sense the presence of the another robot, but also have and indication of how far away it is (in future we plan to utilize to determine whether the robot should reverse or merely stop). </p>
+              
+<!--          relative thresholds graph      -->
+              
+              <p>This was then combined with the wall detecting code in the by adding and if statement in the void loop() section shown below. </p>
+              
+              <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">if</span> (fft_log_out[irBin] <span style="color: #333333">&gt;</span> irThresh) {
+	servos_stop();
+} 
+<span style="color: #008800; font-weight: bold">else</span> {
+	go_straight();    
+	<span style="color: #008800; font-weight: bold">if</span> (wallDetected() <span style="color: #333333">==</span> true){
+          move(left);
+          <span style="color: #008800; font-weight: bold">if</span>(wallDetected() <span style="color: #333333">==</span> true){
+            move(left);
+          }
+        	<span style="color: #008800; font-weight: bold">else</span> go_straight;
+      }
+}
+</pre></div>
+              
+              <p> Thus, if another robot was detected, the robot would stop -- otherwise it would continue with the right hand wall following algorithm. </p>
 
-           
+              
               
               <h3> Work Distribution </h3>
               <p> The Milestone 2 Work Distribution is as follows: <br> 
