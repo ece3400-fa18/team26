@@ -51,12 +51,12 @@
               <p class="item-intro text-muted"> The goal of this milestone is to make the robot successfully circle an arbitrary set of walls and successfully avoid other robots by stopping when it detects another IR emitting hat.
               </p>  
 
-              <!--<img class="img-fluid d-block mx-auto" width="600" height="100" src="./img/ms1/robot_side.jpg" alt="">-->
-              
               <!-- WALL FOLLOWING -->
               <h3> Wall Following </h3>
               <h5>Hardware</h5>
-              <p>The wall detection was done using a distance measuring sensor unit, composed of an integrated combination of PSD (position sensitive detector), IR-LED (infrared emitting diode) and signal processing circuit. Datasheet here. We positioned the sensor at the front of the robot, and attached it with a 3D printed plastic piece.
+              <p>The wall detection was done using a distance measuring sensor unit, composed of an integrated combination of PSD (position sensitive detector), IR-LED (infrared emitting diode) and signal processing circuit. The datasheet for the distance measuring sensor unit can be found
+							<a href="http://www.sharp-world.com/products/device/lineup/data/pdf/datasheet/gp2y0a41sk_e.pdf">here</a>.
+							We positioned the sensor at the front of the robot, and attached it with a 3D printed plastic piece.
              	The sensor is communicating with the Arduino through port A2. <br>
               This piece of code is placed in the function go_straight() for future use.</p>
 
@@ -85,7 +85,7 @@
 }
 </pre></div> <br /> 
 	
-		<iframe width="560" height="315" src="https://www.youtube.com/embed/p8IkYNRx2wQ" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+		<iframe width="560" height="315" src="https://www.youtube.com/embed/p8IkYNRx2wQ" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe> <br /> 
 
 
               
@@ -103,11 +103,11 @@ Serial<span style="color: #333333">.</span>println(<span style="background-color
 
               <p> The chosen sampling frequency is 115200; plotting data indicated that while bins 44, 45, and 46 all increased in size when 6.0kHz was played, the highest peak occurred in bin 45 so it was determined that bin 45 would be used as an indicator of the signal. </p>    
               
-<!--          magnitude graph image      -->
+							<img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/ms2/bins graph.png" alt="">
               
               <p> Lastly, the thresholds for different distances were measured so the robot would not only be able to sense the presence of the another robot, but also have and indication of how far away it is (in future we plan to utilize to determine whether the robot should reverse or merely stop). </p>
               
-<!--          relative thresholds graph      -->
+							<img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/ms2/relative thresholds.png" alt="">
               
               <p>This was then combined with the wall detecting code in the by adding and if statement in the void loop() section shown below. </p>
               
@@ -128,15 +128,18 @@ Serial<span style="color: #333333">.</span>println(<span style="background-color
               
               <p> Thus, if another robot was detected, the robot would stop -- otherwise it would continue with the right hand wall following algorithm. </p>
 		
-		<iframe width="560" height="315" src="https://www.youtube.com/embed/ZOlEzsXYznY" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+							<iframe width="560" height="315" src="https://www.youtube.com/embed/ZOlEzsXYznY" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe> <br /> 
               
+							
               
               <h3> Work Distribution </h3>
               <p> The Milestone 2 Work Distribution is as follows: <br> 
-                  &emsp; - <br>
+                  &emsp; - Nathalia and Priya worked on wall following. <br>
+                  &emsp; - Joyce and Vini worked on IR hat sensing and robot detection. <br>
                   
                   The Lab Report Work Distribution is as follows: <br>
-                  &emsp; - <br>
+                  &emsp; - Nathalia wrote the documentation and code snippets for wall following. <br>
+                  &emsp; - Vini wrote the documentation and generated the graphs for IR sensing and FFT bins. <br>
                   
                   The Website Work distribution is as follows: <br>
                   &emsp; - Nathalia: Website Milestone 2 Set Up and Maintenance<br>
