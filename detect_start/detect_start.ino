@@ -34,19 +34,14 @@ void loop() {
     fft_run();
     fft_mag_log();
     sei();
-    Serial.println("start");
-    for (byte i = 0 ; i < FFT_N/2 ; i++) { 
-      Serial.println(fft_log_out[i]); // send out the data
-    }
-    Serial.println("done");
-//      if (fft_log_out[22] > mag) {
-//        start();
-//        Serial.println("start");
-//        a =1;
-//        }
-//      while(a){
-//        Serial.println("working");
-//       }
+        if (fft_log_out[22] > mag) {
+          start();
+          Serial.println("start");
+          a =1;
+          }
+        while(a){
+          Serial.println("working");
+         }
    } 
 }
 
