@@ -52,11 +52,12 @@ int y = 0; //initial y location
 int facing = 3; //initially facing NORTH
 int direction = 0; //initially going straight
 int d[] = {0,0,0,0,0,0,0,0};
-struct updates{
-  x;
-  y;
-  d;
-}; 
+int updates[] = {x, y, d};
+//struct updates{
+//  x;
+//  y;
+//  d;
+//}; 
 
 
 void read_turn(){

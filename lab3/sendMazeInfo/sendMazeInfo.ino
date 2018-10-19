@@ -119,24 +119,17 @@ void setup(void)
 
 void loop(void)
 {
-  //
   // Ping out role.  Repeatedly send the current time
-  //
 
   if (role == role_ping_out)
   {
     // First, stop listening so we can talk.
     radio.stopListening();
-
-//    // Take the time, and send it.  This will block until complete
-//    unsigned long time = millis();
-//    printf("Now sending %lu...",time);
-//    bool ok = radio.write( "0,0,north=true,west=true,south=true", sizeof(unsigned long) );
-
+    
     //sending hard-coded message
-    unsigned long message = 12345678;
+    unsigned long message[3] = {0,0,1001010};
     printf("now sending %lu...",message);
-    bool ok = radio.write(&message, sizeof(unsigned long));
+    bool ok = radio.write(&message, sizeof(unsigned long)*3);
 
     if (ok)
       printf("ok...");
@@ -161,8 +154,8 @@ void loop(void)
     else
     {
       // Grab the response, compare, and send to debugging spew
-      unsigned long got_message;
-      radio.read( &got_message, sizeof(unsigned long));
+      unsigned long got_message[3];
+      radio.read( &got_message, sizeof(unsigned long)*3);
 
       // Spew it
       printf("Got response %lu, round-trip delay: %lu\n\r",got_message,millis());
@@ -182,15 +175,16 @@ void loop(void)
     if ( radio.available() )
     {
       // Dump the payloads until we've gotten everything
-      unsigned long got_message;
+      unsigned long got_message[3];
       bool done = false;
       while (!done)
       {
         // Fetch the payload, and see if this was the last one.
-        done = radio.read( &got_message, sizeof(unsigned long) );
+        done = radio.read( &got_message, sizeof(unsigned long)*3 );
 
-        // Spew it
+        // Spew it and decryption to GUI
         printf("Got payload %lu...",got_message);
+        decrypt(got_message);
 
         // Delay just a little bit to let the other unit
         // make the transition to receiver
@@ -202,7 +196,7 @@ void loop(void)
       radio.stopListening();
 
       // Send the final one back.
-      radio.write( &got_message, sizeof(unsigned long) );
+      radio.write( &got_message, sizeof(unsigned long)*3 );
       printf("Sent response.\n\r");
 
       // Now, resume listening so we catch the next packets.
@@ -238,3 +232,18 @@ void loop(void)
   }
 }
 // vim:cin:ai:sts=2 sw=2 ft=cpp
+
+void decrypt (unsigned long message[3]){
+    char answer[256];
+    
+    strcat(answer, message[0] + ",");   //x coordinate
+    strcat(answer, message[1]);         //y coordinate
+
+    int data = message[2];
+    if (data % 10) strcat(answer, ",west=true");
+    if ((data >> 1) % 10) strcat(answer, ",south=true");
+    if ((data >> 2) % 10) strcat(answer, ",west=true");
+    if ((data >> 3) % 10) strcat(answer, ",north=true");
+
+    Serial.println(answer);
+}
