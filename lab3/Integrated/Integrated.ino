@@ -1,5 +1,4 @@
-//Integrated Start with 660, IR Stop, Wall and Line Sensing
-#define LOG_OUT 1 
+//Integrated Start with button or 660 signal, Stop with IR, line following and wall sensing
 #define FFT_N 256 
 
 #include <FFT.h>
@@ -24,13 +23,14 @@ Servo right_servo;
 #define forward 1
 #define right   2
 
+
 //pins
 const int LW = 9; // Servo1
 const int RW = 10; // Servo2
 const int right_turn = A5;
 const int left_turn = A4;
 const int front_wall = A2;
-const int started = 0; 
+const int startButton = 2;
 
 // Control variables for line following
 float error           = 0;
@@ -43,6 +43,8 @@ volatile long SENSOR1_TIMER;
 // Line sensor values
 int right_turn_val  = 0;
 int left_turn_val   = 0;
+
+int started = 0; 
 
 void read_turn(){
   right_turn_val = analogRead(right_turn); //signal from outer right sensor
@@ -153,6 +155,9 @@ void setup() {
   right_servo.write(SERVO_BRAKE);
   left_servo.write(SERVO_BRAKE);
 
+  pinMode(startButton, INPUT);
+  digitalWrite(startButton, HIGH);
+
   delay(1000);
 }
 
@@ -177,7 +182,7 @@ void loop() {
     fft_mag_log(); 
     sei();
 
-    if (fft_log_out[startBin] > startThresh) {
+    if ((fft_log_out[startBin] > startThresh)||(startButton == LOW)) {
         started = 1;
           }
         while(started){
