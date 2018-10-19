@@ -1,8 +1,5 @@
 /*
  Copyright (C) 2011 J. Coliz <maniacbug@ymail.com>
- This program is free software; you can redistribute it and/or
- modify it under the terms of the GNU General Public License
- version 2 as published by the Free Software Foundation.
  */
 
 /**
@@ -31,6 +28,17 @@ const uint64_t pipes[2] = { 0x0000000070LL, 0x0000000071LL };
 typedef enum { role_ping_out = 1, role_pong_back } role_e;
 const char* role_friendly_name[] = { "invalid", "Ping out", "Pong back"};
 role_e role = role_pong_back;
+
+unsigned long [] test[9] = {
+ {0,0,10000000},
+ {0,1,10000001},
+ {0,2,10000010},
+ {1,0,10000100},
+ {1,1,10001000},
+ {1,2,10000100},
+ {2,0,10000010},
+ {2,1,10000001},
+ {2,2,10000010},
 
 void setup(void)
 {
@@ -83,16 +91,26 @@ void setup(void)
 
 void loop(void)
 {
+  int count = 0; 
+  // ********************************************************************
   // Ping out role.  Repeatedly send the current time
+  // ********************************************************************
   if (role == role_ping_out)
   {
     // First, stop listening so we can talk.
     radio.stopListening();
 
-    // Take the time, and send it.  This will block until complete
-    unsigned long time = millis();
-    printf("Now sending %lu...",time);
-    bool ok = radio.write( &time, sizeof(unsigned long) );
+    // Take maze data from test array, and send it.  This will block until complete
+   if (count < 10) {
+    printf("Now sending %lu...",test[count]);
+    bool ok = radio.write( &time, sizeof(unsigned long)*3);
+    count++;
+   }
+   else { count = 0; }
+   
+//     unsigned long time = millis();
+//     printf("Now sending %lu...",time);
+//     bool ok = radio.write( &time, sizeof(unsigned long) );
 
     if (ok)printf("ok...");
     else printf("failed.\n\r");
@@ -113,18 +131,18 @@ void loop(void)
     else
     {
       // Grab the response, compare, and send to debugging spew
-      unsigned long got_time;
-      radio.read( &got_time, sizeof(unsigned long) );
+      unsigned long response;
+      radio.read( &response, sizeof(unsigned long)*3);
 
       // Spew it
-      printf("Got response %lu, round-trip delay: %lu\n\r",got_time,millis()-got_time);
+      printf("Got response %lu, round-trip delay: %lu\n\r",response,millis()-got_time);
     }
     delay(1000);
   }
 
-  //
+  // ********************************************************************
   // Pong back role.  Receive each packet, dump it out, and send it back
-  //
+  // ********************************************************************
 
   if ( role == role_pong_back )
   {
@@ -160,9 +178,9 @@ void loop(void)
     }
   }
 
-  //
+  // ********************************************************************
   // Change roles
-  //
+  // ********************************************************************
 
   if ( Serial.available() )
   {
@@ -188,3 +206,5 @@ void loop(void)
   }
 }
 // vim:cin:ai:sts=2 sw=2 ft=cpp
+
+
