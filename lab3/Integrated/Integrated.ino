@@ -1,7 +1,4 @@
-//Iteration 0: Depth sensor
-//Iteration 1: Follow Right hand rule through maze
-//Iteration 2: avoid other robots (do not turn if robot OR wall detected)
-//Iteration 3: Blink different colored LEDS when 1) wall encountered 2) Robot encountered 3)Keep on during duration of maze (turn off after maze finished
+//Integrated Start with 660, IR Stop, Wall and Line Sensing
 #define LOG_OUT 1 
 #define FFT_N 256 
 
