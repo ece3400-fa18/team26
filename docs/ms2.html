@@ -103,28 +103,15 @@ Serial<span style="color: #333333">.</span>println(<span style="background-color
 
               <p> The chosen sampling frequency is 115200; plotting data indicated that while bins 44, 45, and 46 all increased in size when 6.0kHz was played, the highest peak occurred in bin 45 so it was determined that bin 45 would be used as an indicator of the signal. </p>    
               
-							<img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/ms2/bins graph.png" alt="">
+							<img class="img-fluid d-block mx-auto" width="650" height="110" src="./img/ms2/bins graph.png" alt="">
               
               <p> Lastly, the thresholds for different distances were measured so the robot would not only be able to sense the presence of the another robot, but also have and indication of how far away it is (in future we plan to utilize to determine whether the robot should reverse or merely stop). </p>
               
 							<img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/ms2/relative thresholds.png" alt="">
               
-              <p>This was then combined with the wall detecting code in the by adding and if statement in the void loop() section shown below. </p>
+              <p>We moved the sensor to the front of the robot for better detection range. In the go_straight() function, I implemented a continuous check on detecting robot. If a robot is detected, then it will handle the response, similar to an interrupt handler.</p>
               
-              <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">if</span> (fft_log_out[irBin] <span style="color: #333333">&gt;</span> irThresh) {
-	servos_stop();
-} 
-<span style="color: #008800; font-weight: bold">else</span> {
-	go_straight();    
-	<span style="color: #008800; font-weight: bold">if</span> (wallDetected() <span style="color: #333333">==</span> true){
-          move(left);
-          <span style="color: #008800; font-weight: bold">if</span>(wallDetected() <span style="color: #333333">==</span> true){
-            move(left);
-          }
-        	<span style="color: #008800; font-weight: bold">else</span> go_straight;
-      }
-}
-</pre></div>
+             
               
               <p> Thus, if another robot was detected, the robot would stop -- otherwise it would continue with the right hand wall following algorithm. </p>
 		
@@ -139,7 +126,7 @@ Serial<span style="color: #333333">.</span>println(<span style="background-color
                   
                   The Lab Report Work Distribution is as follows: <br>
                   &emsp; - Nathalia wrote the documentation and code snippets for wall following. <br>
-                  &emsp; - Vini wrote the documentation and generated the graphs for IR sensing and FFT bins. <br>
+                  &emsp; - Vini did the documentation and graphs for IR sensing and FFT bins. <br>
                   
                   The Website Work distribution is as follows: <br>
                   &emsp; - Nathalia: Website Milestone 2 Set Up and Maintenance<br>
