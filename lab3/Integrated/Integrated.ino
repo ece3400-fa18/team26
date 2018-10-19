@@ -183,19 +183,23 @@ void loop() {
     sei();
 
     if ((fft_log_out[startBin] > startThresh)||(startButton == LOW)) {
+      //robot starts if button is pushed or 660 signal is sensed
         started = 1;
           }
         while(started){
           if (fft_log_out[irBin] > irThresh) {
+            //robot stops if another robot (IR hat) is sensed
             servos_stop();
           } else {
-            go_straight();    
+            go_straight(); //robot default movement after starting: go straight   
             if (wallDetected() == true){
+              //if a wall is detected, robot turns left (following left hand rule)
               move(left);
             if(wallDetected() == true){
+              //if another wall is detected, robot turns left (following left hand rule)
               move(left);
             }
-            else go_straight;
+            else go_straight; //if no wall or obstacle is encountered, robot continues going straight
             }
         }   
      }
