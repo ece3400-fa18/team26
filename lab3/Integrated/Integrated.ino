@@ -130,31 +130,32 @@ void servos_stop(){
   right_servo.write(SERVO_BRAKE);
   left_servo.write(SERVO_BRAKE);
 }
-
+//IR
 int irBin = 45;
 int irThresh = 40; 
+//Start
 int startBin = 22;
 int startThresh = 80;
 
 void setup() {
   // put your setup code here, to run once:
-  Serial.begin(9600);
+  Serial.begin(115200);
+  //IR fourier transform setup
   TIMSK0 = 0;  //turn off timer0
   ADCSRA = 0xe5;  //set the adc to free running mode
   ADMUX = 0x40; //use adc0
   DIDR0 = 0x01;
-    
-  right_servo.attach(RW);
-  left_servo.attach(LW);
 
   //for analog setup
   pinMode(right_turn, INPUT);
   pinMode(left_turn, INPUT); 
   pinMode(front_wall, INPUT);
-
+  //servor setup
+  right_servo.attach(RW);
+  left_servo.attach(LW);
   right_servo.write(SERVO_BRAKE);
   left_servo.write(SERVO_BRAKE);
-
+  //start button setop
   pinMode(startButton, INPUT);
   digitalWrite(startButton, HIGH);
 
@@ -162,7 +163,9 @@ void setup() {
 }
 
 void loop() {
-  while(1) { 
+  while(1) {
+    //the following lines of code, until the if statment are just necessary for creating the fourier transforms
+    //for the 660 Hz start signal and the IR 6.08KHz
     cli();  
     for (int i = 0 ; i < 512 ; i += 2) { 
       while(!(ADCSRA & 0x10)); 
