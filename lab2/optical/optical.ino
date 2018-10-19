@@ -1,101 +1,65 @@
-#define LOG_OUT 1
-#define FFT_N 256
+/*
+fft_adc_serial.pde
+guest openmusiclabs.com 7.7.14
+example sketch for testing the fft library.
+it takes in data on ADC0 (Analog0) and processes them
+with the fft. the data is sent out over the serial
+port at 115.2kb.
+*/
 
-#include <FFT.h>
+#define LOG_OUT 1 // use the log output function
+#define FFT_N 256 // set to 256 point fft
 
-int threshold = 40;
-int time_threshold = 10;
-int treasure_7 = 0;
-int treasure_12 = 0;
-int treasure_17 = 0;
+#include <FFT.h> // include the library
 
 void setup() {
-  // put your setup code here, to run once:
-  Serial.begin(115200);
-  TIMSK0 = 0;  //turn off timer0
-  ADCSRA = 0xe5;  //set the adc to free running mode
-  ADMUX = 0x40; //use adc0
-  DIDR0 = 0x01;
+  Serial.begin(9600); // use the serial port
+  TIMSK0 = 0; // turn off timer0 for lower jitter
+  ADCSRA = 0xe5; // set the adc to free running mode
+  ADMUX = 0x40; // use adc0
+  DIDR0 = 0x01; // turn off the digital input for adc0
+
+  //pinMode(7, OUTPUT);
+  Serial.println("start");
 }
+
+int detectingAudio = 1;
+
+const int irBinNum = 44;
+const int irThresh = 50;
+const int micBinNum = 20;
+const int micThresh = 180;
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  while(1){
-    cli(); //UDRE interrupt
-    for(int i = 0; i < 512; i+=2){
-      while(!(ADCSRA & 0x10)); //waiting for adc to be ready
-      ADCSRA = 0xf5; //restart ADC
-      byte m = ADCL;
-      byte j = ADCH;
-      int k = (j << 8) | m;
-      k -= 0x0200;
-      k <<= 6;
-      fft_input[i] = k;
-      fft_input[i+1] = 0;
-    } 
-
-    fft_window();
-    fft_reorder();
-    fft_run();
-    fft_mag_log();
-    sei(); //turns interrupts back on
-
-    Serial.println("start treasure hunt");
-    for (byte i = 0; i < FFT_N/2; i++){
-      Serial.println(fft_log_out[i]);
-    }
+  while(1) { // reduces jitter
     
-    //trasureDetect();
+    cli();  // UDRE interrupt slows this way down on arduino1.0
+    for (int i = 0 ; i < 512 ; i += 2) { // save 256 samples
+      while(!(ADCSRA & 0x10)); // wait for adc to be ready
+      ADCSRA = 0xf5; // restart adc (32 prescalar)
+      byte m = ADCL; // fetch adc data
+      byte j = ADCH;
+      int k = (j << 8) | m; // form into an int
+      k -= 0x0200; // form into a signed int
+      k <<= 6; // form into a 16b signed int
+      fft_input[i] = k; // put real data into even bins
+      fft_input[i+1] = 0; // set odd bins to 0
+    }
+    fft_window(); // window the data for better frequency response
+    fft_reorder(); // reorder the data before doing the fft
+    fft_run(); // process the data in the fft
+    fft_mag_log(); // take the output of the fft
+    sei();
+
+      Serial.println(fft_log_out[irBinNum]);
+    
+    
+      if (fft_log_out[irBinNum] > irThresh) {
+        Serial.println("ir");
+        //digitalWrite(7, HIGH);
+      } else {
+        Serial.println("no ir");
+        //digitalWrite(7, LOW);  
+      }   
   }
-
-}
-
-void trasureDetect(){
-  int max_7_bin = 0;
-  for (int i = 46; i < 50; i++){
-    int x = (int) fft_log_out[i];
-    if(x > max_7_bin){
-      max_7_bin = x;
-    }
-  }
-
-  int max_12_bin = 0;
-  for (int i = 80; i < 83; i++){
-    int x = (int) fft_log_out[i];
-    if(x > max_12_bin){
-      max_12_bin = x;
-    }
-  }
-
-  int max_17_bin = 0;
-  for (int i = 113; i < 116; i++){
-    int x = (int) fft_log_out[i];
-    if(x > max_17_bin){
-      max_17_bin = x;
-    }
-  }
-
-  if (max_17_bin > max_12_bin && max_17_bin > max_7_bin) {
-      if (max_17_bin > threshold) 
-       treasure_17++;
-    }
-    else if (max_12_bin > max_7_bin) {
-      if (max_12_bin > threshold)  
-       treasure_12++;
-    }
-    else 
-      if (max_7_bin > threshold)
-        treasure_7++;
-    if (treasure_7 > time_threshold) {
-      Serial.write("7 kHz treasure!\n");
-      treasure_7 = 0;
-    }
-    else if (treasure_12 > time_threshold) {
-      Serial.write ("12 kHz treasure!\n");
-      treasure_12 = 0;
-    }
-    else if (treasure_17 > time_threshold) {
-      Serial.write ("17 kHz treasure!\n");
-      treasure_17 = 0;
-    }
 }
