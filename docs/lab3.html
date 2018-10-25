@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>ECE 3400 Team 26</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+
+    <!-- Custom styles for this template -->
+    <link href="css/agency.css" rel="stylesheet">
+
+  </head>
+
+  <body id="page-top">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="index.html">Home</a>
+        
+      </div>
+    </nav>
+
+    <!-- Header -->
+     <div class="pagehead">
+      <div class="container">
+        <h2>  </h2>
+      </div>
+    </div> 
+
+    <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+            <div class="lab-page">
+              <!-- Project Details Go Here -->
+              <h2 class="text-uppercase text-left">Lab 3: System Integration and Radio Communication</h2>
+              <p class="item-intro text-muted"> 
+              In this lab we integrated the systems from milestones 1 and 2. The robot will start at a 660Hz tone, autonomously navigate a small maze, and send the maze information from the sensors on the robot to a base station using radios. The base station will display the maze information</p>
+
+              <h3> Pre-Lab: Encoding Maze Information </h3>
+              <p>
+              </p>
+              
+              <h3> Radio Communication Team</h3>
+              <p> Priya and Nathalia worked on the radio integration </p>
+              Materials Used:<br>
+              &emsp; - 2 Nordic nRF24L01+ tranceivers <br>
+              &emsp; - 2 Arduino Unos <br>
+              &emsp; - 2 radio breakout boards with headers <br>
+              <p>
+              </p>            
+              Getting Started: <br>
+              <p>We plugged the radios into the arduinos. Instead of using the 3.3V pin on the arduino, we connected the radio directly to a 3.3V Power Source. We then downloaded the RF24 Arduino Library. In this library there is a sketch called “Getting Started”. We replaced this sketch with the “Getting Started” sketch from the course GitHub repository for Lab 4.</p>
+
+              [insert code]
+              <p>
+              </p>
+
+              <p>In this sketch, we modified the identifier numbers for the two pipes to the ones assigned for our team. We calculated our pin numbers using 2(3D + N) + X. For our team, D = 3, N=26. Therefore, we got the numbers 2(3*3 + 26) + 0 = 70 and 2(3*3+26) + 1= 71. <br>
+              We then tested the code to see if our 2 arduinos could communicate with each other properly. In the following video, we can see that we can switch which arduino is transmitting and which is receiving. After confirming that it worked We also moved the arduinos further apart to make sure the communication would still work for a distance of ~10 feet. </p>
+
+              [insert video here]
+		      <p>
+              </p>
+
+              Sending Maze Information: <br>
+              <p> First, we sent wireless information over the radio.<br>
+              Then we designed a protocol for data sent between the robot and the base station. The following describes the representation of each bit and its translation:<br>
+              Each message is 1-byte </p>
+
+              [insert table]
+              <p>
+              </p>
+
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4">
+            <span class="copyright">Copyright &copy; Your Website 2018</span>
+          </div>
+          <div class="col-md-4">
+            <ul class="list-inline social-buttons">
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fab fa-twitter"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fab fa-facebook-f"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fab fa-linkedin-in"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="col-md-4">
+            <ul class="list-inline quicklinks">
+              <li class="list-inline-item">
+                <a href="#">Privacy Policy</a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">Terms of Use</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+ 
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Contact form JavaScript -->
+    <script src="js/jqBootstrapValidation.js"></script>
+    <script src="js/contact_me.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="js/agency.min.js"></script>
+
+  </body>
+
+</html>
