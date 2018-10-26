@@ -20,8 +20,8 @@ Servo right_servo;
 #define right   2
 
 //pins
-const int LW = 9; // Servo1
-const int RW = 10; // Servo2
+const int LW = 5; // Servo1
+const int RW = 6; // Servo2
 const int right_turn = A5;
 const int left_turn = A4;
 const int front_wall = A2;

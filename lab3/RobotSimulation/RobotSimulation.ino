@@ -1,8 +1,5 @@
 /*
  Copyright (C) 2011 J. Coliz <maniacbug@ymail.com>
- This program is free software; you can redistribute it and/or
- modify it under the terms of the GNU General Public License
- version 2 as published by the Free Software Foundation.
  */
 
 /**
@@ -20,43 +17,31 @@
 #include "RF24.h"
 #include "printf.h"
 
-//
+
 // Hardware configuration
-//
-
 // Set up nRF24L01 radio on SPI bus plus pins 9 & 10
-
 RF24 radio(9,10);
-
-//
-// Topology
-//
 
 // Radio pipe addresses for the 2 nodes to communicate.
 const uint64_t pipes[2] = { 0x0000000070LL, 0x0000000071LL };
 
-//
-// Role management
-//
-// Set up role.  This sketch uses the same software for all the nodes
-// in this system.  Doing so greatly simplifies testing.
-//
-
-// The various roles supported by this sketch
 typedef enum { role_ping_out = 1, role_pong_back } role_e;
-
-// The debug-friendly names of those roles
 const char* role_friendly_name[] = { "invalid", "Ping out", "Pong back"};
-
-// The role of the current running sketch
 role_e role = role_pong_back;
+
+unsigned long [] test[9] = {
+ {0,0,10000000},
+ {0,1,10000001},
+ {0,2,10000010},
+ {1,0,10000100},
+ {1,1,10001000},
+ {1,2,10000100},
+ {2,0,10000010},
+ {2,1,10000001},
+ {2,2,10000010},
 
 void setup(void)
 {
-  //
-  // Print preamble
-  //
-
   Serial.begin(57600);
   printf_begin();
   printf("\n\rRF24/examples/GettingStarted/\n\r");
@@ -66,15 +51,13 @@ void setup(void)
   //
   // Setup and configure rf radio
   //
-
   radio.begin();
 
   // optionally, increase the delay between retries & # of retries
   radio.setRetries(15,15);
   radio.setAutoAck(true);
-  // set the channel
   radio.setChannel(0x50);
-  // set the power
+
   // RF24_PA_MIN=-18dBm, RF24_PA_LOW=-12dBm, RF24_PA_MED=-6dBM, and RF24_PA_HIGH=0dBm.
   radio.setPALevel(RF24_PA_MIN);
   //RF24_250KBPS for 250kbs, RF24_1MBPS for 1Mbps, or RF24_2MBPS for 2Mbps
@@ -83,11 +66,7 @@ void setup(void)
   // optionally, reduce the payload size.  seems to
   // improve reliability
   //radio.setPayloadSize(8);
-
-  //
-  // Open pipes to other nodes for communication
-  //
-
+  
   // This simple sketch opens two pipes for these two nodes to communicate
   // back and forth.
   // Open 'our' pipe for writing
@@ -104,37 +83,37 @@ void setup(void)
     radio.openReadingPipe(1,pipes[0]);
   }
 
-  //
-  // Start listening
-  //
-
+  //Start listening
   radio.startListening();
-
-  //
   // Dump the configuration of the rf unit for debugging
-  //
-
   radio.printDetails();
 }
 
 void loop(void)
 {
+  int count = 0; 
+  // ********************************************************************
   // Ping out role.  Repeatedly send the current time
-
+  // ********************************************************************
   if (role == role_ping_out)
   {
     // First, stop listening so we can talk.
     radio.stopListening();
-    
-    //sending hard-coded message
-    unsigned long message[3] = {0,0,10000000};
-    printf("now sending %lu...",message);
-    bool ok = radio.write(&message, sizeof(unsigned long)*3);
 
-    if (ok)
-      printf("ok...");
-    else
-      printf("failed.\n\r");
+    // Take maze data from test array, and send it.  This will block until complete
+   if (count < 10) {
+    printf("Now sending %lu...",test[count]);
+    bool ok = radio.write( &time, sizeof(unsigned long)*3);
+    count++;
+   }
+   else { count = 0; }
+   
+//     unsigned long time = millis();
+//     printf("Now sending %lu...",time);
+//     bool ok = radio.write( &time, sizeof(unsigned long) );
+
+    if (ok)printf("ok...");
+    else printf("failed.\n\r");
 
     // Now, continue listening
     radio.startListening();
@@ -148,26 +127,22 @@ void loop(void)
 
     // Describe the results
     if ( timeout )
-    {
       printf("Failed, response timed out.\n\r");
-    }
     else
     {
       // Grab the response, compare, and send to debugging spew
-      unsigned long got_message[3];
-      radio.read( &got_message, sizeof(unsigned long)*3);
+      unsigned long response;
+      radio.read( &response, sizeof(unsigned long)*3);
 
       // Spew it
-      printf("Got response %lu, round-trip delay: %lu\n\r",got_message,millis());
+      printf("Got response %lu, round-trip delay: %lu\n\r",response,millis()-got_time);
     }
-
-    // Try again 1s later
     delay(1000);
   }
 
-  //
+  // ********************************************************************
   // Pong back role.  Receive each packet, dump it out, and send it back
-  //
+  // ********************************************************************
 
   if ( role == role_pong_back )
   {
@@ -175,16 +150,15 @@ void loop(void)
     if ( radio.available() )
     {
       // Dump the payloads until we've gotten everything
-      unsigned long got_message[3];
+      unsigned long got_time;
       bool done = false;
       while (!done)
       {
         // Fetch the payload, and see if this was the last one.
-        done = radio.read( &got_message, sizeof(unsigned long)*3 );
+        done = radio.read( &got_time, sizeof(unsigned long) );
 
-        // Spew it and decryption to GUI
-        printf("Got payload %lu...",got_message);
-        //decrypt(got_message);
+        // Spew it
+        printf("Got payload %lu...",got_time);
 
         // Delay just a little bit to let the other unit
         // make the transition to receiver
@@ -196,7 +170,7 @@ void loop(void)
       radio.stopListening();
 
       // Send the final one back.
-      radio.write( &got_message, sizeof(unsigned long)*3 );
+      radio.write( &got_time, sizeof(unsigned long) );
       printf("Sent response.\n\r");
 
       // Now, resume listening so we catch the next packets.
@@ -204,9 +178,9 @@ void loop(void)
     }
   }
 
-  //
+  // ********************************************************************
   // Change roles
-  //
+  // ********************************************************************
 
   if ( Serial.available() )
   {
@@ -233,17 +207,4 @@ void loop(void)
 }
 // vim:cin:ai:sts=2 sw=2 ft=cpp
 
-void decrypt (unsigned long message[3]){
-    char answer[256];
-    
-    strcat(answer, message[0] + ",");   //x coordinate
-    strcat(answer, message[1]);         //y coordinate
 
-    int data = message[2];
-    if (data % 10) strcat(answer, ",west=true");
-    if ((data >> 1) % 10) strcat(answer, ",south=true");
-    if ((data >> 2) % 10) strcat(answer, ",west=true");
-    if ((data >> 3) % 10) strcat(answer, ",north=true");
-
-    Serial.println(answer);
-}

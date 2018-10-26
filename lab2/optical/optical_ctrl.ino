@@ -15,28 +15,31 @@ port at 115.2kb.
 void setup() {
   Serial.begin(9600); // use the serial port
   TIMSK0 = 0; // turn off timer0 for lower jitter
-  ADCSRA = 0xe5; // set the adc to free running mode
+  ADCSRA = 0xe6; // set the adc to free running mode
   ADMUX = 0x40; // use adc0
   DIDR0 = 0x01; // turn off the digital input for adc0
 
   //pinMode(7, OUTPUT);
-  Serial.println("start");
 }
 
 int detectingAudio = 1;
 
-const int irBinNum = 44;
-const int irThresh = 50;
-const int micBinNum = 20;
+const int irBinNum = 84;
+const int irThresh = 60;
+const int micBinNum = 18;
 const int micThresh = 180;
 
 void loop() {
   while(1) { // reduces jitter
-    
     cli();  // UDRE interrupt slows this way down on arduino1.0
     for (int i = 0 ; i < 512 ; i += 2) { // save 256 samples
       while(!(ADCSRA & 0x10)); // wait for adc to be ready
-      ADCSRA = 0xf5; // restart adc (32 prescalar)
+      if (detectingAudio) {
+        ADCSRA = 0xf7; // restart adc (128 prescalar)
+      }
+      else {
+        ADCSRA = 0xf5; // restart adc (32 prescalar)
+      }
       byte m = ADCL; // fetch adc data
       byte j = ADCH;
       int k = (j << 8) | m; // form into an int
@@ -51,15 +54,20 @@ void loop() {
     fft_mag_log(); // take the output of the fft
     sei();
 
-      Serial.println(fft_log_out[irBinNum]);
-    
-    
+    if (detectingAudio) {
+      if (fft_log_out[micBinNum] > micThresh) {
+        Serial.println("mic");
+        detectingAudio = 0;
+        ADMUX = 0x41; // switch to ADC1
+      }
+    } else {
       if (fft_log_out[irBinNum] > irThresh) {
         Serial.println("ir");
-        //digitalWrite(7, HIGH);
+        digitalWrite(7, HIGH);
       } else {
-        Serial.println("no ir");
-        //digitalWrite(7, LOW);  
+        Serial.println("no ir, no mic");
+        digitalWrite(7, LOW);  
       }   
+    }
   }
 }
