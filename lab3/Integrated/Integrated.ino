@@ -1,5 +1,6 @@
 //Integrated Start with button or 660 signal, Stop with IR, line following and wall sensing
 #define FFT_N 256 
+#define LOG_OUT 1 
 
 #include <FFT.h>
 #include <Servo.h>
