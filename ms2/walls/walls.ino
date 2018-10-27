@@ -212,6 +212,6 @@ void loop() {
     if(wallDetected() == true){
       move(right);
     }
-  else go_straight;
+  else go_straight();
   }
 }
