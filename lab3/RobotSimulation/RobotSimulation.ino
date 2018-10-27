@@ -5,7 +5,7 @@
 /**
  * Example for Getting Started with nRF24L01+ radios.
  *
- * This is an example of how to use the RF24 class.  Write this sketch to two
+   * This is an example of how to use the RF24 class.  Write this sketch to two
  * different nodes.  Put one of the nodes into 'transmit' mode by connecting
  * with the serial monitor and sending a 'T'.  The ping node sends the current
  * time to the pong node, which responds by sending the value back.  The ping
@@ -206,5 +206,3 @@ void loop(void)
   }
 }
 // vim:cin:ai:sts=2 sw=2 ft=cpp
-
-

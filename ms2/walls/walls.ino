@@ -43,27 +43,8 @@ void read_turn(){
   left_turn_val = analogRead(left_turn); //signal from outer left sensor 
 }
 
+
 void move(int direction){
-  // Turn if requested
-    if(direction == right){
-      left_servo.write(95);
-      right_servo.write(95);
-      while(analogRead(left_turn) > WHITE);
-      while(analogRead(left_turn) < WHITE);
-      Serial.println("done turn right");
-    }
-    
-    if(direction == left){
-      left_servo.write(85);
-      right_servo.write(85);
-      while(analogRead(right_turn) > WHITE);
-      while(analogRead(right_turn) < WHITE);
-      Serial.println("done turn left");
-    }
-  
-  go_straight();
-  delay(50);
-  
   //look for intersection
   while(1){
     Serial.println("looking");
@@ -75,14 +56,78 @@ void move(int direction){
         go_straight();
         i++;
       }
-      Serial.println("delay");
-      break; //both turn sensors are on white line
+      break;
     }
     go_straight();
     delay(10);
-  }//close while; found intersection
-  Serial.println("back to main");
+  }//close while, found intersection
+  
+  // Turn if requested, white=700
+    if(direction == right){
+      Serial.println("TURN RIGHT");
+      left_servo.write(95);
+      right_servo.write(95);
+      while(analogRead(left_turn) > WHITE);
+      while(analogRead(left_turn) < WHITE);
+      while(analogRead(left_turn) > WHITE);
+      Serial.println("done turn right");
+    }
+    
+    if(direction == left){
+      Serial.println("TURN LEFT");
+      left_servo.write(85);
+      right_servo.write(85);
+      while(analogRead(right_turn) > WHITE);
+      while(analogRead(right_turn) < WHITE);
+      while(analogRead(right_turn) > WHITE);
+      Serial.println("done turn left");
+    }
+  
+  go_straight();
+  delay(50);
+  
 }
+
+//void move(int direction){
+//  // Turn if requested
+//    if(direction == right){
+//      left_servo.write(95);
+//      right_servo.write(95);
+//      while(analogRead(left_turn) > WHITE);
+//      while(analogRead(left_turn) < WHITE);
+//      Serial.println("done turn right");
+//    }
+//    
+//    if(direction == left){
+//      left_servo.write(85);
+//      right_servo.write(85);
+//      while(analogRead(right_turn) > WHITE);
+//      while(analogRead(right_turn) < WHITE);
+//      Serial.println("done turn left");
+//    }
+//  
+//  go_straight();
+//  delay(50);
+//  
+//  //look for intersection
+//  while(1){
+//    Serial.println("looking");
+//    read_turn();
+//    if (left_turn_val < WHITE && right_turn_val < WHITE){
+//      i = 0;
+//      Serial.println("found intersection");
+//      while(i < 30){
+//        go_straight();
+//        i++;
+//      }
+//      Serial.println("delay");
+//      break; //both turn sensors are on white line
+//    }
+//    go_straight();
+//    delay(10);
+//  }//close while; found intersection
+//  Serial.println("back to main");
+//}
 
 void go_straight(){
   //modified from solution code
@@ -95,27 +140,44 @@ void go_straight(){
     left_servo.write(SERVO_L_FORWARD_MAX);
     right_servo.write(SERVO_R_FORWARD_MAX);
   }
-  // Robot is too right
-  else if (error > ERROR_RANGE) {
-    // Adjust left
-    error_magnitude = abs(error)/(float)ERROR_RANGE;
-    left_servo.write(SERVO_L_FORWARD_MAX - 2);//error_magnitude*SERVO_L_INCR_FORWARD*0.2);
-    right_servo.write(SERVO_R_FORWARD_MAX - 2);//error_magnitude*SERVO_R_INCR_FORWARD*0.2);
-  }
-  // Robot is too left of line
-  else if (error < -(ERROR_RANGE)) {
-    // Adjust right
-    error_magnitude = abs(error)/(float)ERROR_RANGE;
-    left_servo.write(SERVO_L_FORWARD_MAX +2);
-    right_servo.write(SERVO_R_FORWARD_MAX + 2);
-  }
-  delay(10);
+
+      // Robot is too right
+    else if (error > ERROR_RANGE) {
+      // Adjust left
+      error_magnitude = abs(error)/(float)ERROR_RANGE;
+      left_servo.write(SERVO_L_FORWARD_MAX + error_magnitude*SERVO_L_INCR_FORWARD);
+      right_servo.write(SERVO_R_FORWARD_MAX - error_magnitude*SERVO_R_INCR_FORWARD);
+    }
+    // Robot is too left of line
+    else if (error < -(ERROR_RANGE)) {
+      // Adjust right
+      error_magnitude = abs(error)/(float)ERROR_RANGE;
+      left_servo.write(SERVO_L_FORWARD_MAX - error_magnitude*SERVO_L_INCR_FORWARD);
+      right_servo.write(SERVO_R_FORWARD_MAX + error_magnitude*SERVO_R_INCR_FORWARD);
+    }
+    delay(10);
+    
+//  // Robot is too right
+//  else if (error > ERROR_RANGE) {
+//    // Adjust left
+//    error_magnitude = abs(error)/(float)ERROR_RANGE;
+//    left_servo.write(SERVO_L_FORWARD_MAX - 2);//error_magnitude*SERVO_L_INCR_FORWARD*0.2);
+//    right_servo.write(SERVO_R_FORWARD_MAX - 2);//error_magnitude*SERVO_R_INCR_FORWARD*0.2);
+//  }
+//  // Robot is too left of line
+//  else if (error < -(ERROR_RANGE)) {
+//    // Adjust right
+//    error_magnitude = abs(error)/(float)ERROR_RANGE;
+//    left_servo.write(SERVO_L_FORWARD_MAX +2);
+//    right_servo.write(SERVO_R_FORWARD_MAX + 2);
+//  }
+//  delay(10);
 }
 
 bool wallDetected(){
   int distance = analogRead(front_wall);
   Serial.println(distance);
-  return (distance > 400);
+  return (distance > 110);
 }
 
 void servos_stop(){
@@ -139,15 +201,16 @@ void setup() {
 
   delay(1000);
 }
-
+ 
 
 void loop() {
   go_straight();
 
+  Serial.println(analogRead(front_wall));
   if (wallDetected() == true){
-    move(left);
+    move(right);
     if(wallDetected() == true){
-      move(left);
+      move(right);
     }
   else go_straight;
   }
