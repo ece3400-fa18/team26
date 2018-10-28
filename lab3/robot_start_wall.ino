@@ -42,6 +42,9 @@ port at 115.2kb.
 
 */
 
+#define LOG_OUT 1 // use the log output function
+#define FFT_N 256 // set to 256 point fft
+
 #include <Servo.h>
 #include <FFT.h>
 
@@ -79,8 +82,7 @@ int   i = 0;
 int right_turn_val  = 0;
 int left_turn_val   = 0;
 
-#define LOG_OUT 1 // use the log output function
-#define FFT_N 256 // set to 256 point fft
+
 
 int detectingAudio = 1;
 
