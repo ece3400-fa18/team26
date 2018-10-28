@@ -66,14 +66,22 @@
               Getting Started: <br>
               <p>We plugged the radios into the arduinos. Instead of using the 3.3V pin on the arduino, we connected the radio directly to a 3.3V Power Source. We then downloaded the RF24 Arduino Library. In this library there is a sketch called “Getting Started”. We replaced this sketch with the “Getting Started” sketch from the course GitHub repository for Lab 4.</p>
 
-              [insert code]
+              <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #888888">#include &lt;SPI.h&gt;</span>
+<span style="color: #888888">#include &quot;nRF24L01.h&quot;</span>
+<span style="color: #888888">#include &quot;RF24.h&quot;</span>
+<span style="color: #888888">#include &quot;printf.h&quot;</span>
+
+<span style="color: #333333">//</span> Radio pipe addresses <span style="color: #008800; font-weight: bold">for</span> the <span style="color: #0000DD; font-weight: bold">2</span> nodes to communicate<span style="color: #333333">.</span>
+const uint64_t pipes[<span style="color: #0000DD; font-weight: bold">2</span>] <span style="color: #333333">=</span> { <span style="color: #005588; font-weight: bold">0x0000000070</span>LL, <span style="color: #005588; font-weight: bold">0x0000000071</span>LL };
+</pre></div>
+
               <p>
               </p>
 
               <p>In this sketch, we modified the identifier numbers for the two pipes to the ones assigned for our team. We calculated our pin numbers using 2(3D + N) + X. For our team, D = 3, N=26. Therefore, we got the numbers 2(3*3 + 26) + 0 = 70 and 2(3*3+26) + 1= 71. <br>
-              We then tested the code to see if our 2 arduinos could communicate with each other properly. In the following video, we can see that we can switch which arduino is transmitting and which is receiving. After confirming that it worked We also moved the arduinos further apart to make sure the communication would still work for a distance of ~10 feet. </p>
+              We then tested the code to see if our 2 arduinos could communicate with each other properly. In the first part of the video below, we can see that we can switch which arduino is transmitting and which is receiving. After confirming that it worked, we also moved the arduinos further apart to make sure the communication would still work for a distance of ~10 feet. </p>
 
-              [insert video here]
+
 		      <p>
               </p>
 
@@ -87,14 +95,11 @@
               <p>
               </p>
 
-              Stimulating Your Robot: <br>
-              <p>
-              </p>
-
               Base Station-to-GUI Transmission: <br>
               <p>
               </p>
-
+		    
+              [video coming soon...]
 
               <h3> Robot Systems Integration Team </h3>
               <br>
