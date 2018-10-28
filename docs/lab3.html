@@ -82,18 +82,16 @@
               Then we designed a protocol for data sent between the robot and the base station. The following describes the representation of each bit and its translation:<br>
               Each message is 1-byte </p>
 
-              <img class="img-fluid d-block mx-auto" width="777" height="88" src="./img/lab3/table_of_data_values.png" alt="">
+              <img class="img-fluid d-block mx-auto" width="777" height="88" src="./img/lab3/table_of_data_values.PNG" alt="">
 
               <p>
               </p>
 
               Stimulating Your Robot: <br>
-
               <p>
               </p>
 
               Base Station-to-GUI Transmission: <br>
-
               <p>
               </p>
 
@@ -103,7 +101,7 @@
 
               <p>In this lab we integrated all the components from previous labs and milestones. This included: the start functionality (robot starts after 660Hz tone is played); IR sensing (stop if another robot which emits 6.08 kHz is in collision path, but ignore decoys which emit 18 kHz); line following (with self correction); wall detection (avoiding running into walls).</p>
 
-              <img class="img-fluid d-block mx-auto" width="777" height="88" src="./img/lab3/initial_fsm.png" alt="">
+              <img class="img-fluid d-block mx-auto" width="777" height="88" src="./img/lab3/initial_fsm.PNG" alt="">
 
               <p>As seen in the diagram above, all conditions (presence of other robots, walls, and color of terrain) are checked continuously at the baud rate, except the start signal. The start signal is checked at the beginning of the main loop: if the signal is detected, the variable started (that was initialized to 0) is set to 1. The rest of the code is inside a the while loop with the condition started: while(started). This way the robot is unable to move or react until the 660Hz signal has played, but the signal only needs to play once.</p>
               Materials Used:<br>
