@@ -29,7 +29,7 @@ typedef enum { role_ping_out = 1, role_pong_back } role_e;
 const char* role_friendly_name[] = { "invalid", "Ping out", "Pong back"};
 role_e role = role_pong_back;
 
-unsigned long [] test[9] = {
+unsigned long test[9][3] = {
  {0,0,10000000},
  {0,1,10000001},
  {0,2,10000010},
@@ -39,6 +39,7 @@ unsigned long [] test[9] = {
  {2,0,10000010},
  {2,1,10000001},
  {2,2,10000010},
+};
 
 void setup(void)
 {
@@ -92,6 +93,7 @@ void setup(void)
 void loop(void)
 {
   int count = 0; 
+  bool ok;
   // ********************************************************************
   // Ping out role.  Repeatedly send the current time
   // ********************************************************************
@@ -103,10 +105,10 @@ void loop(void)
     // Take maze data from test array, and send it.  This will block until complete
    if (count < 10) {
     printf("Now sending %lu...",test[count]);
-    bool ok = radio.write( &time, sizeof(unsigned long)*3);
+    ok = radio.write( &test[count], sizeof(unsigned long)*3);
     count++;
    }
-   else { count = 0; }
+   else { count = 0;  }
    
 //     unsigned long time = millis();
 //     printf("Now sending %lu...",time);
@@ -135,7 +137,7 @@ void loop(void)
       radio.read( &response, sizeof(unsigned long)*3);
 
       // Spew it
-      printf("Got response %lu, round-trip delay: %lu\n\r",response,millis()-got_time);
+      printf("Got response %lu, round-trip delay: %lu\n\r",response,millis());
     }
     delay(1000);
   }
