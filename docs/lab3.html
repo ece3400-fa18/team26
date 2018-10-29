@@ -90,12 +90,13 @@ const uint64_t pipes[<span style="color: #0000DD; font-weight: bold">2</span>] <
               Each message is 1-byte </p>
               <img class="img-fluid d-block mx-auto" width="777" height="88" src="./img/lab3/table_of_data_values.PNG" alt="">
 		    <br>
-		<img class="img-fluid d-block mx-auto" width="800" height="200" src="./img/lab3/Radio Set Up.JPG" alt="">
-              <p>
+		<img class="img-fluid d-block mx-auto" width="800" height="200" src="./img/lab3/Radio Set Up.JPG" alt=""> <br>
+              <p> 
+		The next section further discusses the conversion of the sent data package to something the GUI can understand. 
               </p>
 
               <h5>Base Station-to-GUI Transmission: </h5>
-              <p> 
+              <p> After ensuring that the two radios could communicate to each other, we started the base station to GUI transmission. First, we set up the base station to receive information from the robot. Then, should the package be confirmed and acknowledged, decryption occurs. Finally, the decrypted data is displayed on the GUI through the following Serial.println() statements. The video includes the accurate display of this code.
               </p>
 		    
 		    <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">  Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;reset&quot;</span>);
