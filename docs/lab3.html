@@ -141,28 +141,47 @@ const uint64_t pipes[<span style="color: #0000DD; font-weight: bold">2</span>] <
 
 The integrated code was streamlined through the use of functions. Seperate functions were created for reading the line sensors, moving forward, turning right and left, stopping, and detecting walls. The line following code was integrated into both the moving forward function (go_straight()), and the turning function (move(int direction)). </p>
 		    
-<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">       <span style="color: #008800; font-weight: bold">while</span>(started){
-         <span style="color: #008800; font-weight: bold">if</span> (fft_log_out[irBin] <span style="color: #333333">&gt;</span> irThresh) {
-           <span style="color: #333333">//</span>robot stops <span style="color: #008800; font-weight: bold">if</span> another robot (IR hat) <span style="color: #000000; font-weight: bold">is</span> sensed
-           servos_stop();
-         } <span style="color: #008800; font-weight: bold">else</span> {
-           go_straight(); <span style="color: #333333">//</span>robot default movement after starting: go straight  
-           <span style="color: #008800; font-weight: bold">if</span> (wallDetected() <span style="color: #333333">==</span> true){
-             <span style="color: #333333">//</span><span style="color: #008800; font-weight: bold">if</span> a wall <span style="color: #000000; font-weight: bold">is</span> detected, robot turns left (following left hand rule)
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">while</span>(started){
+   <span style="color: #008800; font-weight: bold">if</span> (fft_log_out[irBin] <span style="color: #333333">&gt;</span> irThresh) {
+   <span style="color: #333333">//</span>robot stops <span style="color: #008800; font-weight: bold">if</span> another robot (IR hat) <span style="color: #000000; font-weight: bold">is</span> sensed
+     servos_stop();
+   } <span style="color: #008800; font-weight: bold">else</span> {
+     go_straight(); <span style="color: #333333">//</span>robot default movement after starting: go straight  
+      <span style="color: #008800; font-weight: bold">if</span> (wallDetected() <span style="color: #333333">==</span> true){
+      <span style="color: #333333">//</span><span style="color: #008800; font-weight: bold">if</span> a wall <span style="color: #000000; font-weight: bold">is</span> detected, robot turns left
+      (following left hand rule)
+         move(left);
+         <span style="color: #008800; font-weight: bold">if</span>(wallDetected() <span style="color: #333333">==</span> true){
+         <span style="color: #333333">//</span><span style="color: #008800; font-weight: bold">if</span> another wall <span style="color: #000000; font-weight: bold">is</span> detected, robot 
+         turns left (following left hand rule)
              move(left);
-           <span style="color: #008800; font-weight: bold">if</span>(wallDetected() <span style="color: #333333">==</span> true){
-             <span style="color: #333333">//</span><span style="color: #008800; font-weight: bold">if</span> another wall <span style="color: #000000; font-weight: bold">is</span> detected, robot turns left (following left hand rule)
-             move(left);
-           }
-           <span style="color: #008800; font-weight: bold">else</span> go_straight; <span style="color: #333333">//</span><span style="color: #008800; font-weight: bold">if</span> no wall <span style="color: #000000; font-weight: bold">or</span> obstacle <span style="color: #000000; font-weight: bold">is</span> encountered, robot continues going straight
-           }
-       }  
-    }
+          }
+          <span style="color: #008800; font-weight: bold">else</span> go_straight; <span style="color: #333333">//</span><span style="color: #008800; font-weight: bold">if</span> no wall <span style="color: #000000; font-weight: bold">or</span> obstacle encountered, 
+                             robot continues going straight
+       }
+    }  
+}
 </pre></div>
+
 
 		   
 		<p> In the main loop of the code, the code governing the robots movement through the maze is within a while loop with the condition that the 660Hz signal has played at least one; the first if condition in the while loop checks for the presence of another robot, and its corresponding else statement contains the code for the left hand wall following.  </p>
+		    
+		<iframe width="560" height="315" src="https://www.youtube.com/embed/uwPx8XMK6zM" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
+		    
+	<h3> Work Distribution </h3>
+              <p> The Lab 3 Work Distribution is as follows: <br> 
+                  &emsp; - Nathalia and Priya worked on the radio team <br>
+                  &emsp; - Joyce and Vini worked on the systems integration team <br>
+                  The Lab 3 Report Work Distribution is as follows: <br>
+                  &emsp; - Nathalia and Priya worked on the radio write up <br>
+                  &emsp; - Joyce and Vini worked on the systems integration write up <br>
+                  &emsp; - Joyce and Priya filmed videos, Nathalia edited and uploaded videos <br>
+                  The website work distribution is as follows: <br>
+		  &emsp; - Priya: Website Set Up<br>
+                  &emsp; - Nathalia: Website Completion of Lab 3 and M	aintenance<br>
+              </p>
 
     <!-- Footer -->
     <footer>
