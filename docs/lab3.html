@@ -92,11 +92,30 @@ const uint64_t pipes[<span style="color: #0000DD; font-weight: bold">2</span>] <
 		    <br>
 		<img class="img-fluid d-block mx-auto" width="800" height="200" src="./img/lab3/Radio Set Up.JPG" alt=""> <br>
               <p> 
+		The values for each bit is determined by the readings from the various sensors, such as the line sensors, distance sensors, and phototransistors. In terms of the wall detection, we added additional helper functions called "updateLocation" and "updateFacing" which respectively updated where on the grid the robot was in terms of x and y coordinates and updated which cardinal direction the robot was facing to accurately update where the walls are.
 		The next section further discusses the conversion of the sent data package to something the GUI can understand. 
               </p>
 
               <h5>Base Station-to-GUI Transmission: </h5>
-              <p> After ensuring that the two radios could communicate to each other, we started the base station to GUI transmission. First, we set up the base station to receive information from the robot. Then, should the package be confirmed and acknowledged, decryption occurs. Finally, the decrypted data is displayed on the GUI through the following Serial.println() statements. The video includes the accurate display of this code.
+              <p> After ensuring that the two radios could communicate to each other, we started the base station to GUI transmission. First, we set up the base station to receive information from the robot. Then, should the package be confirmed and acknowledged, decryption occurs. </p>
+	<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">void decrypt (unsigned <span style="color: #007020">long</span> message[<span style="color: #0000DD; font-weight: bold">3</span>]){
+    char answer[<span style="color: #0000DD; font-weight: bold">256</span>];
+    
+    strcat(answer, message[<span style="color: #0000DD; font-weight: bold">0</span>] <span style="color: #333333">+</span> <span style="background-color: #fff0f0">&quot;,&quot;</span>);   <span style="color: #333333">//</span>x coordinate
+    strcat(answer, message[<span style="color: #0000DD; font-weight: bold">1</span>]);         <span style="color: #333333">//</span>y coordinate
+
+    <span style="color: #007020">int</span> data <span style="color: #333333">=</span> message[<span style="color: #0000DD; font-weight: bold">2</span>];
+    <span style="color: #008800; font-weight: bold">if</span> (data <span style="color: #333333">%</span> <span style="color: #0000DD; font-weight: bold">10</span>) strcat(answer, <span style="background-color: #fff0f0">&quot;,west=true&quot;</span>);
+    <span style="color: #008800; font-weight: bold">if</span> ((data <span style="color: #333333">&gt;&gt;</span> <span style="color: #0000DD; font-weight: bold">1</span>) <span style="color: #333333">%</span> <span style="color: #0000DD; font-weight: bold">10</span>) strcat(answer, <span style="background-color: #fff0f0">&quot;,south=true&quot;</span>);
+    <span style="color: #008800; font-weight: bold">if</span> ((data <span style="color: #333333">&gt;&gt;</span> <span style="color: #0000DD; font-weight: bold">2</span>) <span style="color: #333333">%</span> <span style="color: #0000DD; font-weight: bold">10</span>) strcat(answer, <span style="background-color: #fff0f0">&quot;,west=true&quot;</span>);
+    <span style="color: #008800; font-weight: bold">if</span> ((data <span style="color: #333333">&gt;&gt;</span> <span style="color: #0000DD; font-weight: bold">3</span>) <span style="color: #333333">%</span> <span style="color: #0000DD; font-weight: bold">10</span>) strcat(answer, <span style="background-color: #fff0f0">&quot;,north=true&quot;</span>);
+
+    Serial<span style="color: #333333">.</span>println(answer);
+}
+</pre></div>
+
+		      
+	<p> Finally, the decrypted data is displayed on the GUI through the following Serial.println() statements. The video includes the accurate display of this code.
               </p>
 		    
 		    <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">  Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;reset&quot;</span>);
