@@ -20,8 +20,8 @@ Servo right_servo;
 #define right 2
 
 //pins
-const int LW = 9; // Servo1
-const int RW = 10; // Servo2
+const int LW = 5; // Servo1
+const int RW = 6; // Servo2
 const int right_turn = A5;
 const int left_turn = A4;
 
@@ -43,26 +43,6 @@ void read_turn(){
 }
 
 void move(int direction){
-  // Turn if requested
-    if(direction == right){
-      left_servo.write(95);
-      right_servo.write(95);
-      while(analogRead(left_turn) > WHITE);
-      while(analogRead(left_turn) < WHITE);
-      Serial.println("done turn right");
-    }
-    
-    if(direction == left){
-      left_servo.write(85);
-      right_servo.write(85);
-      while(analogRead(right_turn) > WHITE);
-      while(analogRead(right_turn) < WHITE);
-      Serial.println("done turn left");
-    }
-  
-  go_straight();
-  delay(50);
-  
   //look for intersection
   while(1){
     Serial.println("looking");
@@ -74,13 +54,36 @@ void move(int direction){
         go_straight();
         i++;
       }
-      Serial.println("delay");
-      break; //both turn sensors are on white line
+      break;
     }
     go_straight();
     delay(10);
-  }//close while; found intersection
-  Serial.println("back to main");
+  }//close while, found intersection
+  
+  // Turn if requested, white=700
+    if(direction == right){
+      Serial.println("TURN RIGHT");
+      left_servo.write(95);
+      right_servo.write(95);
+      while(analogRead(left_turn) > WHITE);
+      while(analogRead(left_turn) < WHITE);
+      while(analogRead(left_turn) > WHITE);
+      Serial.println("done turn right");
+    }
+    
+    if(direction == left){
+      Serial.println("TURN LEFT");
+      left_servo.write(85);
+      right_servo.write(85);
+      while(analogRead(right_turn) > WHITE);
+      while(analogRead(right_turn) < WHITE);
+      while(analogRead(right_turn) > WHITE);
+      Serial.println("done turn left");
+    }
+  
+  go_straight();
+  delay(50);
+  
 }
 
 void go_straight(){
@@ -94,21 +97,22 @@ void go_straight(){
     left_servo.write(SERVO_L_FORWARD_MAX);
     right_servo.write(SERVO_R_FORWARD_MAX);
   }
-  // Robot is too right
-  else if (error > ERROR_RANGE) {
-    // Adjust left
-    error_magnitude = abs(error)/(float)ERROR_RANGE;
-    left_servo.write(SERVO_L_FORWARD_MAX - 2);//error_magnitude*SERVO_L_INCR_FORWARD*0.2);
-    right_servo.write(SERVO_R_FORWARD_MAX - 2);//error_magnitude*SERVO_R_INCR_FORWARD*0.2);
-  }
-  // Robot is too left of line
-  else if (error < -(ERROR_RANGE)) {
-    // Adjust right
-    error_magnitude = abs(error)/(float)ERROR_RANGE;
-    left_servo.write(SERVO_L_FORWARD_MAX +2);
-    right_servo.write(SERVO_R_FORWARD_MAX + 2);
-  }
-  delay(10);
+  
+    // Robot is too right
+    else if (error > ERROR_RANGE) {
+      // Adjust left
+      error_magnitude = abs(error)/(float)ERROR_RANGE;
+      left_servo.write(SERVO_L_FORWARD_MAX + error_magnitude*SERVO_L_INCR_FORWARD);
+      right_servo.write(SERVO_R_FORWARD_MAX - error_magnitude*SERVO_R_INCR_FORWARD);
+    }
+    // Robot is too left of line
+    else if (error < -(ERROR_RANGE)) {
+      // Adjust right
+      error_magnitude = abs(error)/(float)ERROR_RANGE;
+      left_servo.write(SERVO_L_FORWARD_MAX - error_magnitude*SERVO_L_INCR_FORWARD);
+      right_servo.write(SERVO_R_FORWARD_MAX + error_magnitude*SERVO_R_INCR_FORWARD);
+    }
+    delay(10);
 }
 
 
@@ -130,22 +134,24 @@ void setup() {
 
 
 void loop() {
-  Serial.println("hi");
-  move(left);
-  delay(50);
-  move(left);
-  delay(50);
-  move(left);
-  delay(50);
-  move(left);
-  delay(50);
+//  move(left);
+//  delay(50);
+//  move(left);
+//  delay(50);
+//  move(left);
+//  delay(50);
+//  move(left);
+//  delay(50);
+//  
+//  move(right);
+//  delay(50);
+//  move(right);
+//  delay(50);
+//  move(right);
+//  delay(50);
+//  move(right);
+//  delay(50);
+  move(right);
+  delay(50); 
   
-  move(right);
-  delay(50);
-  move(right);
-  delay(50);
-  move(right);
-  delay(50);
-  move(right);
-  delay(50);
 }

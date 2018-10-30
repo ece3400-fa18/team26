@@ -71,24 +71,24 @@ void move(){
       // Adjust left
       Serial.println("too right");
       error_magnitude = abs(error)/(float)ERROR_RANGE;
-      left_servo.write(SERVO_L_FORWARD_MAX - error_magnitude*SERVO_L_INCR_FORWARD);
-      right_servo.write(SERVO_R_FORWARD_MAX + error_magnitude*SERVO_R_INCR_FORWARD);
+      left_servo.write(SERVO_L_FORWARD_MAX + error_magnitude*SERVO_L_INCR_FORWARD);
+      right_servo.write(SERVO_R_FORWARD_MAX - error_magnitude*SERVO_R_INCR_FORWARD);
     }
     // Robot is too left of line
     else if (error < -(ERROR_RANGE)) {
       // Adjust right
       Serial.println("too left");
       error_magnitude = abs(error)/(float)ERROR_RANGE;
-      left_servo.write(SERVO_L_FORWARD_MAX + error_magnitude*SERVO_L_INCR_FORWARD);
-      right_servo.write(SERVO_R_FORWARD_MAX - error_magnitude*SERVO_R_INCR_FORWARD);
+      left_servo.write(SERVO_L_FORWARD_MAX - error_magnitude*SERVO_L_INCR_FORWARD);
+      right_servo.write(SERVO_R_FORWARD_MAX + error_magnitude*SERVO_R_INCR_FORWARD);
     }
     delay(10);
 }
 
 void setup() {
   Serial.begin(9600);
-  right_servo.attach(10);
-  left_servo.attach(9);
+  right_servo.attach(6);
+  left_servo.attach(5);
   // Set up the select pins as outputs:
 
   pinMode(right_turn, INPUT);
@@ -96,16 +96,12 @@ void setup() {
   pinMode(left_pid, INPUT);
   pinMode(left_turn, INPUT);
 
-
-
   right_servo.write(SERVO_BRAKE);
   left_servo.write(SERVO_BRAKE);
 
-  // Wait at start for 1 second
   delay(1000);
 }
 
 void loop() {
-  
   move();
 }
