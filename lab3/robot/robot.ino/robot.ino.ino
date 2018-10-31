@@ -47,11 +47,13 @@ int   i = 0;
 int right_turn_val  = 0;
 int left_turn_val   = 0;
 
+//control variables for turning
+int turn_count = 0;
+
 const int irBinNum = 44;
 const int irThresh = 50;
 const int micBinNum = 17;
 const int micThresh = 130;
-
 
 
 
@@ -196,11 +198,22 @@ void setup() {
 }
 
 void loop() {
-//  right_servo.write(SERVO_BRAKE);
-//  left_servo.write(SERVO_BRAKE);
-  go_straight();
   if (wallDetected()){
     Serial.println("wall");
-    move(right);
+    Serial.println(turn_count);
+    if(turn_count == 0){
+      move(left);
+    }else if(turn_count == 1){
+      move(left);
+      move(left);
+    }else if(turn_count == 2){
+      //reach dead end
+      move(right);
+      turn_count = 0;
+    }
+    turn_count++;
+  }else{
+    go_straight();
+    turn_count = 0;
   }
 }
