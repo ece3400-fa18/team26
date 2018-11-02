@@ -1,8 +1,13 @@
 #include <Wire.h>
 
 #define OV7670_I2C_ADDRESS /*TODO: write this in hex (eg. 0xAB) */
-//Read key registers written,
-//Write key registers in progress
+#define CC7 0001001//Common Control 7
+#define CC3 0000110//Common Control 3
+#define IC 0001000//Internal Clock
+#define CC15 0100000//Common Control 15
+#define CC17 0000100//Common Control 17
+#define MVFP 0001111//MVFP
+#define GAIN 0000000//GAIN
 
 ///////// Main Program //////////////
 void setup() {
@@ -26,27 +31,27 @@ void loop(){
 ///////// Function Definition //////////////
 void read_key_registers(){
   /*TODO: DEFINE THIS FUNCTION*/
-  read_register_value(0001001) //Common Control 7
+  read_register_value(CC7) //Common Control 7
   Serial.println("Common Control 7")
-  Serial.println(read_register_value(0001001))
-  read_register_value(0000110) //Common Control 3
+  Serial.println(read_register_value(CC7))
+  read_register_value(CC3) //Common Control 3
   Serial.println("Common Control 3")
-  Serial.println(read_register_value(0000110))
-  read_register_value(0001000)//Internal Clock
+  Serial.println(read_register_value(CC3))
+  read_register_value(IC)//Internal Clock
   Serial.println("Internal Clock")
-  Serial.println(read_register_value(0001000))
-  read_register_value(0100000)//Common Control 15
+  Serial.println(read_register_value(IC))
+  read_register_value(CC15)//Common Control 15
   Serial.println("Common Control 15")
-  Serial.println(read_register_value(0100000))
-  read_register_value(0000100)//Common Control 17
+  Serial.println(read_register_value(CC15))
+  read_register_value(CC17)//Common Control 17
   Serial.println("Common Control 17")
-  Serial.println(read_register_value(0000100))
-  read_register_value(0001111)//MVFP
+  Serial.println(read_register_value(CC17))
+  read_register_value(MVFP)//MVFP
   Serial.println("MVFP")
-  Serial.println(read_register_value(0001111))
-  read_register_value(0000000)//GAIN
+  Serial.println(read_register_value(MVFP))
+  read_register_value(GAIN)//GAIN
   Serial.println("GAIN")
-  Serial.println(read_register_value(0000000))
+  Serial.println(read_register_value(GAIN))
 }
 
 byte read_register_value(int register_address){
@@ -83,7 +88,9 @@ String OV7670_write_register(int reg_address, byte data){
  }
 
 String write_key_registers(){
-  return OV7670_write(reg_address, &data, 1);
+  //OV7670_write_register(CC7, 7)//setting to 1 resets all registers
+  OV7670_write_register(CC3, 3)//setting to 1 enables scale control
+  OV7670_write_register(CC7, 2)//RGB selection
  }
 
 void set_color_matrix(){
