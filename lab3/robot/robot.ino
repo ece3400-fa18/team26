@@ -90,22 +90,23 @@ void move(int direction){
 
 void find_intersection(){
   //look for intersection
-  while(1){
-    Serial.println("looking");
-    read_turn();
     if (left_turn_val < WHITE && right_turn_val < WHITE){
-      i = 0;
-      Serial.println("found intersection");
-      while(i < 30){
-        go_straight();
-        i++;
-      }
-      break; //both turn sensors are on white line
+      //intersection cross
+//       i = 0;
+//       Serial.println("found intersection");
+//       while(i < 30){
+//         go_straight();
+//         i++;
+//       }
+//       break; //both turn sensors are on white line
+      
+      
+      //UPDATE RADIO CONTROL SIGNAL HERE
     }
-  }//close while; found intersection
 }
 
 void go_straight(){
+  find_intersection();
   //modified from solution code
   //following straight line
   read_turn();
