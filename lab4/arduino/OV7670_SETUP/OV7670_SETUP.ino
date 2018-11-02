@@ -1,13 +1,13 @@
 #include <Wire.h>
 
 #define OV7670_I2C_ADDRESS /*TODO: write this in hex (eg. 0xAB) */
-#define CC7 0001001//Common Control 7
-#define CC3 0000110//Common Control 3
-#define IC 0001000//Internal Clock
-#define CC15 0100000//Common Control 15
-#define CC17 0000100//Common Control 17
-#define MVFP 0001111//MVFP
-#define GAIN 0000000//GAIN
+#define CC7 0x9//Common Control 7
+#define CC3 0x6//Common Control 3
+#define IC 0x8//Internal Clock
+#define CC15 0x20//Common Control 15
+#define CC17 0x4//Common Control 17
+#define MVFP 0xF//MVFP
+#define GAIN 0//GAIN
 
 ///////// Main Program //////////////
 void setup() {
