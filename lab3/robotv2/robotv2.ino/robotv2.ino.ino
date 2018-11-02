@@ -110,7 +110,9 @@ void find_intersection(){
 
       //UPDATE LOCATION HERE
       updateLocation(facing);
-      
+
+
+      Serial.println("...................INTERSECTION.................");
       Serial.println(x);
       Serial.println(y);
     }
@@ -132,15 +134,15 @@ void go_straight(){
   else if (error > ERROR_RANGE) {
     // Adjust left
     error_magnitude = abs(error)/(float)ERROR_RANGE;
-    left_servo.write(SERVO_L_FORWARD_MAX - 2);//error_magnitude*SERVO_L_INCR_FORWARD*0.2);
-    right_servo.write(SERVO_R_FORWARD_MAX - 2);//error_magnitude*SERVO_R_INCR_FORWARD*0.2);
+    left_servo.write(SERVO_L_FORWARD_MAX + error_magnitude*SERVO_L_INCR_FORWARD);
+    right_servo.write(SERVO_R_FORWARD_MAX - error_magnitude*SERVO_R_INCR_FORWARD);
   }
   // Robot is too left of line
   else if (error < -(ERROR_RANGE)) {
     // Adjust right
     error_magnitude = abs(error)/(float)ERROR_RANGE;
-    left_servo.write(SERVO_L_FORWARD_MAX +2);
-    right_servo.write(SERVO_R_FORWARD_MAX + 2);
+    left_servo.write(SERVO_L_FORWARD_MAX - error_magnitude*SERVO_L_INCR_FORWARD);
+    right_servo.write(SERVO_R_FORWARD_MAX + error_magnitude*SERVO_R_INCR_FORWARD);
   }
 
   delay(10);
