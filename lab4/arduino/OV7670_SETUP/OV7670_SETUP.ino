@@ -1,7 +1,8 @@
 #include <Wire.h>
 
 #define OV7670_I2C_ADDRESS /*TODO: write this in hex (eg. 0xAB) */
-
+//Read key registers written,
+//Write key registers in progress
 
 ///////// Main Program //////////////
 void setup() {
