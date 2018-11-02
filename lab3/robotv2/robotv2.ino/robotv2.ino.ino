@@ -99,6 +99,7 @@ void move(int direction){
 void find_intersection(){
   //look for intersection
     if (left_turn_val < WHITE && right_turn_val < WHITE){
+      while(left_turn_val < WHITE && right_turn_val < WHITE);
       //intersection cross
 //       i = 0;
 //       Serial.println("found intersection");
