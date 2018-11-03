@@ -78,6 +78,7 @@ void read_turn(){
 void move(int direction){
   // Turn if requested
     if(direction == right){
+      Serial.println("begin turn right");
       updateFacing(&facing, 0);
       left_servo.write(95);
       right_servo.write(95);
@@ -87,6 +88,7 @@ void move(int direction){
     }
     
     if(direction == left){
+      Serial.println("begin turn left");
       updateFacing(&facing, 1);
       left_servo.write(85);
       right_servo.write(85);
@@ -99,7 +101,8 @@ void move(int direction){
 void find_intersection(){
   //look for intersection
     if (left_turn_val < WHITE && right_turn_val < WHITE){
-      while(left_turn_val < WHITE && right_turn_val < WHITE);
+      while(left_turn_val > WHITE && right_turn_val > WHITE);
+      Serial.println("found intersection");
       //intersection cross
 //       i = 0;
 //       Serial.println("found intersection");
@@ -116,6 +119,7 @@ void find_intersection(){
       Serial.println("...................INTERSECTION.................");
       Serial.println(x);
       Serial.println(y);
+      Serial.println("................................................");
     }
 }
 
@@ -237,29 +241,29 @@ void updateFacing(int *facing, int turningDirection){
       *facing = 0; //now facing west
     } else if (turningDirection == 0) { //turning right
       *facing = 2; //now facing east
-    }
+      }
   }
-if (*facing == 2){ //initially east
-    if (turningDirection == 1){ //turning left 
-      *facing = 3; //now facing north
-    } else if (turningDirection == 0) { //turning right
-      *facing = 1; //now facing south
+    if (*facing == 2){ //initially east
+      if (turningDirection == 1){ //turning left 
+        *facing = 3; //now facing north
+      } else if (turningDirection == 0) { //turning right
+        *facing = 1; //now facing south
+        }
     }
-  }
-if (*facing == 1){ //initially south
-    if (turningDirection == 1){ //turning left 
-      *facing = 2; //now facing east
-    } else if (turningDirection == 0) { //turning right
-      *facing = 0; //now facing west
+    if (*facing == 1){ //initially south
+      if (turningDirection == 1){ //turning left 
+        *facing = 2; //now facing east
+      } else if (turningDirection == 0) { //turning right
+        *facing = 0; //now facing west
+        }
     }
-  }
-if (*facing == 0){ //initially west
-    if (turningDirection == 1){ //turning left 
-      *facing = 1; //now facing south
-    } else if (turningDirection == 0) { //turning right
-      *facing = 3; //now facing north
-    }
-  }
+    if (*facing == 0){ //initially west
+      if (turningDirection == 1){ //turning left 
+        *facing = 1; //now facing south
+      } else if (turningDirection == 0) { //turning right
+        *facing = 3; //now facing north
+        }
+     }
 }
 
 void setup() {
@@ -277,9 +281,11 @@ void setup() {
 
 void loop() {
   if (wallDetected()){
+    Serial.println("...........update...........");
     Serial.println(updates[0]);
     Serial.println(updates[1]);
     Serial.println(updates[2]);
+    Serial.println("............................");
     //Serial.println(turn_count);
     if(turn_count == 0){
       move(left);
