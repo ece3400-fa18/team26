@@ -14,10 +14,10 @@
 void setup() {
   Wire.begin();
   Serial.begin(9600);
-  Serial.println("test");
+  Serial.println("start");
   // TODO: READ KEY REGISTERS
   read_key_registers();
-  Serial.println("test 3");
+  Serial.println("finished first read");
   delay(100);
   
   // TODO: WRITE KEY REGISTERS
@@ -28,13 +28,12 @@ void setup() {
 }
 
 void loop(){
-   Serial.println("test 2");
  }
 
 
 ///////// Function Definition //////////////
 void read_key_registers(){
-  Serial.println("test 4");
+  Serial.println("enter read_key_reg");
   /*TODO: DEFINE THIS FUNCTION*/
   read_register_value(CC7); //Common Control 7
   Serial.println("Common Control 7");
@@ -60,7 +59,7 @@ void read_key_registers(){
 }
 
 byte read_register_value(int register_address){
-  Serial.println("entering read register");
+  Serial.println("entering read_reg_val");
   byte data = 0;
   Serial.println("test 5");
   Wire.beginTransmission(OV7670_I2C_ADDRESS);
@@ -71,7 +70,7 @@ byte read_register_value(int register_address){
   Serial.println("test 8");
   Wire.requestFrom(OV7670_I2C_ADDRESS,1);
   Serial.println("test 9");
-   Serial.println(Wire.available());
+  Serial.println(Wire.available());
   while(Wire.available()<1);
   Serial.println("test 10");
   data = Wire.read();
