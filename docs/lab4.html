@@ -68,11 +68,18 @@
               &emsp; - OV7670 Camera <br>
               &emsp; - Arduino Uno <br>
               &emsp; - DE0-Nano FPGA board <br>
+		    
+		<h5> Camera Set Up:Registers</h5>
+		    We began by looking through the documentation for the registers that were related to six main functionalities: 1)resetting the registers 2)scaling 3)using external clock as internatl 4)pixel resolution 5)color bar 6)vertical and mirror image manupilation. After determining the relevant resistors and their addresses (please see table for details), we defined these at the top of the code. We then sought the values needed to enable the desired properties -- enable scaling, enable colorbar, ect. (These are marked by bold numbers in the third column). We then converted the values from binary to hex and obtained the 'write' values for all registers. In the write key register function, we began by resetting registers to their original values before writing the enable values. 
+		    
+		    As the reading and writing address of the camera differs by the value of the last bit (0 for write and 1 for read) we defined the camera address to the first seven bits, the last bit was dependant on whether the function calling the address was for reading or writing. 
 
 
-              <h5> Camera Set Up </h5>
+              <h5> Camera Set Up: Wiring To FPGA</h5>
+		    We intially struggled with creating the proper connections between the FPGA board and the OV7670 Camera, as in the documentation, the diagram for GPIO-0 is to the left of GPIO-1 and the first pin for both GPIO beds is at the top. However, on the FPGA board, the GPIO-1 is to the left of GPIO-0 and the first pin for GPIO-1 is at the bottom of the board, diagonal to the first pin of GPIO-0. 
+		
 							
-							<h5> Communicating with FPGA </h5>
+		<h5> Communicating with FPGA </h5>
 
 
 <br>
