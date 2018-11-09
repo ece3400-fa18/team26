@@ -290,8 +290,8 @@ void loop() {
     if(turn_count == 0){
       move(left);
     }else if(turn_count == 1){
-      move(left);
-      move(left);
+      move(right);
+      move(right);
     }else if(turn_count == 2){
       //reach dead end
       move(right);

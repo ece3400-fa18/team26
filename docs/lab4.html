@@ -51,9 +51,16 @@
               <p class="item-intro text-muted"> 
               In this lab we split into two teams to develop an FPGA module capable of detecting basic shapes from a camera input, and pass this information on to the Arduino. This device will be mounted on the robot to identify these shapes on the walls of the maze.</p>
 
-              <!--<h3> Pre-Lab: PLL </h3>
-              <p>
-              </p>-->
+              <h3> Pre-Lab: PLL </h3>
+              <p> In the pre-lab, we learned key things about the FPGA we are using, the DE0-Nano, and the camera we are using, the OV670. Knowing these facts will allow us to perform image processing. <br>
+              Embedded memory on the FPGA is 74.25 kB; this is the maximum size of the buffer. Since the camera has 640x480 pixels at full resolution, with a maximum of 3 bytes per a pixel, neither color resolution nor resolution can be used at full capacity. Each entry in the ram has a minimum size of 8 bits, so the maximum number of entries for the minimum size is 76032.<br>
+              Of the available pixel formats, the RGB565 (16bits/pixel) format provides the most information on the base colors making up each pixel.
+              In order to convert that pixel format to be accepted by the VGA module, (RGB565 to RGB332), we will use the following diagram:<br>
+              [insert image]
+              Based on the timing diagrams on page 7 of the camera data sheet, we will sample on the positive edge of HREF.
+              <br>
+
+              </p>
               
               <h3> Arduino Team</h3>
               <p> Nathalia and Vini worked on the arduino team. </p>
