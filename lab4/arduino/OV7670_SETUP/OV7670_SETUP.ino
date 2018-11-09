@@ -24,8 +24,8 @@ void setup() {
   // TODO: WRITE KEY REGISTERS
   write_key_registers();
   set_color_matrix();
-  Serial.println("now reading");
   read_key_registers();
+
 }
 
 void loop(){
@@ -54,7 +54,6 @@ void read_key_registers(){
 //  read_register_value(MVFP);//MVFP
   Serial.println("MVFP");
   Serial.println(read_register_value(MVFP),HEX);
-
 }
 
 byte read_register_value(int register_address){
@@ -100,6 +99,7 @@ String write_key_registers(){
   OV7670_write_register(CC7, 0x0C);   //Color & RGB bar selection
   OV7670_write_register(CC15, 0xD0);  //Color Pixel
   //OV7670_write_register(CC17, 0x00);//Color Bar IF DOESN'T WORK TRY 0C
+
  }
 
 void set_color_matrix(){
