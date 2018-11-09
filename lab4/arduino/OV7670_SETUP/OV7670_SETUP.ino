@@ -2,22 +2,23 @@
 
 #define OV7670_I2C_ADDRESS 0x21
 //read: 
-#define CC7 0x9//Common Control 7
-#define CC3 0x6//Common Control 3
-#define IC 0x8//Internal Clock
-#define CC15 0x20//Common Control 15
-#define CC17 0x4//Common Control 17
-#define MVFP 0xF//MVFP
-#define GAIN 0//GAIN
+#define CC7 0x12//Common Control 7
+#define CC3 0x0C//Common Control 3
+#define IC 0x11//Internal Clock
+#define CC15 0x40//Common Control 15
+#define CC14 0x3E//Common Control 14
+#define CC17 0x42//Common Control 17
+#define MVFP 0x1E//MVFP
+
 
 ///////// Main Program //////////////
 void setup() {
   Wire.begin();
   Serial.begin(9600);
-  Serial.println("start");
+  Serial.println("test");
   // TODO: READ KEY REGISTERS
   read_key_registers();
-  Serial.println("finished first read");
+  Serial.println("test 3");
   delay(100);
   
   // TODO: WRITE KEY REGISTERS
@@ -28,12 +29,13 @@ void setup() {
 }
 
 void loop(){
+   Serial.println("test 2");
  }
 
 
 ///////// Function Definition //////////////
 void read_key_registers(){
-  Serial.println("enter read_key_reg");
+  Serial.println("test 4");
   /*TODO: DEFINE THIS FUNCTION*/
   read_register_value(CC7); //Common Control 7
   Serial.println("Common Control 7");
@@ -53,13 +55,13 @@ void read_key_registers(){
   read_register_value(MVFP);//MVFP
   Serial.println("MVFP");
   Serial.println(read_register_value(MVFP));
-  read_register_value(GAIN);//GAIN
-  Serial.println("GAIN");
-  Serial.println(read_register_value(GAIN));
+//  read_register_value(GAIN);//GAIN
+//  Serial.println("GAIN");
+//  Serial.println(read_register_value(GAIN));
 }
 
 byte read_register_value(int register_address){
-  Serial.println("entering read_reg_val");
+  Serial.println("entering read register");
   byte data = 0;
   Serial.println("test 5");
   Wire.beginTransmission(OV7670_I2C_ADDRESS);
@@ -101,9 +103,13 @@ String OV7670_write_register(int reg_address, byte data){
  }
 
 String write_key_registers(){
-  //OV7670_write_register(CC7, 7);//setting to 1 resets all registers
-  OV7670_write_register(CC3, 3);//setting to 1 enables scale control
-  OV7670_write_register(CC7, 2);//RGB selection
+  OV7670_write_register(CC7, 0x80);//setting to 1 resets all registers
+  OV7670_write_register(CC3, 0x08);//setting to 1 enables scale control
+  OV7670_write_register(IC, 0xC0);//IC selection
+  OV7670_write_register(MVFP, 0x30);//Vertical &mirror flip
+  OV7670_write_register(CC7, 0x0E);//Color bar selection
+  OV7670_write_register(CC15, 0xD0);//Color Pixel
+  OV7670_write_register(CC17, 0x08);//Color Bar IF DOESN'T WORK TRY 0C
  }
 
 void set_color_matrix(){
