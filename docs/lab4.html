@@ -73,9 +73,10 @@
 	<img class="img-fluid d-block mx-auto" width="800" height="200" src="./img/lab4/arduino2.JPG" alt=""> <br>
 
 		<h5> Camera Set Up: Registers</h5>
-		    We began by looking through the documentation for the registers that were related to six main functionalities: 1)resetting the registers 2)scaling 3)using external clock as internatl 4)pixel resolution 5)color bar 6)vertical and mirror image manupilation. After determining the relevant resistors and their addresses (please see table for details), we defined these at the top of the code. We then sought the values needed to enable the desired properties -- enable scaling, enable colorbar, ect. (These are marked by bold numbers in the third column). We then converted the values from binary to hex and obtained the 'write' values for all registers. In the write key register function, we began by resetting registers to their original values before writing the enable values. 
+		    We began by looking through the documentation for the registers that were related to six main functionalities:<br> 1)resetting the registers 2)scaling 3)using external clock as internatl 4)pixel resolution 5)color bar 6)vertical and mirror image manipulation. <br>
+		    After determining the relevant resistors and their addresses (please see table for details), we defined these at the top of the code. We then sought the values needed to enable the desired properties -- enable scaling, enable colorbar, etc. These are marked by bold numbers in the third column. We then converted the values from binary to hex and obtained the 'write' values for all registers. In the write key register function, we began by resetting registers to their original values before writing the enable values. 
 		    
-		    As the reading and writing address of the camera differs by the value of the last bit (0 for write and 1 for read) we defined the camera address to the first seven bits, the last bit was dependant on whether the function calling the address was for reading or writing. <br>
+		    As the reading and writing address of the camera differs by the value of the last bit, 0 for write and 1 for read, we defined the camera address to the first seven bits, the last bit was dependant on whether the function calling the address was for reading or writing. <br>
 
 <br>
               <h5> Camera Set Up: Wiring To FPGA</h5>
@@ -212,7 +213,56 @@
 	1 is vertically flip image
 	 </td>
   </tr>	
-</table>			
+</table>	
+		    <p> With this table in mind, we began our main program in the "Set Up" section of the code. We wanted to use serial to ensure that our register values were what we expected, so we set that up. Next, we called the subroutine functions write_key_registers() and read_key_registers(), both of which are included below. </p>
+			    
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #333333">/////////</span> Main Program <span style="color: #333333">//////////////</span>
+void setup() {
+  Wire<span style="color: #333333">.</span>begin();
+  Serial<span style="color: #333333">.</span>begin(<span style="color: #0000DD; font-weight: bold">9600</span>);
+  <span style="color: #333333">//</span> TODO: READ KEY REGISTERS
+  OV7670_write_register(CC7, <span style="color: #005588; font-weight: bold">0x80</span>);<span style="color: #333333">//</span>resets <span style="color: #007020">all</span> registers
+  read_key_registers();
+
+  delay(<span style="color: #0000DD; font-weight: bold">100</span>);
+  
+  <span style="color: #333333">//</span> TODO: WRITE KEY REGISTERS
+  write_key_registers();
+  set_color_matrix();
+  read_key_registers();
+
+}
+</pre></div>
+		   
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">void read_key_registers(){
+  <span style="color: #333333">/*</span>TODO: DEFINE THIS FUNCTION<span style="color: #333333">*/</span>
+  Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;Common Control 7&quot;</span>);
+  Serial<span style="color: #333333">.</span>println(read_register_value(CC7),HEX);
+  Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;Common Control 3&quot;</span>);
+  Serial<span style="color: #333333">.</span>println(read_register_value(CC3),HEX);
+  Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;Internal Clock&quot;</span>);
+  Serial<span style="color: #333333">.</span>println(read_register_value(IC),HEX);
+  Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;Common Control 15&quot;</span>);
+  Serial<span style="color: #333333">.</span>println(read_register_value(CC15),HEX);
+  Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;Common Control 17&quot;</span>);
+  Serial<span style="color: #333333">.</span>println(read_register_value(CC17),HEX);
+  Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;MVFP&quot;</span>);
+  Serial<span style="color: #333333">.</span>println(read_register_value(MVFP),HEX);
+}
+</pre></div>
+		    
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">String write_key_registers(){
+  OV7670_write_register(CC7, <span style="color: #005588; font-weight: bold">0x80</span>);   <span style="color: #333333">//</span>setting to <span style="color: #0000DD; font-weight: bold">1</span> resets <span style="color: #007020">all</span> registers
+  delay(<span style="color: #0000DD; font-weight: bold">100</span>);
+  OV7670_write_register(CC3, <span style="color: #005588; font-weight: bold">0x08</span>);   <span style="color: #333333">//</span>setting to <span style="color: #0000DD; font-weight: bold">1</span> enables scale control
+  OV7670_write_register(IC, <span style="color: #005588; font-weight: bold">0xC0</span>);    <span style="color: #333333">//</span>IC selection
+  OV7670_write_register(MVFP, <span style="color: #005588; font-weight: bold">0x30</span>);  <span style="color: #333333">//</span>Vertical <span style="color: #333333">&amp;</span> mirror flip
+  OV7670_write_register(CC7, <span style="color: #005588; font-weight: bold">0x0C</span>);   <span style="color: #333333">//</span>Color <span style="color: #333333">&amp;</span> RGB bar selection
+  OV7670_write_register(CC15, <span style="color: #005588; font-weight: bold">0xD0</span>);  <span style="color: #333333">//</span>Color Pixel
+  OV7670_write_register(CC17, <span style="color: #005588; font-weight: bold">0x00</span>); <span style="color: #333333">//</span>Color Bar
+
+ }
+</pre></div>
 		<img class="img-fluid d-block mx-auto" width="800" height="200" src="./img/lab4/arduino registers.png" alt=""> <br>
 		    
 		    
@@ -229,9 +279,11 @@
 		    
 
               <h5>Set Up </h5>
+		    <img class="img-fluid d-block mx-auto" width="800" height="200" src="./img/lab4/FPGA.png" alt=""> <br>
 		    
 	    <p> Successful Color Bar test </p>
 		<img class="img-fluid d-block mx-auto" width="800" height="200" src="./img/lab4/FPGACB2.png" alt=""> <br>
+		  
 		    
 
 <br>
