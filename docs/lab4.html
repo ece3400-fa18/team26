@@ -56,7 +56,8 @@
               Embedded memory on the FPGA is 74.25 kB; this is the maximum size of the buffer. Since the camera has 640x480 pixels at full resolution, with a maximum of 3 bytes per a pixel, neither color resolution nor resolution can be used at full capacity. Each entry in the ram has a minimum size of 8 bits, so the maximum number of entries for the minimum size is 76032.<br>
               Of the available pixel formats, the RGB565 (16bits/pixel) format provides the most information on the base colors making up each pixel.
               In order to convert that pixel format to be accepted by the VGA module, (RGB565 to RGB332), we will use the following diagram:<br>
-              [insert image]
+              <img class="img-fluid d-block mx-auto" width="800" height="200" src="./img/lab4/downsize table.JPG" alt=""> <br>
+	
               Based on the timing diagrams on page 7 of the camera data sheet, we will sample on the positive edge of HREF.
               <br>
 
@@ -69,6 +70,8 @@
               &emsp; - Arduino Uno <br>
               &emsp; - DE0-Nano FPGA board <br>
 <br>		    
+	<img class="img-fluid d-block mx-auto" width="800" height="200" src="./img/lab4/arduino2.JPG" alt=""> <br>
+
 		<h5> Camera Set Up: Registers</h5>
 		    We began by looking through the documentation for the registers that were related to six main functionalities: 1)resetting the registers 2)scaling 3)using external clock as internatl 4)pixel resolution 5)color bar 6)vertical and mirror image manupilation. After determining the relevant resistors and their addresses (please see table for details), we defined these at the top of the code. We then sought the values needed to enable the desired properties -- enable scaling, enable colorbar, ect. (These are marked by bold numbers in the third column). We then converted the values from binary to hex and obtained the 'write' values for all registers. In the write key register function, we began by resetting registers to their original values before writing the enable values. 
 		    
@@ -208,11 +211,14 @@
 	0 is normal
 	1 is vertically flip image
 	 </td>
-  </tr>
-	
-	
-</table>							
+  </tr>	
+</table>			
+		<img class="img-fluid d-block mx-auto" width="800" height="200" src="./img/lab4/arduino registers.png" alt=""> <br>
+		    
+		    
 		<h5> Communicating with FPGA </h5>
+		<img class="img-fluid d-block mx-auto" width="800" height="200" src="./img/lab4/comm bits.JPG" alt=""> <br>
+		    
 
 <br>
               <h3> FPGA Team </h3>
@@ -223,6 +229,9 @@
 		    
 
               <h5>Set Up </h5>
+		    
+	    <p> Successful Color Bar test </p>
+		<img class="img-fluid d-block mx-auto" width="800" height="200" src="./img/lab4/FPGACB2.png" alt=""> <br>
 		    
 
 <br>
