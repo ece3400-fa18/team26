@@ -1,5 +1,5 @@
 Analysis & Synthesis report for DE0_NANO
-Fri Nov 02 16:28:10 2018
+Fri Nov 09 14:23:38 2018
 Quartus Prime Version 17.0.0 Build 595 04/25/2017 SJ Lite Edition
 
 
@@ -21,11 +21,9 @@ Quartus Prime Version 17.0.0 Build 595 04/25/2017 SJ Lite Edition
  13. altpll Parameter Settings by Entity Instance
  14. Port Connectivity Checks: "IMAGE_PROCESSOR:proc"
  15. Port Connectivity Checks: "Dual_Port_RAM_M9K:mem"
- 16. Port Connectivity Checks: "BUFFER_READER:buffer"
- 17. Port Connectivity Checks: "T26PLL:T26PLL_inst"
- 18. Post-Synthesis Netlist Statistics for Top Partition
- 19. Elapsed Time Per Partition
- 20. Analysis & Synthesis Messages
+ 16. Post-Synthesis Netlist Statistics for Top Partition
+ 17. Elapsed Time Per Partition
+ 18. Analysis & Synthesis Messages
 
 
 
@@ -52,7 +50,7 @@ agreement for further details.
 +----------------------------------------------------------------------------------+
 ; Analysis & Synthesis Summary                                                     ;
 +------------------------------------+---------------------------------------------+
-; Analysis & Synthesis Status        ; Successful - Fri Nov 02 16:28:10 2018       ;
+; Analysis & Synthesis Status        ; Successful - Fri Nov 09 14:23:38 2018       ;
 ; Quartus Prime Version              ; 17.0.0 Build 595 04/25/2017 SJ Lite Edition ;
 ; Revision Name                      ; DE0_NANO                                    ;
 ; Top-level Entity Name              ; DE0_NANO                                    ;
@@ -61,7 +59,7 @@ agreement for further details.
 ;     Total combinational functions  ; 37                                          ;
 ;     Dedicated logic registers      ; 20                                          ;
 ; Total registers                    ; 20                                          ;
-; Total pins                         ; 51                                          ;
+; Total pins                         ; 71                                          ;
 ; Total virtual pins                 ; 0                                           ;
 ; Total memory bits                  ; 0                                           ;
 ; Embedded Multiplier 9-bit elements ; 0                                           ;
@@ -177,18 +175,17 @@ agreement for further details.
 +----------------------------------+-----------------+------------------------------+--------------------------------------------------------------------------+---------+
 ; File Name with User-Entered Path ; Used in Netlist ; File Type                    ; File Name with Absolute Path                                             ; Library ;
 +----------------------------------+-----------------+------------------------------+--------------------------------------------------------------------------+---------+
-; VGA_DRIVER.v                     ; yes             ; User Verilog HDL File        ; C:/Users/labuser/Documents/Lab4_FPGA_Template/VGA_DRIVER.v               ;         ;
-; DE0_NANO.v                       ; yes             ; User Verilog HDL File        ; C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v                 ;         ;
-; Dual_Port_RAM_M9K.v              ; yes             ; User Verilog HDL File        ; C:/Users/labuser/Documents/Lab4_FPGA_Template/Dual_Port_RAM_M9K.v        ;         ;
-; IMAGE_PROCESSOR.v                ; yes             ; User Verilog HDL File        ; C:/Users/labuser/Documents/Lab4_FPGA_Template/IMAGE_PROCESSOR.v          ;         ;
-; T26PLL.v                         ; yes             ; User Wizard-Generated File   ; C:/Users/labuser/Documents/Lab4_FPGA_Template/T26PLL.v                   ;         ;
-; BUFFER_READER.v                  ; yes             ; User Verilog HDL File        ; C:/Users/labuser/Documents/Lab4_FPGA_Template/BUFFER_READER.v            ;         ;
+; VGA_DRIVER.v                     ; yes             ; User Verilog HDL File        ; C:/Users/labuser/Downloads/FPGA/VGA_DRIVER.v                             ;         ;
+; DE0_NANO.v                       ; yes             ; User Verilog HDL File        ; C:/Users/labuser/Downloads/FPGA/DE0_NANO.v                               ;         ;
+; Dual_Port_RAM_M9K.v              ; yes             ; User Verilog HDL File        ; C:/Users/labuser/Downloads/FPGA/Dual_Port_RAM_M9K.v                      ;         ;
+; IMAGE_PROCESSOR.v                ; yes             ; User Verilog HDL File        ; C:/Users/labuser/Downloads/FPGA/IMAGE_PROCESSOR.v                        ;         ;
+; T26PLL.v                         ; yes             ; User Wizard-Generated File   ; C:/Users/labuser/Downloads/FPGA/T26PLL.v                                 ;         ;
 ; altpll.tdf                       ; yes             ; Megafunction                 ; c:/intelfpga_lite/17.0/quartus/libraries/megafunctions/altpll.tdf        ;         ;
 ; aglobal170.inc                   ; yes             ; Megafunction                 ; c:/intelfpga_lite/17.0/quartus/libraries/megafunctions/aglobal170.inc    ;         ;
 ; stratix_pll.inc                  ; yes             ; Megafunction                 ; c:/intelfpga_lite/17.0/quartus/libraries/megafunctions/stratix_pll.inc   ;         ;
 ; stratixii_pll.inc                ; yes             ; Megafunction                 ; c:/intelfpga_lite/17.0/quartus/libraries/megafunctions/stratixii_pll.inc ;         ;
 ; cycloneii_pll.inc                ; yes             ; Megafunction                 ; c:/intelfpga_lite/17.0/quartus/libraries/megafunctions/cycloneii_pll.inc ;         ;
-; db/t26pll_altpll.v               ; yes             ; Auto-Generated Megafunction  ; C:/Users/labuser/Documents/Lab4_FPGA_Template/db/t26pll_altpll.v         ;         ;
+; db/t26pll_altpll.v               ; yes             ; Auto-Generated Megafunction  ; C:/Users/labuser/Downloads/FPGA/db/t26pll_altpll.v                       ;         ;
 +----------------------------------+-----------------+------------------------------+--------------------------------------------------------------------------+---------+
 
 
@@ -213,7 +210,7 @@ agreement for further details.
 ;     -- Dedicated logic registers            ; 20                                                                                       ;
 ;     -- I/O registers                        ; 0                                                                                        ;
 ;                                             ;                                                                                          ;
-; I/O pins                                    ; 51                                                                                       ;
+; I/O pins                                    ; 71                                                                                       ;
 ;                                             ;                                                                                          ;
 ; Embedded Multiplier 9-bit elements          ; 0                                                                                        ;
 ;                                             ;                                                                                          ;
@@ -221,9 +218,9 @@ agreement for further details.
 ;     -- PLLs                                 ; 1                                                                                        ;
 ;                                             ;                                                                                          ;
 ; Maximum fan-out node                        ; T26PLL:T26PLL_inst|altpll:altpll_component|T26PLL_altpll:auto_generated|wire_pll1_clk[0] ;
-; Maximum fan-out                             ; 21                                                                                       ;
-; Total fan-out                               ; 227                                                                                      ;
-; Average fan-out                             ; 1.42                                                                                     ;
+; Maximum fan-out                             ; 22                                                                                       ;
+; Total fan-out                               ; 248                                                                                      ;
+; Average fan-out                             ; 1.24                                                                                     ;
 +---------------------------------------------+------------------------------------------------------------------------------------------+
 
 
@@ -232,7 +229,7 @@ agreement for further details.
 +-----------------------------------------+---------------------+---------------------------+-------------+--------------+---------+-----------+------+--------------+-----------------------------------------------------------------------------------+---------------+--------------+
 ; Compilation Hierarchy Node              ; Combinational ALUTs ; Dedicated Logic Registers ; Memory Bits ; DSP Elements ; DSP 9x9 ; DSP 18x18 ; Pins ; Virtual Pins ; Full Hierarchy Name                                                               ; Entity Name   ; Library Name ;
 +-----------------------------------------+---------------------+---------------------------+-------------+--------------+---------+-----------+------+--------------+-----------------------------------------------------------------------------------+---------------+--------------+
-; |DE0_NANO                               ; 37 (0)              ; 20 (0)                    ; 0           ; 0            ; 0       ; 0         ; 51   ; 0            ; |DE0_NANO                                                                         ; DE0_NANO      ; work         ;
+; |DE0_NANO                               ; 37 (0)              ; 20 (0)                    ; 0           ; 0            ; 0       ; 0         ; 71   ; 0            ; |DE0_NANO                                                                         ; DE0_NANO      ; work         ;
 ;    |T26PLL:T26PLL_inst|                 ; 0 (0)               ; 0 (0)                     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |DE0_NANO|T26PLL:T26PLL_inst                                                      ; T26PLL        ; work         ;
 ;       |altpll:altpll_component|         ; 0 (0)               ; 0 (0)                     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |DE0_NANO|T26PLL:T26PLL_inst|altpll:altpll_component                              ; altpll        ; work         ;
 ;          |T26PLL_altpll:auto_generated| ; 0 (0)               ; 0 (0)                     ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |DE0_NANO|T26PLL:T26PLL_inst|altpll:altpll_component|T26PLL_altpll:auto_generated ; T26PLL_altpll ; work         ;
@@ -685,37 +682,14 @@ Note: In order to hide this table in the UI and the text report file, please set
 +--------+--------+----------+-------------------------------------------------------------------------------------+
 
 
-+---------------------------------------------------+
-; Port Connectivity Checks: "Dual_Port_RAM_M9K:mem" ;
-+------------+-------+----------+-------------------+
-; Port       ; Type  ; Severity ; Details           ;
-+------------+-------+----------+-------------------+
-; input_data ; Input ; Info     ; Stuck at GND      ;
-; w_en       ; Input ; Info     ; Stuck at GND      ;
-+------------+-------+----------+-------------------+
-
-
-+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-; Port Connectivity Checks: "BUFFER_READER:buffer"                                                                                                                                                                       ;
-+---------------+--------+----------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-; Port          ; Type   ; Severity ; Details                                                                                                                                                                            ;
-+---------------+--------+----------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-; CMR_VSYNC     ; Input  ; Warning  ; Input port expression (32 bits) is wider than the input port (1 bits) it drives.  The 31 most-significant bit(s) in the expression will be dangling if they have no other fanouts. ;
-; CMR_VSYNC[-1] ; Input  ; Info     ; Stuck at GND                                                                                                                                                                       ;
-; CMR_HREF      ; Input  ; Warning  ; Input port expression (32 bits) is wider than the input port (1 bits) it drives.  The 31 most-significant bit(s) in the expression will be dangling if they have no other fanouts. ;
-; CMR_HREF[-1]  ; Input  ; Info     ; Stuck at GND                                                                                                                                                                       ;
-; X_ADDRr       ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed.                                                                                                ;
-; Y_ADDRr       ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed.                                                                                                ;
-+---------------+--------+----------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-
-
-+----------------------------------------------------------------------------------------------------------------+
-; Port Connectivity Checks: "T26PLL:T26PLL_inst"                                                                 ;
-+------+--------+----------+-------------------------------------------------------------------------------------+
-; Port ; Type   ; Severity ; Details                                                                             ;
-+------+--------+----------+-------------------------------------------------------------------------------------+
-; c2   ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
-+------+--------+----------+-------------------------------------------------------------------------------------+
++----------------------------------------------------+
+; Port Connectivity Checks: "Dual_Port_RAM_M9K:mem"  ;
++------------------+-------+----------+--------------+
+; Port             ; Type  ; Severity ; Details      ;
++------------------+-------+----------+--------------+
+; input_data[1..0] ; Input ; Info     ; Stuck at GND ;
+; w_en             ; Input ; Info     ; Stuck at GND ;
++------------------+-------+----------+--------------+
 
 
 +-----------------------------------------------------+
@@ -723,7 +697,7 @@ Note: In order to hide this table in the UI and the text report file, please set
 +-----------------------+-----------------------------+
 ; Type                  ; Count                       ;
 +-----------------------+-----------------------------+
-; boundary_port         ; 51                          ;
+; boundary_port         ; 71                          ;
 ; cycloneiii_ff         ; 20                          ;
 ;     ENA SCLR          ; 10                          ;
 ;     SCLR              ; 10                          ;
@@ -739,7 +713,7 @@ Note: In order to hide this table in the UI and the text report file, please set
 ; cycloneiii_pll        ; 1                           ;
 ;                       ;                             ;
 ; Max LUT depth         ; 3.00                        ;
-; Average LUT depth     ; 1.88                        ;
+; Average LUT depth     ; 1.85                        ;
 +-----------------------+-----------------------------+
 
 
@@ -758,7 +732,7 @@ Note: In order to hide this table in the UI and the text report file, please set
 Info: *******************************************************************
 Info: Running Quartus Prime Analysis & Synthesis
     Info: Version 17.0.0 Build 595 04/25/2017 SJ Lite Edition
-    Info: Processing started: Fri Nov 02 16:27:59 2018
+    Info: Processing started: Fri Nov 09 14:23:28 2018
 Info: Command: quartus_map --read_settings_files=on --write_settings_files=off DE0_NANO -c DE0_NANO
 Warning (125092): Tcl Script File DE_NANO_SOPC.qip not found
     Info (125063): set_global_assignment -name QIP_FILE DE_NANO_SOPC.qip
@@ -767,44 +741,55 @@ Warning (125092): Tcl Script File pll.qip not found
 Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
 Info (20030): Parallel compilation is enabled and will use 4 of the 4 processors detected
 Info (12021): Found 1 design units, including 1 entities, in source file vga_driver.v
-    Info (12023): Found entity 1: VGA_DRIVER File: C:/Users/labuser/Documents/Lab4_FPGA_Template/VGA_DRIVER.v Line: 14
-Warning (10275): Verilog HDL Module Instantiation warning at DE0_NANO.v(91): ignored dangling comma in List of Port Connections File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 91
+    Info (12023): Found entity 1: VGA_DRIVER File: C:/Users/labuser/Downloads/FPGA/VGA_DRIVER.v Line: 14
 Info (12021): Found 1 design units, including 1 entities, in source file de0_nano.v
-    Info (12023): Found entity 1: DE0_NANO File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 5
+    Info (12023): Found entity 1: DE0_NANO File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 5
 Info (12021): Found 1 design units, including 1 entities, in source file dual_port_ram_m9k.v
-    Info (12023): Found entity 1: Dual_Port_RAM_M9K File: C:/Users/labuser/Documents/Lab4_FPGA_Template/Dual_Port_RAM_M9K.v Line: 4
+    Info (12023): Found entity 1: Dual_Port_RAM_M9K File: C:/Users/labuser/Downloads/FPGA/Dual_Port_RAM_M9K.v Line: 4
+Warning (10229): Verilog HDL Expression warning at IMAGE_PROCESSOR.v(46): truncated literal to match 10 bits File: C:/Users/labuser/Downloads/FPGA/IMAGE_PROCESSOR.v Line: 46
+Warning (10229): Verilog HDL Expression warning at IMAGE_PROCESSOR.v(49): truncated literal to match 10 bits File: C:/Users/labuser/Downloads/FPGA/IMAGE_PROCESSOR.v Line: 49
 Info (12021): Found 1 design units, including 1 entities, in source file image_processor.v
-    Info (12023): Found entity 1: IMAGE_PROCESSOR File: C:/Users/labuser/Documents/Lab4_FPGA_Template/IMAGE_PROCESSOR.v Line: 6
+    Info (12023): Found entity 1: IMAGE_PROCESSOR File: C:/Users/labuser/Downloads/FPGA/IMAGE_PROCESSOR.v Line: 7
 Info (12021): Found 1 design units, including 1 entities, in source file t26pll.v
-    Info (12023): Found entity 1: T26PLL File: C:/Users/labuser/Documents/Lab4_FPGA_Template/T26PLL.v Line: 40
-Info (12021): Found 1 design units, including 1 entities, in source file downsampler.v
-    Info (12023): Found entity 1: DOWNSAMPLER File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DOWNSAMPLER.v Line: 1
-Warning (10238): Verilog Module Declaration warning at BUFFER_READER.v(8): ignored anonymous port(s) indicated by duplicate or dangling comma(s) in the port list for module "BUFFER_READER" File: C:/Users/labuser/Documents/Lab4_FPGA_Template/BUFFER_READER.v Line: 8
-Info (12021): Found 1 design units, including 1 entities, in source file buffer_reader.v
-    Info (12023): Found entity 1: BUFFER_READER File: C:/Users/labuser/Documents/Lab4_FPGA_Template/BUFFER_READER.v Line: 1
+    Info (12023): Found entity 1: T26PLL File: C:/Users/labuser/Downloads/FPGA/T26PLL.v Line: 40
+Info (12021): Found 0 design units, including 0 entities, in source file downsampler.v
+Warning (12019): Can't analyze file -- file BUFFER_READER.v is missing
 Info (12127): Elaborating entity "DE0_NANO" for the top level hierarchy
-Warning (10858): Verilog HDL warning at DE0_NANO.v(36): object X_ADDR used but never assigned File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 36
-Warning (10858): Verilog HDL warning at DE0_NANO.v(37): object Y_ADDR used but never assigned File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 37
-Warning (10230): Verilog HDL assignment warning at DE0_NANO.v(41): truncated value with size 32 to match size of target (15) File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 41
-Warning (10230): Verilog HDL assignment warning at DE0_NANO.v(130): truncated value with size 32 to match size of target (15) File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 130
-Warning (10030): Net "X_ADDR" at DE0_NANO.v(36) has no driver or initial value, using a default initial value '0' File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 36
-Warning (10030): Net "Y_ADDR" at DE0_NANO.v(37) has no driver or initial value, using a default initial value '0' File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 37
-Warning (10030): Net "W_EN" at DE0_NANO.v(67) has no driver or initial value, using a default initial value '0' File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 67
-Warning (10034): Output port "GPIO_0_D[33..24]" at DE0_NANO.v(27) has no driver File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
-Warning (10034): Output port "GPIO_0_D[22]" at DE0_NANO.v(27) has no driver File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
-Warning (10034): Output port "GPIO_0_D[20]" at DE0_NANO.v(27) has no driver File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
-Warning (10034): Output port "GPIO_0_D[18]" at DE0_NANO.v(27) has no driver File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
-Warning (10034): Output port "GPIO_0_D[16]" at DE0_NANO.v(27) has no driver File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
-Warning (10034): Output port "GPIO_0_D[14]" at DE0_NANO.v(27) has no driver File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
-Warning (10034): Output port "GPIO_0_D[12]" at DE0_NANO.v(27) has no driver File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
-Warning (10034): Output port "GPIO_0_D[10]" at DE0_NANO.v(27) has no driver File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
-Warning (10034): Output port "GPIO_0_D[8]" at DE0_NANO.v(27) has no driver File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
-Warning (10034): Output port "GPIO_0_D[6]" at DE0_NANO.v(27) has no driver File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
-Warning (10034): Output port "GPIO_0_D[4..0]" at DE0_NANO.v(27) has no driver File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
-Info (12128): Elaborating entity "T26PLL" for hierarchy "T26PLL:T26PLL_inst" File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 81
-Info (12128): Elaborating entity "altpll" for hierarchy "T26PLL:T26PLL_inst|altpll:altpll_component" File: C:/Users/labuser/Documents/Lab4_FPGA_Template/T26PLL.v Line: 99
-Info (12130): Elaborated megafunction instantiation "T26PLL:T26PLL_inst|altpll:altpll_component" File: C:/Users/labuser/Documents/Lab4_FPGA_Template/T26PLL.v Line: 99
-Info (12133): Instantiated megafunction "T26PLL:T26PLL_inst|altpll:altpll_component" with the following parameter: File: C:/Users/labuser/Documents/Lab4_FPGA_Template/T26PLL.v Line: 99
+Warning (10858): Verilog HDL warning at DE0_NANO.v(36): object X_ADDR used but never assigned File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 36
+Warning (10858): Verilog HDL warning at DE0_NANO.v(37): object Y_ADDR used but never assigned File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 37
+Warning (10036): Verilog HDL or VHDL warning at DE0_NANO.v(60): object "CAMERA_IN" assigned a value but never read File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 60
+Warning (10036): Verilog HDL or VHDL warning at DE0_NANO.v(64): object "HREF" assigned a value but never read File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 64
+Warning (10036): Verilog HDL or VHDL warning at DE0_NANO.v(65): object "VSYNC" assigned a value but never read File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 65
+Warning (10036): Verilog HDL or VHDL warning at DE0_NANO.v(66): object "PCLK" assigned a value but never read File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 66
+Warning (10230): Verilog HDL assignment warning at DE0_NANO.v(41): truncated value with size 32 to match size of target (15) File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 41
+Warning (10230): Verilog HDL assignment warning at DE0_NANO.v(134): truncated value with size 32 to match size of target (15) File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 134
+Warning (10240): Verilog HDL Always Construct warning at DE0_NANO.v(133): inferring latch(es) for variable "pixel_data_RGB332", which holds its previous value in one or more paths through the always construct File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 133
+Warning (10030): Net "X_ADDR" at DE0_NANO.v(36) has no driver or initial value, using a default initial value '0' File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 36
+Warning (10030): Net "Y_ADDR" at DE0_NANO.v(37) has no driver or initial value, using a default initial value '0' File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 37
+Warning (10030): Net "W_EN" at DE0_NANO.v(70) has no driver or initial value, using a default initial value '0' File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 70
+Warning (10034): Output port "GPIO_0_D[33..24]" at DE0_NANO.v(27) has no driver File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 27
+Warning (10034): Output port "GPIO_0_D[22]" at DE0_NANO.v(27) has no driver File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 27
+Warning (10034): Output port "GPIO_0_D[20]" at DE0_NANO.v(27) has no driver File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 27
+Warning (10034): Output port "GPIO_0_D[18]" at DE0_NANO.v(27) has no driver File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 27
+Warning (10034): Output port "GPIO_0_D[16]" at DE0_NANO.v(27) has no driver File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 27
+Warning (10034): Output port "GPIO_0_D[14]" at DE0_NANO.v(27) has no driver File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 27
+Warning (10034): Output port "GPIO_0_D[12]" at DE0_NANO.v(27) has no driver File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 27
+Warning (10034): Output port "GPIO_0_D[10]" at DE0_NANO.v(27) has no driver File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 27
+Warning (10034): Output port "GPIO_0_D[8]" at DE0_NANO.v(27) has no driver File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 27
+Warning (10034): Output port "GPIO_0_D[6]" at DE0_NANO.v(27) has no driver File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 27
+Warning (10034): Output port "GPIO_0_D[3..0]" at DE0_NANO.v(27) has no driver File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 27
+Info (10041): Inferred latch for "pixel_data_RGB332[0]" at DE0_NANO.v(139) File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 139
+Info (10041): Inferred latch for "pixel_data_RGB332[1]" at DE0_NANO.v(139) File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 139
+Info (10041): Inferred latch for "pixel_data_RGB332[2]" at DE0_NANO.v(139) File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 139
+Info (10041): Inferred latch for "pixel_data_RGB332[3]" at DE0_NANO.v(139) File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 139
+Info (10041): Inferred latch for "pixel_data_RGB332[4]" at DE0_NANO.v(139) File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 139
+Info (10041): Inferred latch for "pixel_data_RGB332[5]" at DE0_NANO.v(139) File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 139
+Info (10041): Inferred latch for "pixel_data_RGB332[6]" at DE0_NANO.v(139) File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 139
+Info (10041): Inferred latch for "pixel_data_RGB332[7]" at DE0_NANO.v(139) File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 139
+Info (12128): Elaborating entity "T26PLL" for hierarchy "T26PLL:T26PLL_inst" File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 84
+Info (12128): Elaborating entity "altpll" for hierarchy "T26PLL:T26PLL_inst|altpll:altpll_component" File: C:/Users/labuser/Downloads/FPGA/T26PLL.v Line: 99
+Info (12130): Elaborated megafunction instantiation "T26PLL:T26PLL_inst|altpll:altpll_component" File: C:/Users/labuser/Downloads/FPGA/T26PLL.v Line: 99
+Info (12133): Instantiated megafunction "T26PLL:T26PLL_inst|altpll:altpll_component" with the following parameter: File: C:/Users/labuser/Downloads/FPGA/T26PLL.v Line: 99
     Info (12134): Parameter "bandwidth_type" = "AUTO"
     Info (12134): Parameter "clk0_divide_by" = "25"
     Info (12134): Parameter "clk0_duty_cycle" = "50"
@@ -868,78 +853,95 @@ Info (12133): Instantiated megafunction "T26PLL:T26PLL_inst|altpll:altpll_compon
     Info (12134): Parameter "port_extclk3" = "PORT_UNUSED"
     Info (12134): Parameter "width_clock" = "5"
 Info (12021): Found 1 design units, including 1 entities, in source file db/t26pll_altpll.v
-    Info (12023): Found entity 1: T26PLL_altpll File: C:/Users/labuser/Documents/Lab4_FPGA_Template/db/t26pll_altpll.v Line: 30
+    Info (12023): Found entity 1: T26PLL_altpll File: C:/Users/labuser/Downloads/FPGA/db/t26pll_altpll.v Line: 30
 Info (12128): Elaborating entity "T26PLL_altpll" for hierarchy "T26PLL:T26PLL_inst|altpll:altpll_component|T26PLL_altpll:auto_generated" File: c:/intelfpga_lite/17.0/quartus/libraries/megafunctions/altpll.tdf Line: 898
-Info (12128): Elaborating entity "BUFFER_READER" for hierarchy "BUFFER_READER:buffer" File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 91
-Warning (10230): Verilog HDL assignment warning at BUFFER_READER.v(26): truncated value with size 32 to match size of target (15) File: C:/Users/labuser/Documents/Lab4_FPGA_Template/BUFFER_READER.v Line: 26
-Info (12128): Elaborating entity "Dual_Port_RAM_M9K" for hierarchy "Dual_Port_RAM_M9K:mem" File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 103
-Warning (10036): Verilog HDL or VHDL warning at Dual_Port_RAM_M9K.v(34): object "r_addr_reg" assigned a value but never read File: C:/Users/labuser/Documents/Lab4_FPGA_Template/Dual_Port_RAM_M9K.v Line: 34
-Info (12128): Elaborating entity "VGA_DRIVER" for hierarchy "VGA_DRIVER:driver" File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 115
-Warning (10230): Verilog HDL assignment warning at VGA_DRIVER.v(71): truncated value with size 32 to match size of target (10) File: C:/Users/labuser/Documents/Lab4_FPGA_Template/VGA_DRIVER.v Line: 71
-Warning (10230): Verilog HDL assignment warning at VGA_DRIVER.v(75): truncated value with size 32 to match size of target (10) File: C:/Users/labuser/Documents/Lab4_FPGA_Template/VGA_DRIVER.v Line: 75
-Info (12128): Elaborating entity "IMAGE_PROCESSOR" for hierarchy "IMAGE_PROCESSOR:proc" File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 125
-Warning (12241): 1 hierarchies have connectivity warnings - see the Connectivity Checks report folder
+Info (12128): Elaborating entity "Dual_Port_RAM_M9K" for hierarchy "Dual_Port_RAM_M9K:mem" File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 107
+Warning (10036): Verilog HDL or VHDL warning at Dual_Port_RAM_M9K.v(34): object "r_addr_reg" assigned a value but never read File: C:/Users/labuser/Downloads/FPGA/Dual_Port_RAM_M9K.v Line: 34
+Info (12128): Elaborating entity "VGA_DRIVER" for hierarchy "VGA_DRIVER:driver" File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 119
+Warning (10230): Verilog HDL assignment warning at VGA_DRIVER.v(71): truncated value with size 32 to match size of target (10) File: C:/Users/labuser/Downloads/FPGA/VGA_DRIVER.v Line: 71
+Warning (10230): Verilog HDL assignment warning at VGA_DRIVER.v(75): truncated value with size 32 to match size of target (10) File: C:/Users/labuser/Downloads/FPGA/VGA_DRIVER.v Line: 75
+Info (12128): Elaborating entity "IMAGE_PROCESSOR" for hierarchy "IMAGE_PROCESSOR:proc" File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 129
+Warning (10230): Verilog HDL assignment warning at IMAGE_PROCESSOR.v(61): truncated value with size 32 to match size of target (10) File: C:/Users/labuser/Downloads/FPGA/IMAGE_PROCESSOR.v Line: 61
+Warning (10230): Verilog HDL assignment warning at IMAGE_PROCESSOR.v(62): truncated value with size 32 to match size of target (10) File: C:/Users/labuser/Downloads/FPGA/IMAGE_PROCESSOR.v Line: 62
 Warning (13024): Output pins are stuck at VCC or GND
-    Warning (13410): Pin "GPIO_0_D[0]" is stuck at GND File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
-    Warning (13410): Pin "GPIO_0_D[1]" is stuck at GND File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
-    Warning (13410): Pin "GPIO_0_D[2]" is stuck at GND File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
-    Warning (13410): Pin "GPIO_0_D[3]" is stuck at GND File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
-    Warning (13410): Pin "GPIO_0_D[4]" is stuck at GND File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
-    Warning (13410): Pin "GPIO_0_D[6]" is stuck at GND File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
-    Warning (13410): Pin "GPIO_0_D[8]" is stuck at GND File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
-    Warning (13410): Pin "GPIO_0_D[9]" is stuck at GND File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
-    Warning (13410): Pin "GPIO_0_D[10]" is stuck at GND File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
-    Warning (13410): Pin "GPIO_0_D[11]" is stuck at GND File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
-    Warning (13410): Pin "GPIO_0_D[12]" is stuck at GND File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
-    Warning (13410): Pin "GPIO_0_D[13]" is stuck at GND File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
-    Warning (13410): Pin "GPIO_0_D[14]" is stuck at GND File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
-    Warning (13410): Pin "GPIO_0_D[15]" is stuck at GND File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
-    Warning (13410): Pin "GPIO_0_D[16]" is stuck at GND File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
-    Warning (13410): Pin "GPIO_0_D[17]" is stuck at GND File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
-    Warning (13410): Pin "GPIO_0_D[18]" is stuck at GND File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
-    Warning (13410): Pin "GPIO_0_D[19]" is stuck at GND File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
-    Warning (13410): Pin "GPIO_0_D[20]" is stuck at GND File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
-    Warning (13410): Pin "GPIO_0_D[22]" is stuck at GND File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
-    Warning (13410): Pin "GPIO_0_D[24]" is stuck at GND File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
-    Warning (13410): Pin "GPIO_0_D[25]" is stuck at GND File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
-    Warning (13410): Pin "GPIO_0_D[26]" is stuck at GND File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
-    Warning (13410): Pin "GPIO_0_D[27]" is stuck at GND File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
-    Warning (13410): Pin "GPIO_0_D[28]" is stuck at GND File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
-    Warning (13410): Pin "GPIO_0_D[29]" is stuck at GND File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
-    Warning (13410): Pin "GPIO_0_D[30]" is stuck at GND File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
-    Warning (13410): Pin "GPIO_0_D[31]" is stuck at GND File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
-    Warning (13410): Pin "GPIO_0_D[32]" is stuck at GND File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
-    Warning (13410): Pin "GPIO_0_D[33]" is stuck at GND File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 27
+    Warning (13410): Pin "GPIO_0_D[0]" is stuck at GND File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 27
+    Warning (13410): Pin "GPIO_0_D[1]" is stuck at GND File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 27
+    Warning (13410): Pin "GPIO_0_D[2]" is stuck at GND File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 27
+    Warning (13410): Pin "GPIO_0_D[3]" is stuck at GND File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 27
+    Warning (13410): Pin "GPIO_0_D[6]" is stuck at GND File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 27
+    Warning (13410): Pin "GPIO_0_D[8]" is stuck at GND File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 27
+    Warning (13410): Pin "GPIO_0_D[9]" is stuck at GND File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 27
+    Warning (13410): Pin "GPIO_0_D[10]" is stuck at GND File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 27
+    Warning (13410): Pin "GPIO_0_D[11]" is stuck at GND File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 27
+    Warning (13410): Pin "GPIO_0_D[12]" is stuck at GND File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 27
+    Warning (13410): Pin "GPIO_0_D[13]" is stuck at GND File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 27
+    Warning (13410): Pin "GPIO_0_D[14]" is stuck at GND File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 27
+    Warning (13410): Pin "GPIO_0_D[15]" is stuck at GND File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 27
+    Warning (13410): Pin "GPIO_0_D[16]" is stuck at GND File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 27
+    Warning (13410): Pin "GPIO_0_D[17]" is stuck at GND File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 27
+    Warning (13410): Pin "GPIO_0_D[18]" is stuck at GND File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 27
+    Warning (13410): Pin "GPIO_0_D[19]" is stuck at GND File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 27
+    Warning (13410): Pin "GPIO_0_D[20]" is stuck at GND File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 27
+    Warning (13410): Pin "GPIO_0_D[22]" is stuck at GND File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 27
+    Warning (13410): Pin "GPIO_0_D[24]" is stuck at GND File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 27
+    Warning (13410): Pin "GPIO_0_D[25]" is stuck at GND File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 27
+    Warning (13410): Pin "GPIO_0_D[26]" is stuck at GND File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 27
+    Warning (13410): Pin "GPIO_0_D[27]" is stuck at GND File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 27
+    Warning (13410): Pin "GPIO_0_D[28]" is stuck at GND File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 27
+    Warning (13410): Pin "GPIO_0_D[29]" is stuck at GND File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 27
+    Warning (13410): Pin "GPIO_0_D[30]" is stuck at GND File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 27
+    Warning (13410): Pin "GPIO_0_D[31]" is stuck at GND File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 27
+    Warning (13410): Pin "GPIO_0_D[32]" is stuck at GND File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 27
+    Warning (13410): Pin "GPIO_0_D[33]" is stuck at GND File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 27
 Info (286030): Timing-Driven Synthesis is running
 Info (16010): Generating hard_block partition "hard_block:auto_generated_inst"
     Info (16011): Adding 1 node(s), including 0 DDIO, 1 PLL, 0 transceiver and 0 LCELL
-Warning (15897): PLL "T26PLL:T26PLL_inst|altpll:altpll_component|T26PLL_altpll:auto_generated|pll1" has parameter compensate_clock set to clock0 but port CLK[0] is not connected File: C:/Users/labuser/Documents/Lab4_FPGA_Template/db/t26pll_altpll.v Line: 44
-Warning (15899): PLL "T26PLL:T26PLL_inst|altpll:altpll_component|T26PLL_altpll:auto_generated|pll1" has parameters clk0_multiply_by and clk0_divide_by specified but port CLK[0] is not connected File: C:/Users/labuser/Documents/Lab4_FPGA_Template/db/t26pll_altpll.v Line: 44
-Warning (21074): Design contains 15 input pin(s) that do not drive logic
-    Warning (15610): No output dependent on input pin "GPIO_1_D[20]" File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 29
-    Warning (15610): No output dependent on input pin "GPIO_1_D[21]" File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 29
-    Warning (15610): No output dependent on input pin "GPIO_1_D[22]" File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 29
-    Warning (15610): No output dependent on input pin "GPIO_1_D[23]" File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 29
-    Warning (15610): No output dependent on input pin "GPIO_1_D[24]" File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 29
-    Warning (15610): No output dependent on input pin "GPIO_1_D[25]" File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 29
-    Warning (15610): No output dependent on input pin "GPIO_1_D[26]" File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 29
-    Warning (15610): No output dependent on input pin "GPIO_1_D[27]" File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 29
-    Warning (15610): No output dependent on input pin "GPIO_1_D[28]" File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 29
-    Warning (15610): No output dependent on input pin "GPIO_1_D[29]" File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 29
-    Warning (15610): No output dependent on input pin "GPIO_1_D[30]" File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 29
-    Warning (15610): No output dependent on input pin "GPIO_1_D[31]" File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 29
-    Warning (15610): No output dependent on input pin "GPIO_1_D[32]" File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 29
-    Warning (15610): No output dependent on input pin "GPIO_1_D[33]" File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 29
-    Warning (15610): No output dependent on input pin "KEY[1]" File: C:/Users/labuser/Documents/Lab4_FPGA_Template/DE0_NANO.v Line: 30
-Info (21057): Implemented 89 device resources after synthesis - the final resource count might be different
-    Info (21058): Implemented 17 input pins
+Warning (15899): PLL "T26PLL:T26PLL_inst|altpll:altpll_component|T26PLL_altpll:auto_generated|pll1" has parameters clk2_multiply_by and clk2_divide_by specified but port CLK[2] is not connected File: C:/Users/labuser/Downloads/FPGA/db/t26pll_altpll.v Line: 44
+Warning (21074): Design contains 35 input pin(s) that do not drive logic
+    Warning (15610): No output dependent on input pin "GPIO_1_D[0]" File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 29
+    Warning (15610): No output dependent on input pin "GPIO_1_D[1]" File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 29
+    Warning (15610): No output dependent on input pin "GPIO_1_D[2]" File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 29
+    Warning (15610): No output dependent on input pin "GPIO_1_D[3]" File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 29
+    Warning (15610): No output dependent on input pin "GPIO_1_D[4]" File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 29
+    Warning (15610): No output dependent on input pin "GPIO_1_D[5]" File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 29
+    Warning (15610): No output dependent on input pin "GPIO_1_D[6]" File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 29
+    Warning (15610): No output dependent on input pin "GPIO_1_D[7]" File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 29
+    Warning (15610): No output dependent on input pin "GPIO_1_D[8]" File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 29
+    Warning (15610): No output dependent on input pin "GPIO_1_D[9]" File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 29
+    Warning (15610): No output dependent on input pin "GPIO_1_D[10]" File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 29
+    Warning (15610): No output dependent on input pin "GPIO_1_D[11]" File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 29
+    Warning (15610): No output dependent on input pin "GPIO_1_D[12]" File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 29
+    Warning (15610): No output dependent on input pin "GPIO_1_D[13]" File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 29
+    Warning (15610): No output dependent on input pin "GPIO_1_D[14]" File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 29
+    Warning (15610): No output dependent on input pin "GPIO_1_D[15]" File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 29
+    Warning (15610): No output dependent on input pin "GPIO_1_D[16]" File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 29
+    Warning (15610): No output dependent on input pin "GPIO_1_D[17]" File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 29
+    Warning (15610): No output dependent on input pin "GPIO_1_D[18]" File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 29
+    Warning (15610): No output dependent on input pin "GPIO_1_D[19]" File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 29
+    Warning (15610): No output dependent on input pin "GPIO_1_D[20]" File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 29
+    Warning (15610): No output dependent on input pin "GPIO_1_D[21]" File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 29
+    Warning (15610): No output dependent on input pin "GPIO_1_D[22]" File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 29
+    Warning (15610): No output dependent on input pin "GPIO_1_D[23]" File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 29
+    Warning (15610): No output dependent on input pin "GPIO_1_D[24]" File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 29
+    Warning (15610): No output dependent on input pin "GPIO_1_D[25]" File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 29
+    Warning (15610): No output dependent on input pin "GPIO_1_D[26]" File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 29
+    Warning (15610): No output dependent on input pin "GPIO_1_D[27]" File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 29
+    Warning (15610): No output dependent on input pin "GPIO_1_D[28]" File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 29
+    Warning (15610): No output dependent on input pin "GPIO_1_D[29]" File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 29
+    Warning (15610): No output dependent on input pin "GPIO_1_D[30]" File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 29
+    Warning (15610): No output dependent on input pin "GPIO_1_D[31]" File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 29
+    Warning (15610): No output dependent on input pin "GPIO_1_D[32]" File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 29
+    Warning (15610): No output dependent on input pin "GPIO_1_D[33]" File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 29
+    Warning (15610): No output dependent on input pin "KEY[1]" File: C:/Users/labuser/Downloads/FPGA/DE0_NANO.v Line: 30
+Info (21057): Implemented 109 device resources after synthesis - the final resource count might be different
+    Info (21058): Implemented 37 input pins
     Info (21059): Implemented 34 output pins
     Info (21061): Implemented 37 logic cells
     Info (21065): Implemented 1 PLLs
-Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 77 warnings
+Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 101 warnings
     Info: Peak virtual memory: 660 megabytes
-    Info: Processing ended: Fri Nov 02 16:28:10 2018
-    Info: Elapsed time: 00:00:11
-    Info: Total CPU time (on all processors): 00:00:23
+    Info: Processing ended: Fri Nov 09 14:23:38 2018
+    Info: Elapsed time: 00:00:10
+    Info: Total CPU time (on all processors): 00:00:22
 
 

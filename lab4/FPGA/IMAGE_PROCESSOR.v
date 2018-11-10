@@ -27,13 +27,14 @@ input		VGA_VSYNC_NEG;
 
 output [7:0] RESULT;
 
-reg[15:0] red_count;
-reg[15:0] blue_count;
+reg[9:0] red_count;
+reg[9:0] blue_count;
 reg[7:0] RESULT;
 
 
 wire[1:0] RED;
 wire[1:0] BLUE;
+wire[1:0] GREEN;
 
 assign RED = PIXEL_IN[7:6];
 assign GREEN = PIXEL_IN[4:3];
@@ -42,16 +43,16 @@ assign BLUE = PIXEL_IN[1:0];
 
 always @(posedge CLK) begin
 	if(!VGA_VSYNC_NEG) begin
-		if(red_count > blue_count && red_count > COLOR_THRESHOLD) begin
-			result[7:6] = 2'b10;
+		if(red_count > blue_count && red_count > 10'd15000) begin
+			RESULT[7:6] = 2'b10;
 		end
-		else if (blue_count > red_count && blue_count > COLOR_THRESHOLD) begin
-			result[7:6] = 2'b01;
+		else if (blue_count > red_count && blue_count > 10'd15000) begin
+			RESULT[7:6] = 2'b01;
 		end
 		else begin
-			result[7:6] = 2'b00;
+			RESULT[7:6] = 2'b00;
 		end
-		result[5:0] = 6'b0;
+		RESULT[5:0] = 6'b0;
 		red_count = 0;
 		blue_count = 0;
 	end
@@ -62,7 +63,7 @@ always @(posedge CLK) begin
 		end
 	end
 	
-end // end alwyas
+end // end always
 
 
 endmodule

@@ -88,12 +88,32 @@
 	      Materials Used:<br>
               &emsp; - DE0-Nano FPGA board <br>
               &emsp; - VGA adapter <br>
-		    
+              
+		          <p>The FPGA module are connected as shown in the following diagram.</p>
+              <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab4/FPGA.png" alt=""><br>
+              <h5>PLL Clock</h5>
+              <p>We need three clock output from FPGA: a 24MHz clock for camera, a 25MHz clock to drive VGA, and a 50 MHz one for memory. FPGA can generate at 50MHz clock, and we will use Phase-locked loop (PLL) to generates clock with different frequencies.
+              This module takes the original 50MHz clock as input and output 3 clock lines, which are connected to their respective modules.</p><br>
 
-              <h5>Set Up </h5>
-		    
+              <h5>Downsampler</h5>
+              <p>The downsampler module is responsible for updating address and writing data to mem. For x address, we update the address every other PCLK cycle. This is because the Arduino sends color format in RGB565, a total of 2 bytes, but every PCLK cycle only transmits one byte. Therefore, we implement a register that toggles every cycle ot keep track of whether it is the lower bits of the full RGB565 data or the higher bits of the RGB565 data. When it finish reading the lower bits, the x address will be incremented, and it also enables the memory write to store that data into RAM. X address is reset after the end of each row, which is indicated by the negedge of HREF. For my implementation, I write x address as 0 whenever HREF is low. To update the y address, we increment it every time there is a new row coming, the same time as we reset x to zero. Resetting the x address and y address happens when there is a new picture frame coming, which is indiacted by VSYNC. The data communicaiton is as illustrated below. As shown in the picture, there is only valid data when HREF is high. Once HREF go down, we know that there is a new row coming. </p>
+              <p>Besides updating the address, downsampler also downsamples the data to RGB332. This is done simply be selectign the correct bits from the Arduino input. </p>
+              <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab4/Timing.png" alt=""><br>
+              
+              <h5>Image Processor</h5>
+              <p>Image processor takes input from memory, pixel by pixel. Then it determines whether the pixel is red or blue, or neither. If it is a red pixel, then the red_count will be incremented; vice versa. Then, at then end of each picture frame, it will determine whether the frame is dominated by red or blue (passing a threshold), then sends Arduino a 8 bit data. The data it sends back is one byte. The first bit(MSB) indicates red treasure found, the second bit indicates blue treasure found. The remaining 6 bits are set to zero now but will be used to indicate the shape of the treasure in the future.</p>
 
-<br>
+              <h5>Buffer Test</h5>
+              <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab4/FPGAbuffer.png" alt=""><br>
+              <p>The development of FPGA uses a test driven design approaceh. The first step we did is to see whether the template program with PLL set up can correclty output the blue screen. Then, we write a test pattern -- Green background with a red diagonal line -- directly to VGA output to verify that we are correctly communicating with the VGA adapter.</p>
+
+              <h5>Color Bar Test</h5>
+              <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab4/FPGACB2.png" alt=""><br>
+              <p>We were able to get the correct color for the color bar test but it is not ordered correctly. The first color bar we got looks like the one below: </p>
+              <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab4/FPGACB1.png" alt=""><br>
+              <p>Then, we figured we are not setting the Y address correctly, so the colors are not reading out in order and it partially overwrite the data in memory in a skewed way. After we changed that to have the y address triggered correctly then we were able to read the proper color. The ordering happends, I suspect, because of the wrong reading order of RGB565.</p>
+              <p>As of the camera live input, the best I could get to is to have the correct image output with a significant delay. I suspect this is becasue the memory write enable or clock is not handled properly. The result is that the camer will capture a frame, then that frame will be displayed a few seconds later. It is also very sensitive to wiring. If I pull the camera one way, it updates, but when I pull the other way, then there is no response. I am not sure what exactly is the issue. The color is wrong, of course, since we don't have the correct color ordering from color bar, so the color of the data is also stored in a wrong order.</p>
+<br>  
 
 		    
 							<h3> Work Distribution </h3>

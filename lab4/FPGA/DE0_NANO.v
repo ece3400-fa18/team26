@@ -26,7 +26,7 @@ input 		          		CLOCK_50;
 //////////// GPIO_0, GPIO_0 connect to GPIO Default //////////
 output 		    [33:0]		GPIO_0_D;
 //////////// GPIO_0, GPIO_1 connect to GPIO Default //////////
-input 		    [33:20]		GPIO_1_D;
+input 		    [33:0]		GPIO_1_D;
 input 		     [1:0]		KEY;
 
 ///// PIXEL DATA /////
@@ -59,7 +59,7 @@ wire [7:0] RESULT;
 //CHANGE GPIO HERE TODO ASSIGN GPIO PINS
 wire[7:0] CAMERA_IN;
 assign CAMERA_IN = {GPIO_1_D[22], GPIO_1_D[20], GPIO_1_D[18], 
-					GPIO_1_D[16], GPIO_1_D[14], GPIO_1_D[12], 
+					GPIO_1_D[16], GPIO_1_D[14], GPIO_1_D[24], 
 					GPIO_1_D[10], GPIO_1_D[8]};
 wire HREF = GPIO_1_D[2];
 wire VSYNC = GPIO_1_D[4];
@@ -73,7 +73,7 @@ reg W_EN;
 wire CLK24;
 wire CLK25;
 wire CLK50;
-assign GPIO_1_D[6] = CLK24;
+assign GPIO_0_D[1] = CLK24;
 
 ///////* INSTANTIATE YOUR PLL HERE *///////
 T26PLL	T26PLL_inst (
@@ -82,18 +82,6 @@ T26PLL	T26PLL_inst (
 	.c1 ( CLK25 ),
 	.c2 ( CLK50 )
 );
-
-DOWNSAMPLER sampler(
-	.PCLK(PCLK),
-	.HREF(HREF),
-	.VSYNC(VSYNC),
-	.CAMERA_IN(CAMERA_IN),
-	.pixel_data_RGB332(pixel_data_RGB332),
-	.X_ADDR(X_ADDR),
-	.Y_ADDR(Y_ADDR),
-	.W_EN(W_EN)
-)
-
 
 ///////* M9K Module *///////
 Dual_Port_RAM_M9K mem(
@@ -139,53 +127,53 @@ always @ (VGA_PIXEL_X, VGA_PIXEL_Y) begin
 			VGA_READ_MEM_EN = 1'b1;
 
 			/* test pattern*/
-			// if (VGA_PIXEL_X==VGA_PIXEL_Y) pixel_data_RGB332 = RED;
-			// else  pixel_data_RGB332 = GREEN;
+			if (VGA_PIXEL_X==VGA_PIXEL_Y) pixel_data_RGB332 = RED;
+			else  pixel_data_RGB332 = GREEN;
 				
 		end
 end
 
 //DOWNSAMPLER Module
-// reg high;
-// initial high = 0;
+reg high;
+initial high = 0;
 
-// always @(negedge HREF) begin
-// 	if((Y_ADDR >= `SCREEN_HEIGHT-1) || VSYNC) Y_ADDR = 0;
-// 	else Y_ADDR = Y_ADDR+1;
-// end
+always @(posedge VSYNC or negedge HREF) begin
+	if((VSYNC) Y_ADDR = 0;
+	else Y_ADDR = Y_ADDR+1;
+end
 
-// //store data and update x address
-// always @(posedge PCLK) begin
-// 	if(VSYNC) begin
-// 		W_EN = 0;
-// 		X_ADDR = 0;
-// 		high = 0;
-// 		pixel_data_RGB332 = 0;
-// 	end
-// 	else begin
-// 		if (HREF) begin
-// 			if(!high) begin
-// 				W_EN = 0;
-// 				X_ADDR = X_ADDR;
-// 				pixel_data_RGB332[1:0] = {CAMERA_IN[4], CAMERA_IN[3]};
-// 				high = 1;
-// 			end
-// 			else begin
-// 				pixel_data_RGB332[7:5] = {CAMERA_IN[7], CAMERA_IN[6], CAMERA_IN[5]};
-// 				pixel_data_RGB332[4:2] = {CAMERA_IN[2], CAMERA_IN[1], CAMERA_IN[0]};
-// 				X_ADDR = X_ADDR + 1;
-// 				high = 0;
-// 				W_EN = 1;
-// 			end
-// 		end
-// 		else begin
-// 			W_EN = 0;
-// 			X_ADDR = 0;
-// 			high = 0;
-// 			out = 0;
-// 		end
-// 	end
-// end
+//store data and update x address
+always @(posedge PCLK) begin
+	if(VSYNC) begin
+		W_EN = 0;
+		X_ADDR = 0;
+		high = 0;
+		pixel_data_RGB332 = 0;
+	end
+	else begin
+		if (HREF) begin
+			if(!high) begin
+				W_EN = 0;
+				X_ADDR = X_ADDR;
+				pixel_data_RGB332[1:0] = {CAMERA_IN[4], CAMERA_IN[3]};
+				high = 1;
+			end
+			else begin
+				pixel_data_RGB332[7:5] = {CAMERA_IN[7], CAMERA_IN[6], CAMERA_IN[5]};
+				pixel_data_RGB332[4:2] = {CAMERA_IN[2], CAMERA_IN[1], CAMERA_IN[0]};
+				X_ADDR = X_ADDR + 1;
+				high = 0;
+				W_EN = 1;
+			end
+		end
+		else begin
+			W_EN = 0;
+			X_ADDR = 0;
+			high = 0;
+			pixel_data_RGB332 = 0;
+		end
+	end
+end
 
 	
 endmodule 
