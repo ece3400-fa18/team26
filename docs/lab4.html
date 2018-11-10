@@ -68,19 +68,151 @@
               &emsp; - OV7670 Camera <br>
               &emsp; - Arduino Uno <br>
               &emsp; - DE0-Nano FPGA board <br>
-		    
-		<h5> Camera Set Up:Registers</h5>
+<br>		    
+		<h5> Camera Set Up: Registers</h5>
 		    We began by looking through the documentation for the registers that were related to six main functionalities: 1)resetting the registers 2)scaling 3)using external clock as internatl 4)pixel resolution 5)color bar 6)vertical and mirror image manupilation. After determining the relevant resistors and their addresses (please see table for details), we defined these at the top of the code. We then sought the values needed to enable the desired properties -- enable scaling, enable colorbar, ect. (These are marked by bold numbers in the third column). We then converted the values from binary to hex and obtained the 'write' values for all registers. In the write key register function, we began by resetting registers to their original values before writing the enable values. 
 		    
-		    As the reading and writing address of the camera differs by the value of the last bit (0 for write and 1 for read) we defined the camera address to the first seven bits, the last bit was dependant on whether the function calling the address was for reading or writing. 
+		    As the reading and writing address of the camera differs by the value of the last bit (0 for write and 1 for read) we defined the camera address to the first seven bits, the last bit was dependant on whether the function calling the address was for reading or writing. <br>
 
-
+<br>
               <h5> Camera Set Up: Wiring To FPGA</h5>
-		    We intially struggled with creating the proper connections between the FPGA board and the OV7670 Camera, as in the documentation, the diagram for GPIO-0 is to the left of GPIO-1 and the first pin for both GPIO beds is at the top. However, on the FPGA board, the GPIO-1 is to the left of GPIO-0 and the first pin for GPIO-1 is at the bottom of the board, diagonal to the first pin of GPIO-0. 
-		
-							
-		<h5> Communicating with FPGA </h5>
+		    We intially struggled with creating the proper connections between the FPGA board and the OV7670 Camera, as in the documentation, the diagram for GPIO-0 is to the left of GPIO-1 and the first pin for both GPIO beds is at the top. However, on the FPGA board, the GPIO-1 is to the left of GPIO-0 and the first pin for GPIO-1 is at the bottom of the board, diagonal to the first pin of GPIO-0. <br>
+<table style="width:100%">
+  <tr>
+    <th>Functionality</th>
+    <th>Register Description</th> 
+    <th>Register ‘Write’ Values</th>
+    <th>Bit Adjustments </th>
+  </tr>
+	
+  <tr>
+    <td>Reset all registers</td>
+    <td>Common Control 7
+        COM7 
+	Default Hex: 00
+	Address Hex: 12</td> 
+    <td>10000000
+	************
+	0x80 </td>
+    <td>SCCB Register Reset is Bit[7]; 
+	0 is no change
+	1 Resets all registers to default values </td>
+  </tr>
+	
+  <tr>
+    <td>Enable Scaling</td>
+    <td>Common Control 3
+	COM3 
+	Default Hex: 00
+	Address Hex: 0C </td> 
+    <td>00001000
+	************
+	0x08 </td>
+    <td> Scale Enable is Bit[3]; 
+	0 is disable
+	1 is enable </td>
+  </tr>
+	
+  <tr>
+    <td>Use external clock as internal clock</td>
+    <td>Internal Clock
+	CLKRC
+	Default Hex: 80
+	Address Hex: 11
+ 	</td> 
+    <td>11000000
+	************
+	0xC0
+	 </td>
+    <td> Bit[7]: Reserved
+	Bit[6]: Use external clock as internal (no clock prescale available) 
+	 </td>
+  </tr>
 
+<tr>
+    <td>Set the camera to output the resolution you specified in Q4 and the pixel format you specified in Q2. The pixel format will take setting an extra register to fully specify</td>
+    <td>Common Control 7
+	COM7 
+	Default Hex: 00
+	Address Hex: 12<br>
+	_________________ <br>
+
+	Common Control 15
+	COM15 
+	Default Hex: C0
+	Address Hex: 40
+	 </td> 
+    <td>00001110
+	************
+	0x0E (*combined with QCIF output format and color bar activation) <br>
+	_____________ <br>
+	11010000
+	************
+	0xD0
+	 </td>
+    <td> Bit[2] is RGB Selection (COM7[0] = 0 and COM7[2] =1) <br>
+	___________________<br>
+	Bit[7:6] = 11 (sets output range [00] to [FF]) 
+	Bit[5:4] is RGB 555/565 (must set COM7[0] = 0 and COM7[2] =1)  
+	</td>
+  </tr>
+	
+  <tr>
+    <td>Enable a color bar test (takes setting 2 regs, neither of them are the SCALING regs)</td>
+    <td>Common Control 17
+	COM17
+	Default Hex: 8
+	Address Hex: 42 <br>
+	_________________ <br>
+	Common Control 7
+	COM7 
+	Default Hex: 00
+	Address Hex: 12
+	 </td> 
+    <td>00001000
+	************
+	0x08 <br>
+	______________ <br>
+	00001110
+	************
+	0x0E (*combined with QCIF output format and rgb selection)
+	 </td>
+    <td> DSP Color Bar Enable
+	Bit[3]; 
+	0 is disable
+	1 is enable <br>
+	______________________ <br>
+	Color Bar
+	Bit[1]; 
+	0 is disable
+	1 is enable 
+	 </td>
+  </tr>
+	
+  <tr>
+    <td>Vertical and mirror flip the output image (optional)</td>
+    <td>MVFP
+	Default Hex: 00
+	Address Hex: 1E
+	 </td> 
+    <td>00110000
+	************
+	0x30
+	 </td>
+    <td> Mirror/VFlip Enable
+	Bit[5] is Mirror
+	0 is normal
+	1 is mirror <br>
+
+	Bit[4] is VFlip
+	0 is normal
+	1 is vertically flip image
+	 </td>
+  </tr>
+	
+	
+</table>							
+		<h5> Communicating with FPGA </h5>
 
 <br>
               <h3> FPGA Team </h3>
@@ -103,7 +235,7 @@
                   The Lab 4 Report Work Distribution is as follows: <br>
                   &emsp; - Nathalia and Vini worked on the arduino write up <br>
                   &emsp; - Joyce and Priya worked on the FPGA write up <br>
-                  &emsp; - Joyce and Priya filmed videos, Nathalia edited and uploaded videos <br>
+                  &emsp; - Joyce and Vini documented photos, Nathalia edited and uploaded photos <br>
                   The website work distribution is as follows: <br>
                   &emsp; - Nathalia: Website Set Up and Maintenance<br>
               </p>
