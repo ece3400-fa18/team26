@@ -56,7 +56,8 @@
               Embedded memory on the FPGA is 74.25 kB; this is the maximum size of the buffer. Since the camera has 640x480 pixels at full resolution, with a maximum of 3 bytes per a pixel, neither color resolution nor resolution can be used at full capacity. Each entry in the ram has a minimum size of 8 bits, so the maximum number of entries for the minimum size is 76032.<br>
               Of the available pixel formats, the RGB565 (16bits/pixel) format provides the most information on the base colors making up each pixel.
               In order to convert that pixel format to be accepted by the VGA module, (RGB565 to RGB332), we will use the following diagram:<br>
-              [insert image]
+              <img class="img-fluid d-block mx-auto" width="800" height="200" src="./img/lab4/downsize table.JPG" alt=""> <br>
+	
               Based on the timing diagrams on page 7 of the camera data sheet, we will sample on the positive edge of HREF.
               <br>
 
@@ -68,19 +69,206 @@
               &emsp; - OV7670 Camera <br>
               &emsp; - Arduino Uno <br>
               &emsp; - DE0-Nano FPGA board <br>
-		    
-		<h5> Camera Set Up:Registers</h5>
-		    We began by looking through the documentation for the registers that were related to six main functionalities: 1)resetting the registers 2)scaling 3)using external clock as internatl 4)pixel resolution 5)color bar 6)vertical and mirror image manupilation. After determining the relevant resistors and their addresses (please see table for details), we defined these at the top of the code. We then sought the values needed to enable the desired properties -- enable scaling, enable colorbar, ect. (These are marked by bold numbers in the third column). We then converted the values from binary to hex and obtained the 'write' values for all registers. In the write key register function, we began by resetting registers to their original values before writing the enable values. 
-		    
-		    As the reading and writing address of the camera differs by the value of the last bit (0 for write and 1 for read) we defined the camera address to the first seven bits, the last bit was dependant on whether the function calling the address was for reading or writing. 
+<br>		    
+	<img class="img-fluid d-block mx-auto" width="800" height="200" src="./img/lab4/arduino2.JPG" alt=""> <br>
 
+		<h5> Camera Set Up: Registers</h5>
+		    We began by looking through the documentation for the registers that were related to six main functionalities:<br> 1)resetting the registers 2)scaling 3)using external clock as internatl 4)pixel resolution 5)color bar 6)vertical and mirror image manipulation. <br>
+		    After determining the relevant resistors and their addresses (please see table for details), we defined these at the top of the code. We then sought the values needed to enable the desired properties -- enable scaling, enable colorbar, etc. These are marked by bold numbers in the third column. We then converted the values from binary to hex and obtained the 'write' values for all registers. In the write key register function, we began by resetting registers to their original values before writing the enable values. 
+		    
+		    As the reading and writing address of the camera differs by the value of the last bit, 0 for write and 1 for read, we defined the camera address to the first seven bits, the last bit was dependant on whether the function calling the address was for reading or writing. <br>
 
+<br>
               <h5> Camera Set Up: Wiring To FPGA</h5>
-		    We intially struggled with creating the proper connections between the FPGA board and the OV7670 Camera, as in the documentation, the diagram for GPIO-0 is to the left of GPIO-1 and the first pin for both GPIO beds is at the top. However, on the FPGA board, the GPIO-1 is to the left of GPIO-0 and the first pin for GPIO-1 is at the bottom of the board, diagonal to the first pin of GPIO-0. 
-		
-							
-		<h5> Communicating with FPGA </h5>
+		    We intially struggled with creating the proper connections between the FPGA board and the OV7670 Camera, as in the documentation, the diagram for GPIO-0 is to the left of GPIO-1 and the first pin for both GPIO beds is at the top. However, on the FPGA board, the GPIO-1 is to the left of GPIO-0 and the first pin for GPIO-1 is at the bottom of the board, diagonal to the first pin of GPIO-0. <br>
+<table style="width:100%">
+  <tr>
+    <th>Functionality</th>
+    <th>Register Description</th> 
+    <th>Register ‘Write’ Values</th>
+    <th>Bit Adjustments </th>
+  </tr>
+	
+  <tr>
+    <td>Reset all registers</td>
+    <td>Common Control 7
+        COM7 
+	Default Hex: 00
+	Address Hex: 12</td> 
+    <td>10000000
+	************
+	0x80 </td>
+    <td>SCCB Register Reset is Bit[7]; 
+	0 is no change
+	1 Resets all registers to default values </td>
+  </tr>
+	
+  <tr>
+    <td>Enable Scaling</td>
+    <td>Common Control 3
+	COM3 
+	Default Hex: 00
+	Address Hex: 0C </td> 
+    <td>00001000
+	************
+	0x08 </td>
+    <td> Scale Enable is Bit[3]; 
+	0 is disable
+	1 is enable </td>
+  </tr>
+	
+  <tr>
+    <td>Use external clock as internal clock</td>
+    <td>Internal Clock
+	CLKRC
+	Default Hex: 80
+	Address Hex: 11
+ 	</td> 
+    <td>11000000
+	************
+	0xC0
+	 </td>
+    <td> Bit[7]: Reserved
+	Bit[6]: Use external clock as internal (no clock prescale available) 
+	 </td>
+  </tr>
 
+<tr>
+    <td>Set the camera to output the resolution you specified in Q4 and the pixel format you specified in Q2. The pixel format will take setting an extra register to fully specify</td>
+    <td>Common Control 7
+	COM7 
+	Default Hex: 00
+	Address Hex: 12<br>
+	_________________ <br>
+
+	Common Control 15
+	COM15 
+	Default Hex: C0
+	Address Hex: 40
+	 </td> 
+    <td>00001110
+	************
+	0x0E (*combined with QCIF output format and color bar activation) <br>
+	_____________ <br>
+	11010000
+	************
+	0xD0
+	 </td>
+    <td> Bit[2] is RGB Selection (COM7[0] = 0 and COM7[2] =1) <br>
+	___________________<br>
+	Bit[7:6] = 11 (sets output range [00] to [FF]) 
+	Bit[5:4] is RGB 555/565 (must set COM7[0] = 0 and COM7[2] =1)  
+	</td>
+  </tr>
+	
+  <tr>
+    <td>Enable a color bar test (takes setting 2 regs, neither of them are the SCALING regs)</td>
+    <td>Common Control 17
+	COM17
+	Default Hex: 8
+	Address Hex: 42 <br>
+	_________________ <br>
+	Common Control 7
+	COM7 
+	Default Hex: 00
+	Address Hex: 12
+	 </td> 
+    <td>00001000
+	************
+	0x08 <br>
+	______________ <br>
+	00001110
+	************
+	0x0E (*combined with QCIF output format and rgb selection)
+	 </td>
+    <td> DSP Color Bar Enable
+	Bit[3]; 
+	0 is disable
+	1 is enable <br>
+	______________________ <br>
+	Color Bar
+	Bit[1]; 
+	0 is disable
+	1 is enable 
+	 </td>
+  </tr>
+	
+  <tr>
+    <td>Vertical and mirror flip the output image (optional)</td>
+    <td>MVFP
+	Default Hex: 00
+	Address Hex: 1E
+	 </td> 
+    <td>00110000
+	************
+	0x30
+	 </td>
+    <td> Mirror/VFlip Enable
+	Bit[5] is Mirror
+	0 is normal
+	1 is mirror <br>
+
+	Bit[4] is VFlip
+	0 is normal
+	1 is vertically flip image
+	 </td>
+  </tr>	
+</table>	
+		    <p> With this table in mind, we began our main program in the "Set Up" section of the code. We wanted to use serial to ensure that our register values were what we expected, so we set that up. Next, we called the subroutine functions write_key_registers() and read_key_registers(), both of which are included below. </p>
+			    
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #333333">/////////</span> Main Program <span style="color: #333333">//////////////</span>
+void setup() {
+  Wire<span style="color: #333333">.</span>begin();
+  Serial<span style="color: #333333">.</span>begin(<span style="color: #0000DD; font-weight: bold">9600</span>);
+  <span style="color: #333333">//</span> TODO: READ KEY REGISTERS
+  OV7670_write_register(CC7, <span style="color: #005588; font-weight: bold">0x80</span>);<span style="color: #333333">//</span>resets <span style="color: #007020">all</span> registers
+  read_key_registers();
+
+  delay(<span style="color: #0000DD; font-weight: bold">100</span>);
+  
+  <span style="color: #333333">//</span> TODO: WRITE KEY REGISTERS
+  write_key_registers();
+  set_color_matrix();
+  read_key_registers();
+
+}
+</pre></div>
+		   
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">void read_key_registers(){
+  <span style="color: #333333">/*</span>TODO: DEFINE THIS FUNCTION<span style="color: #333333">*/</span>
+  Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;Common Control 7&quot;</span>);
+  Serial<span style="color: #333333">.</span>println(read_register_value(CC7),HEX);
+  Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;Common Control 3&quot;</span>);
+  Serial<span style="color: #333333">.</span>println(read_register_value(CC3),HEX);
+  Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;Internal Clock&quot;</span>);
+  Serial<span style="color: #333333">.</span>println(read_register_value(IC),HEX);
+  Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;Common Control 15&quot;</span>);
+  Serial<span style="color: #333333">.</span>println(read_register_value(CC15),HEX);
+  Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;Common Control 17&quot;</span>);
+  Serial<span style="color: #333333">.</span>println(read_register_value(CC17),HEX);
+  Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;MVFP&quot;</span>);
+  Serial<span style="color: #333333">.</span>println(read_register_value(MVFP),HEX);
+}
+</pre></div>
+		    
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">String write_key_registers(){
+  OV7670_write_register(CC7, <span style="color: #005588; font-weight: bold">0x80</span>);   <span style="color: #333333">//</span>setting to <span style="color: #0000DD; font-weight: bold">1</span> resets <span style="color: #007020">all</span> registers
+  delay(<span style="color: #0000DD; font-weight: bold">100</span>);
+  OV7670_write_register(CC3, <span style="color: #005588; font-weight: bold">0x08</span>);   <span style="color: #333333">//</span>setting to <span style="color: #0000DD; font-weight: bold">1</span> enables scale control
+  OV7670_write_register(IC, <span style="color: #005588; font-weight: bold">0xC0</span>);    <span style="color: #333333">//</span>IC selection
+  OV7670_write_register(MVFP, <span style="color: #005588; font-weight: bold">0x30</span>);  <span style="color: #333333">//</span>Vertical <span style="color: #333333">&amp;</span> mirror flip
+  OV7670_write_register(CC7, <span style="color: #005588; font-weight: bold">0x0C</span>);   <span style="color: #333333">//</span>Color <span style="color: #333333">&amp;</span> RGB bar selection
+  OV7670_write_register(CC15, <span style="color: #005588; font-weight: bold">0xD0</span>);  <span style="color: #333333">//</span>Color Pixel
+  OV7670_write_register(CC17, <span style="color: #005588; font-weight: bold">0x00</span>); <span style="color: #333333">//</span>Color Bar
+
+ }
+</pre></div>
+		<img class="img-fluid d-block mx-auto" width="800" height="200" src="./img/lab4/arduino registers.png" alt=""> <br>
+		    
+		    
+		<h5> Communicating with FPGA </h5>
+		<img class="img-fluid d-block mx-auto" width="800" height="200" src="./img/lab4/comm bits.JPG" alt=""> <br>
+		    
 
 <br>
               <h3> FPGA Team </h3>
@@ -123,7 +311,7 @@
                   The Lab 4 Report Work Distribution is as follows: <br>
                   &emsp; - Nathalia and Vini worked on the arduino write up <br>
                   &emsp; - Joyce and Priya worked on the FPGA write up <br>
-                  &emsp; - Joyce and Priya filmed videos, Nathalia edited and uploaded videos <br>
+                  &emsp; - Joyce and Vini documented photos, Nathalia edited and uploaded photos <br>
                   The website work distribution is as follows: <br>
                   &emsp; - Nathalia: Website Set Up and Maintenance<br>
               </p>
