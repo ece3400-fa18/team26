@@ -1,0 +1,12 @@
+module DOWNSAMPLER(
+	input_data,
+	output_data
+)
+
+//////////// write and read addresses //////////
+input [15:0]		input_data;
+output[7:0]		output_data;
+
+assign ouput_data = 	{input_data[15:13], input_data[10:8], input_data[4:3]};
+
+endmodule
