@@ -200,7 +200,8 @@ void detectAudio(){
     sei();
     //Serial.println(fft_log_out[micBinNum]);
    if (fft_log_out[micBinNum] > micThresh){
-    //Serial.println(fft_log_out[micBinNum]);
+    Serial.println("SOUND");
+    Serial.println(fft_log_out[micBinNum]);
     break;
    } 
   }
