@@ -10,6 +10,6 @@ D6: right wheel <br />
 A0: optical <br />
 A1: microphone <br />
 A2: front short distance sensor <br />
-A3: left distance sensor <br />
+A3: left long distance sensor <br />
 A4: left outer <br />
 A5: right outer <br />
