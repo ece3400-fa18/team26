@@ -4,10 +4,12 @@ ECE 3400 Fall 2018 <br />
 Team 26 - Joyce Huang, Nathalia Lie, Priya Kattappurath, Vini Tripathii
 
 ### pin layout
-left wheel 5 <br />
-right wheel 6 <br />
-optical A0 <br />
-microphone A1 <br />
-short distance sensor A2 <br />
-left outer A4 <br />
-right outer A5 <br />
+D5: left wheel <br />
+D6: right wheel <br />
+<br />
+A0: optical <br />
+A1: microphone <br />
+A2: front short distance sensor <br />
+A3: left distance sensor <br />
+A4: left outer <br />
+A5: right outer <br />
