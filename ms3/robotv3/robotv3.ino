@@ -55,11 +55,11 @@ int turn_count = 0;
 const int irBinNum  = 44;
 const int irThresh  = 50;
 const int micBinNum = 17;
-const int micThresh = 130;
+const int micThresh = 140;
 
 // Location and Direction values
 volatile int unsigned long x = 0; //initial x 
-volatile int unsigned long y = 0; //initial y 
+volatile int unsigned long y = -1; //initial y 
 int facing = 3; //initially facing NORTH
 int direction = 0; //initially going straight
 volatile int unsigned long d = 0;
