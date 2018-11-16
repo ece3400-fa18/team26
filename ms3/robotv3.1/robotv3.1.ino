@@ -288,10 +288,10 @@ void loop() {
     Serial.println("............................");
     //Serial.println(turn_count);
     if(turn_count == 0){
-      move(left);
+      move(right);
     }else if(turn_count == 1){
-      move(right);
-      move(right);
+      move(left);
+      move(left);
     }else if(turn_count == 2){
       //reach dead end
       move(right);
@@ -300,6 +300,6 @@ void loop() {
     turn_count++;
   }else{
     go_straight();
-    turn_count = 0;
+    //turn_count = 0;
   }
 }
