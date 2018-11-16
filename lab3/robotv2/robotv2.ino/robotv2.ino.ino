@@ -114,12 +114,12 @@ void find_intersection(){
 
       //UPDATE LOCATION HERE
       updateLocation(facing);
-
-
-      Serial.println("...................INTERSECTION.................");
-      Serial.println(x);
-      Serial.println(y);
-      Serial.println("................................................");
+//
+//
+//      Serial.println("...................INTERSECTION.................");
+//      Serial.println(x);
+//      Serial.println(y);
+//      Serial.println("................................................");
     }
 }
 
@@ -157,7 +157,7 @@ void go_straight(){
 bool wallDetected(){
   int distance = analogRead(front_wall);
   //Serial.println(distance);
-  if (distance > 305){
+  if (distance > 290){
     d = 10000000;
     if (facing == 3){
       d = d|1000;
@@ -281,25 +281,25 @@ void setup() {
 
 void loop() {
   if (wallDetected()){
-    Serial.println("...........update...........");
-    Serial.println(updates[0]);
-    Serial.println(updates[1]);
-    Serial.println(updates[2]);
-    Serial.println("............................");
+//    Serial.println("...........update...........");
+//    Serial.println(updates[0]);
+//    Serial.println(updates[1]);
+//    Serial.println(updates[2]);
+//    Serial.println("............................");
     //Serial.println(turn_count);
     if(turn_count == 0){
-      move(left);
+      move(right);
+      move(right);
     }else if(turn_count == 1){
-      move(right);
-      move(right);
+      move(left);
     }else if(turn_count == 2){
       //reach dead end
-      move(right);
+      move(left);
       turn_count = 0;
     }
     turn_count++;
   }else{
     go_straight();
-    turn_count = 0;
+    //turn_count = 0;
   }
 }

@@ -55,7 +55,7 @@ int turn_count = 0;
 const int irBinNum  = 44;
 const int irThresh  = 50;
 const int micBinNum = 17;
-const int micThresh = 140;
+const int micThresh = 135;
 
 // Location and Direction values
 volatile int unsigned long x = 0; //initial x 
@@ -104,7 +104,7 @@ void find_intersection(){
   //look for intersection
     if (left_turn_val < WHITE && right_turn_val < WHITE){
       while(left_turn_val > WHITE && right_turn_val > WHITE);
-      Serial.println("found intersection");
+      //Serial.println("found intersection");
       //intersection cross
 //       i = 0;
 //       Serial.println("found intersection");
@@ -115,10 +115,10 @@ void find_intersection(){
 //       break; //both turn sensors are on white line
       //UPDATE LOCATION HERE
       updateLocation(facing);
-      Serial.println("........INTERSECTION......");
-      Serial.println(x);
-      Serial.println(y);
-      Serial.println("..........................");
+//      Serial.println("........INTERSECTION......");
+//      Serial.println(x);
+//      Serial.println(y);
+//      Serial.println("..........................");
     }
 }
 
@@ -151,10 +151,12 @@ void go_straight(){
 
 bool wallDetected(){
   int distance = analogRead(front_wall);
-  if (distance > 305){
+  if (distance > 290){
     Serial.println("front wall sensed");
-    if (analogRead(left_wall) > 575) {
+    Serial.println(analogRead(left_wall));
+    if (analogRead(left_wall) > 260) {
       move(right);
+      //delay(500);
       Serial.println("left wall sensed");
     }
     else move(left);
@@ -270,11 +272,11 @@ void setup() {
 
 void loop() {
   if (wallDetected()){
-    Serial.println(".......UPDATE.......");
-    Serial.println(updates[0]);
-    Serial.println(updates[1]);
-    Serial.println(updates[2]);
-    Serial.println("....................");
+//    Serial.println(".......UPDATE.......");
+//    Serial.println(updates[0]);
+//    Serial.println(updates[1]);
+//    Serial.println(updates[2]);
+//    Serial.println("....................");
   }
   else{
     go_straight();
