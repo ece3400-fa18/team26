@@ -181,13 +181,13 @@ header.masthead {
   background-attachment: scroll;
   background-position: center center;
   background-size: cover;
+  top: 50px;
 }
 
 
 header.masthead .intro-text {
   padding-top: 100px;
   padding-bottom: 200px;
-  top: 50px;
 }
 
 header.masthead .intro-text .intro-lead-in {
