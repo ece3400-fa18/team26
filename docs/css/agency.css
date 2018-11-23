@@ -181,7 +181,10 @@ header.masthead {
   background-attachment: scroll;
   background-position: center center;
   background-size: cover;
+  position: absolute;
   top: 50px;
+  left: 50%;
+  transform: translate(-50%, -50%)
 }
 
 
