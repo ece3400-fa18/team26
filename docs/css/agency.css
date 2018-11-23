@@ -175,7 +175,7 @@ img::-moz-selection {
 
 header.masthead {
   text-align: center;
-  color: white;
+  color: red;
   background-image: url("../img/about/robot banner.jpg");
   background-repeat: no-repeat;
   background-attachment: scroll;
