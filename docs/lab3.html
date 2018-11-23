@@ -31,7 +31,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
       <div class="container">
         <a class="navbar-brand js-scroll-trigger" href="index.html">Home</a>
-        
+
       </div>
     </nav>
 
@@ -40,7 +40,7 @@
       <div class="container">
         <h2>  </h2>
       </div>
-    </div> 
+    </div>
 
     <div class="container">
         <div class="row">
@@ -48,13 +48,13 @@
             <div class="lab-page">
               <!-- Project Details Go Here -->
               <h2 class="text-uppercase text-left">Lab 3: System Integration and Radio Communication</h2>
-              <p class="item-intro text-muted"> 
+              <p class="item-intro text-muted">
               In this lab we integrated the systems from milestones 1 and 2. The robot will start at a 660Hz tone, autonomously navigate a small maze, and send the maze information from the sensors on the robot to a base station using radios. The base station will display the maze information</p>
 
               <!--<h3> Pre-Lab: Encoding Maze Information </h3>
               <p>
               </p>-->
-              
+
               <h3> Radio Communication Team</h3>
               <p> Priya and Nathalia worked on the radio integration </p>
               Materials Used:<br>
@@ -62,7 +62,7 @@
               &emsp; - 2 Arduino Unos <br>
               &emsp; - 2 radio breakout boards with headers <br>
               <p>
-              </p>            
+              </p>
               <h5>Getting Started: </h5>
               <p>We plugged the radios into the arduinos. Instead of using the 3.3V pin on the arduino, we connected the radio directly to a 3.3V Power Source. We then downloaded the RF24 Arduino Library. In this library there is a sketch called “Getting Started”. We replaced this sketch with the “Getting Started” sketch from the course GitHub repository for Lab 4.</p>
 
@@ -91,16 +91,16 @@ const uint64_t pipes[<span style="color: #0000DD; font-weight: bold">2</span>] <
               <img class="img-fluid d-block mx-auto" width="777" height="88" src="./img/lab3/table_of_data_values.PNG" alt="">
 		    <br>
 		<img class="img-fluid d-block mx-auto" width="800" height="200" src="./img/lab3/Radio Set Up.JPG" alt=""> <br>
-              <p> 
+              <p>
 		The values for each bit is determined by the readings from the various sensors, such as the line sensors, distance sensors, and phototransistors. In terms of the wall detection, we added additional helper functions called "updateLocation" and "updateFacing" which respectively updated where on the grid the robot was in terms of x and y coordinates and updated which cardinal direction the robot was facing to accurately update where the walls are.
-		The next section further discusses the conversion of the sent data package to something the GUI can understand. 
+		The next section further discusses the conversion of the sent data package to something the GUI can understand.
               </p>
 
               <h5>Base Station-to-GUI Transmission: </h5>
               <p> After ensuring that the two radios could communicate to each other, we started the base station to GUI transmission. First, we set up the base station to receive information from the robot. Then, should the package be confirmed and acknowledged, decryption occurs. </p>
 	<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">void decrypt (unsigned <span style="color: #007020">long</span> message[<span style="color: #0000DD; font-weight: bold">3</span>]){
     char answer[<span style="color: #0000DD; font-weight: bold">256</span>];
-    
+
     strcat(answer, message[<span style="color: #0000DD; font-weight: bold">0</span>] <span style="color: #333333">+</span> <span style="background-color: #fff0f0">&quot;,&quot;</span>);   <span style="color: #333333">//</span>x coordinate
     strcat(answer, message[<span style="color: #0000DD; font-weight: bold">1</span>]);         <span style="color: #333333">//</span>y coordinate
 
@@ -114,10 +114,10 @@ const uint64_t pipes[<span style="color: #0000DD; font-weight: bold">2</span>] <
 }
 </pre></div>
 
-		      
+
 	<p> Finally, the decrypted data is displayed on the GUI through the following Serial.println() statements. The video includes the accurate display of this code.
               </p>
-		    
+
 		    <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">  Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;reset&quot;</span>);
   delay(<span style="color: #0000DD; font-weight: bold">1000</span>);
   Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;0,0,west=true,south=true&quot;</span>);
@@ -140,7 +140,7 @@ const uint64_t pipes[<span style="color: #0000DD; font-weight: bold">2</span>] <
   delay(<span style="color: #0000DD; font-weight: bold">5000</span>);
 </pre></div>
 <br>
-		    
+
              <iframe width="560" height="315" src="https://www.youtube.com/embed/T2-B2kjtHHs" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 <br>
               <h3> Robot Systems Integration Team </h3>
@@ -150,7 +150,7 @@ const uint64_t pipes[<span style="color: #0000DD; font-weight: bold">2</span>] <
               &emsp; - Decoy <br>
               &emsp; - 660Hz tone generator <br>
               &emsp; - walls <br>
-		    
+
               <p>In this lab we integrated all the components from previous labs and milestones. This included: the start functionality (robot starts after 660Hz tone is played); IR sensing (stop if another robot which emits 6.08 kHz is in collision path, but ignore decoys which emit 18 kHz); line following (with self correction); wall detection (avoiding running into walls).</p>
 
               <img class="img-fluid d-block mx-auto" width="777" height="88" src="./img/lab3/initial_fsm.PNG" alt="">
@@ -158,42 +158,42 @@ const uint64_t pipes[<span style="color: #0000DD; font-weight: bold">2</span>] <
               <p>As seen in the diagram above, all conditions (presence of other robots, walls, and color of terrain) are checked continuously at the baud rate, except the start signal. The start signal is checked at the beginning of the main loop: if the signal is detected, the variable started (that was initialized to 0) is set to 1. The rest of the code is inside a the while loop with the condition started: while(started). This way the robot is unable to move or react until the 660Hz signal has played, but the signal only needs to play once.</p>
 
               <h5>Integration Overview: </h5>
-              <p>We began by testing and tweaking each of the functionalities from previous labs. Afterwards we compiled the different circuits onto a single breadboard, one at a time, after each new addition the compiled subsystems were tested. As some of our subsystems are still not performing at an optimal level, we plan to further streamline and improve subsystems later on. 
+              <p>We began by testing and tweaking each of the functionalities from previous labs. Afterwards we compiled the different circuits onto a single breadboard, one at a time, after each new addition the compiled subsystems were tested. As some of our subsystems are still not performing at an optimal level, we plan to further streamline and improve subsystems later on.
 
 The integrated code was streamlined through the use of functions. Seperate functions were created for reading the line sensors, moving forward, turning right and left, stopping, and detecting walls. The line following code was integrated into both the moving forward function (go_straight()), and the turning function (move(int direction)). </p>
-		    
+
 <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">while</span>(started){
    <span style="color: #008800; font-weight: bold">if</span> (fft_log_out[irBin] <span style="color: #333333">&gt;</span> irThresh) {
    <span style="color: #333333">//</span>robot stops <span style="color: #008800; font-weight: bold">if</span> another robot (IR hat) <span style="color: #000000; font-weight: bold">is</span> sensed
      servos_stop();
    } <span style="color: #008800; font-weight: bold">else</span> {
-     go_straight(); <span style="color: #333333">//</span>robot default movement after starting: go straight  
+     go_straight(); <span style="color: #333333">//</span>robot default movement after starting: go straight
       <span style="color: #008800; font-weight: bold">if</span> (wallDetected() <span style="color: #333333">==</span> true){
       <span style="color: #333333">//</span><span style="color: #008800; font-weight: bold">if</span> a wall <span style="color: #000000; font-weight: bold">is</span> detected, robot turns left
       (following left hand rule)
          move(left);
          <span style="color: #008800; font-weight: bold">if</span>(wallDetected() <span style="color: #333333">==</span> true){
-         <span style="color: #333333">//</span><span style="color: #008800; font-weight: bold">if</span> another wall <span style="color: #000000; font-weight: bold">is</span> detected, robot 
+         <span style="color: #333333">//</span><span style="color: #008800; font-weight: bold">if</span> another wall <span style="color: #000000; font-weight: bold">is</span> detected, robot
          turns left (following left hand rule)
              move(left);
           }
-          <span style="color: #008800; font-weight: bold">else</span> go_straight; <span style="color: #333333">//</span><span style="color: #008800; font-weight: bold">if</span> no wall <span style="color: #000000; font-weight: bold">or</span> obstacle encountered, 
+          <span style="color: #008800; font-weight: bold">else</span> go_straight; <span style="color: #333333">//</span><span style="color: #008800; font-weight: bold">if</span> no wall <span style="color: #000000; font-weight: bold">or</span> obstacle encountered,
                              robot continues going straight
        }
-    }  
+    }
 }
 </pre></div>
 
 
-		   
+
 		<p> In the main loop of the code, the code governing the robots movement through the maze is within a while loop with the condition that the 660Hz signal has played at least one; the first if condition in the while loop checks for the presence of another robot, and its corresponding else statement contains the code for the left hand wall following.  </p>
-		    
+
 		<iframe width="560" height="315" src="https://www.youtube.com/embed/uwPx8XMK6zM" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 		    <br>
 
-		    
+
 	<h3> Work Distribution </h3>
-              <p> The Lab 3 Work Distribution is as follows: <br> 
+              <p> The Lab 3 Work Distribution is as follows: <br>
                   &emsp; - Nathalia and Priya worked on the radio team <br>
                   &emsp; - Joyce and Vini worked on the systems integration team <br>
                   The Lab 3 Report Work Distribution is as follows: <br>
@@ -211,9 +211,9 @@ The integrated code was streamlined through the use of functions. Seperate funct
       <div class="container">
         <div class="row">
           <div class="col-md-4">
-            <span class="copyright">Copyright &copy; Your Website 2018</span>
+            <span class="copyright">Copyright &copy; 2018 ECE 3400 Team 26</span>
           </div>
-          <div class="col-md-4">
+          <!--<div class="col-md-4">
             <ul class="list-inline social-buttons">
               <li class="list-inline-item">
                 <a href="#">
@@ -241,12 +241,12 @@ The integrated code was streamlined through the use of functions. Seperate funct
                 <a href="#">Terms of Use</a>
               </li>
             </ul>
-          </div>
+        </div>-->
         </div>
       </div>
     </footer>
 
- 
+
 
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>

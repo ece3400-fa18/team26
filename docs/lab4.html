@@ -31,7 +31,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
       <div class="container">
         <a class="navbar-brand js-scroll-trigger" href="index.html">Home</a>
-        
+
       </div>
     </nav>
 
@@ -40,7 +40,7 @@
       <div class="container">
         <h2>  </h2>
       </div>
-    </div> 
+    </div>
 
     <div class="container">
         <div class="row">
@@ -48,7 +48,7 @@
             <div class="lab-page">
               <!-- Project Details Go Here -->
               <h2 class="text-uppercase text-left">Lab 4: FPGA and Shape Detection</h2>
-              <p class="item-intro text-muted"> 
+              <p class="item-intro text-muted">
               In this lab we split into two teams to develop an FPGA module capable of detecting basic shapes from a camera input, and pass this information on to the Arduino. This device will be mounted on the robot to identify these shapes on the walls of the maze.</p>
 
               <h3> Pre-Lab: PLL </h3>
@@ -57,25 +57,25 @@
               Of the available pixel formats, the RGB565 (16bits/pixel) format provides the most information on the base colors making up each pixel.
               In order to convert that pixel format to be accepted by the VGA module, (RGB565 to RGB332), we will use the following diagram:<br>
               <img class="img-fluid d-block mx-auto" width="800" height="200" src="./img/lab4/downsize table.JPG" alt=""> <br>
-	
+
               Based on the timing diagrams on page 7 of the camera data sheet, we will sample on the positive edge of HREF.
               <br>
 
               </p>
-              
+
               <h3> Arduino Team</h3>
               <p> Nathalia and Vini worked on the arduino team. </p>
               Materials Used:<br>
               &emsp; - OV7670 Camera <br>
               &emsp; - Arduino Uno <br>
               &emsp; - DE0-Nano FPGA board <br>
-<br>		    
+<br>
 	<img class="img-fluid d-block mx-auto" width="800" height="200" src="./img/lab4/arduino2.JPG" alt=""> <br>
 
 		<h5> Camera Set Up: Registers</h5>
 		    We began by looking through the documentation for the registers that were related to six main functionalities:<br> 1)resetting the registers 2)scaling 3)using external clock as internatl 4)pixel resolution 5)color bar 6)vertical and mirror image manipulation. <br>
-		    After determining the relevant resistors and their addresses (please see table for details), we defined these at the top of the code. We then sought the values needed to enable the desired properties -- enable scaling, enable colorbar, etc. These are marked by bold numbers in the third column. We then converted the values from binary to hex and obtained the 'write' values for all registers. In the write key register function, we began by resetting registers to their original values before writing the enable values. 
-		    
+		    After determining the relevant resistors and their addresses (please see table for details), we defined these at the top of the code. We then sought the values needed to enable the desired properties -- enable scaling, enable colorbar, etc. These are marked by bold numbers in the third column. We then converted the values from binary to hex and obtained the 'write' values for all registers. In the write key register function, we began by resetting registers to their original values before writing the enable values.
+
 		    As the reading and writing address of the camera differs by the value of the last bit, 0 for write and 1 for read, we defined the camera address to the first seven bits, the last bit was dependant on whether the function calling the address was for reading or writing. <br>
 
 <br>
@@ -84,68 +84,68 @@
 <table style="width:100%">
   <tr>
     <th>Functionality</th>
-    <th>Register Description</th> 
+    <th>Register Description</th>
     <th>Register ‘Write’ Values</th>
     <th>Bit Adjustments </th>
   </tr>
-	
+
   <tr>
     <td>Reset all registers</td>
     <td>Common Control 7
-        COM7 
+        COM7
 	Default Hex: 00
-	Address Hex: 12</td> 
+	Address Hex: 12</td>
     <td>10000000
 	************
 	0x80 </td>
-    <td>SCCB Register Reset is Bit[7]; 
+    <td>SCCB Register Reset is Bit[7];
 	0 is no change
 	1 Resets all registers to default values </td>
   </tr>
-	
+
   <tr>
     <td>Enable Scaling</td>
     <td>Common Control 3
-	COM3 
+	COM3
 	Default Hex: 00
-	Address Hex: 0C </td> 
+	Address Hex: 0C </td>
     <td>00001000
 	************
 	0x08 </td>
-    <td> Scale Enable is Bit[3]; 
+    <td> Scale Enable is Bit[3];
 	0 is disable
 	1 is enable </td>
   </tr>
-	
+
   <tr>
     <td>Use external clock as internal clock</td>
     <td>Internal Clock
 	CLKRC
 	Default Hex: 80
 	Address Hex: 11
- 	</td> 
+ 	</td>
     <td>11000000
 	************
 	0xC0
 	 </td>
     <td> Bit[7]: Reserved
-	Bit[6]: Use external clock as internal (no clock prescale available) 
+	Bit[6]: Use external clock as internal (no clock prescale available)
 	 </td>
   </tr>
 
 <tr>
     <td>Set the camera to output the resolution you specified in Q4 and the pixel format you specified in Q2. The pixel format will take setting an extra register to fully specify</td>
     <td>Common Control 7
-	COM7 
+	COM7
 	Default Hex: 00
 	Address Hex: 12<br>
 	_________________ <br>
 
 	Common Control 15
-	COM15 
+	COM15
 	Default Hex: C0
 	Address Hex: 40
-	 </td> 
+	 </td>
     <td>00001110
 	************
 	0x0E (*combined with QCIF output format and color bar activation) <br>
@@ -156,11 +156,11 @@
 	 </td>
     <td> Bit[2] is RGB Selection (COM7[0] = 0 and COM7[2] =1) <br>
 	___________________<br>
-	Bit[7:6] = 11 (sets output range [00] to [FF]) 
-	Bit[5:4] is RGB 555/565 (must set COM7[0] = 0 and COM7[2] =1)  
+	Bit[7:6] = 11 (sets output range [00] to [FF])
+	Bit[5:4] is RGB 555/565 (must set COM7[0] = 0 and COM7[2] =1)
 	</td>
   </tr>
-	
+
   <tr>
     <td>Enable a color bar test (takes setting 2 regs, neither of them are the SCALING regs)</td>
     <td>Common Control 17
@@ -169,10 +169,10 @@
 	Address Hex: 42 <br>
 	_________________ <br>
 	Common Control 7
-	COM7 
+	COM7
 	Default Hex: 00
 	Address Hex: 12
-	 </td> 
+	 </td>
     <td>00001000
 	************
 	0x08 <br>
@@ -182,23 +182,23 @@
 	0x0E (*combined with QCIF output format and rgb selection)
 	 </td>
     <td> DSP Color Bar Enable
-	Bit[3]; 
+	Bit[3];
 	0 is disable
 	1 is enable <br>
 	______________________ <br>
 	Color Bar
-	Bit[1]; 
+	Bit[1];
 	0 is disable
-	1 is enable 
+	1 is enable
 	 </td>
   </tr>
-	
+
   <tr>
     <td>Vertical and mirror flip the output image (optional)</td>
     <td>MVFP
 	Default Hex: 00
 	Address Hex: 1E
-	 </td> 
+	 </td>
     <td>00110000
 	************
 	0x30
@@ -212,10 +212,10 @@
 	0 is normal
 	1 is vertically flip image
 	 </td>
-  </tr>	
-</table>	
+  </tr>
+</table>
 		    <p> With this table in mind, we began our main program in the "Set Up" section of the code. We wanted to use serial to ensure that our register values were what we expected, so we set that up. Next, we called the subroutine functions write_key_registers() and read_key_registers(), both of which are included below. </p>
-			    
+
 <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #333333">/////////</span> Main Program <span style="color: #333333">//////////////</span>
 void setup() {
   Wire<span style="color: #333333">.</span>begin();
@@ -225,7 +225,7 @@ void setup() {
   read_key_registers();
 
   delay(<span style="color: #0000DD; font-weight: bold">100</span>);
-  
+
   <span style="color: #333333">//</span> TODO: WRITE KEY REGISTERS
   write_key_registers();
   set_color_matrix();
@@ -233,7 +233,7 @@ void setup() {
 
 }
 </pre></div>
-		   
+
 <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">void read_key_registers(){
   <span style="color: #333333">/*</span>TODO: DEFINE THIS FUNCTION<span style="color: #333333">*/</span>
   Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;Common Control 7&quot;</span>);
@@ -250,7 +250,7 @@ void setup() {
   Serial<span style="color: #333333">.</span>println(read_register_value(MVFP),HEX);
 }
 </pre></div>
-		    
+
 <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">String write_key_registers(){
   OV7670_write_register(CC7, <span style="color: #005588; font-weight: bold">0x80</span>);   <span style="color: #333333">//</span>setting to <span style="color: #0000DD; font-weight: bold">1</span> resets <span style="color: #007020">all</span> registers
   delay(<span style="color: #0000DD; font-weight: bold">100</span>);
@@ -264,11 +264,11 @@ void setup() {
  }
 </pre></div>
 		<img class="img-fluid d-block mx-auto" width="800" height="200" src="./img/lab4/arduino registers.png" alt=""> <br>
-		    
-		    
+
+
 		<h5> Communicating with FPGA </h5>
 		<img class="img-fluid d-block mx-auto" width="800" height="200" src="./img/lab4/comm bits.JPG" alt=""> <br>
-		    
+
 
 <br>
               <h3> FPGA Team </h3>
@@ -276,7 +276,7 @@ void setup() {
 	      Materials Used:<br>
               &emsp; - DE0-Nano FPGA board <br>
               &emsp; - VGA adapter <br>
-              
+
 		          <p>The FPGA module are connected as shown in the following diagram.</p>
               <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab4/FPGA.png" alt=""><br>
               <h5>PLL Clock</h5>
@@ -287,7 +287,7 @@ void setup() {
               <p>The downsampler module is responsible for updating address and writing data to mem. For x address, we update the address every other PCLK cycle. This is because the Arduino sends color format in RGB565, a total of 2 bytes, but every PCLK cycle only transmits one byte. Therefore, we implement a register that toggles every cycle ot keep track of whether it is the lower bits of the full RGB565 data or the higher bits of the RGB565 data. When it finish reading the lower bits, the x address will be incremented, and it also enables the memory write to store that data into RAM. X address is reset after the end of each row, which is indicated by the negedge of HREF. For my implementation, I write x address as 0 whenever HREF is low. To update the y address, we increment it every time there is a new row coming, the same time as we reset x to zero. Resetting the x address and y address happens when there is a new picture frame coming, which is indiacted by VSYNC. The data communicaiton is as illustrated below. As shown in the picture, there is only valid data when HREF is high. Once HREF go down, we know that there is a new row coming. </p>
               <p>Besides updating the address, downsampler also downsamples the data to RGB332. This is done simply be selectign the correct bits from the Arduino input. </p>
               <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab4/Timing.png" alt=""><br>
-              
+
               <h5>Image Processor</h5>
               <p>Image processor takes input from memory, pixel by pixel. Then it determines whether the pixel is red or blue, or neither. If it is a red pixel, then the red_count will be incremented; vice versa. Then, at then end of each picture frame, it will determine whether the frame is dominated by red or blue (passing a threshold), then sends Arduino a 8 bit data. The data it sends back is one byte. The first bit(MSB) indicates red treasure found, the second bit indicates blue treasure found. The remaining 6 bits are set to zero now but will be used to indicate the shape of the treasure in the future.</p>
 
@@ -301,11 +301,11 @@ void setup() {
               <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab4/FPGACB1.png" alt=""><br>
               <p>Then, we figured we are not setting the Y address correctly, so the colors are not reading out in order and it partially overwrite the data in memory in a skewed way. After we changed that to have the y address triggered correctly then we were able to read the proper color. The ordering happends, I suspect, because of the wrong reading order of RGB565.</p>
               <p>As of the camera live input, the best I could get to is to have the correct image output with a significant delay. I suspect this is becasue the memory write enable or clock is not handled properly. The result is that the camer will capture a frame, then that frame will be displayed a few seconds later. It is also very sensitive to wiring. If I pull the camera one way, it updates, but when I pull the other way, then there is no response. I am not sure what exactly is the issue. The color is wrong, of course, since we don't have the correct color ordering from color bar, so the color of the data is also stored in a wrong order.</p>
-<br>  
+<br>
 
-		    
+
 							<h3> Work Distribution </h3>
-              <p> The Lab 4 Work Distribution is as follows: <br> 
+              <p> The Lab 4 Work Distribution is as follows: <br>
                   &emsp; - Nathalia and Vini worked on the arduino team <br>
                   &emsp; - Joyce and Priya worked on the FPGA team <br>
                   The Lab 4 Report Work Distribution is as follows: <br>
@@ -321,9 +321,9 @@ void setup() {
       <div class="container">
         <div class="row">
           <div class="col-md-4">
-            <span class="copyright">Copyright &copy; Your Website 2018</span>
+            <span class="copyright">Copyright &copy; 2018 ECE 3400 Team 26</span>
           </div>
-          <div class="col-md-4">
+          <!--<div class="col-md-4">
             <ul class="list-inline social-buttons">
               <li class="list-inline-item">
                 <a href="#">
@@ -351,12 +351,12 @@ void setup() {
                 <a href="#">Terms of Use</a>
               </li>
             </ul>
-          </div>
+        </div>-->
         </div>
       </div>
     </footer>
 
- 
+
 
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>

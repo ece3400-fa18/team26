@@ -31,7 +31,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
       <div class="container">
         <a class="navbar-brand js-scroll-trigger" href="index.html">Home</a>
-        
+
       </div>
     </nav>
 
@@ -40,7 +40,7 @@
       <div class="container">
         <h2>  </h2>
       </div>
-    </div> 
+    </div>
 
     <div class="container">
         <div class="row">
@@ -49,12 +49,12 @@
               <!-- Project Details Go Here -->
               <h2 class="text-uppercase text-left">Lab 1: Microcontroller</h2>
               <p class="item-intro text-muted"> This lab is an introduction to the Arduino IDE. The team is split into two subteams to perform the same tasks. In the end of the lab, both subteams were able to control the LED and servo, which are then used to build the robot below.</p>
-  
+
               <iframe width="560" height="315" align="middle" src="https://www.youtube.com/embed/wf3T-4biOp0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-  
-              
+
+
               <h3> Communicating between Uno and IDE </h3>
-              <p>In order to test the Arduino UNO and the IDE, we used example code “Blink.” This program caused an LED on the Arduino to blink on and off every other second. The LED on board is connected to pin13, which is also defined as LED_BUILTIN in the macro. The delay loop takes the value of 1000 which corresponds to 1 second.</p>             
+              <p>In order to test the Arduino UNO and the IDE, we used example code “Blink.” This program caused an LED on the Arduino to blink on and off every other second. The LED on board is connected to pin13, which is also defined as LED_BUILTIN in the macro. The delay loop takes the value of 1000 which corresponds to 1 second.</p>
               <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab1/part 1.png" alt="">
               <code>
                 // the setup function runs once when you press reset or power the board <br>
@@ -71,9 +71,9 @@
                   &emsp; delay(1000);                       // wait for a second<br>
                 }
               </code>
-              
+
               <h3> Modify the blink sketch </h3>
-              <p>We modified the example code blink.ino so that it would work for an external LED. We tested the digital input ports 2-12 to make sure they were all functional. In order to switch which port is being sent information, we need to change LED_BUILTIN to the number of the port we need to access. The below code is set to work for an LED connected to port 2. 
+              <p>We modified the example code blink.ino so that it would work for an external LED. We tested the digital input ports 2-12 to make sure they were all functional. In order to switch which port is being sent information, we need to change LED_BUILTIN to the number of the port we need to access. The below code is set to work for an LED connected to port 2.
               (Note: When testing the different ports, we attempted to use ports 0 and 1 but were unable to do so -- we discovered that this is because ports 0 and 1 are typically used for serial communication.)</p>
               <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab1/part 2.png" alt="">
               <code>
@@ -92,8 +92,8 @@
                   &emsp; delay(1000);             // wait for a second<br>
                 }
               </code>
-              
-              
+
+
               <h3> The Serial Monitor and the Analog Pins </h3>
               <p>We used a potentiometer to measure the analog voltages from the input pins. To write to the serial monitor we first opened the serial port at 9600 bits per a second as per the documentation. We then used the inbuilt analogRead method to collect readings from the potentiometer. These values were then printed to the serial interface through the println method. The delay method takes input in milliseconds so to get a reading every half second we set a delay of 500. </p>
               <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab1/part 3.png" alt="">
@@ -107,7 +107,7 @@
                 }<br>
                 <br>
                 // the loop function runs over and over again forever<br>
-                void loop() {<br> 
+                void loop() {<br>
                    &emsp; val = analogRead(pinPot);   // read the input pin<br>
                    &emsp; Serial.println(val);<br>
                    &emsp; delay (500);<br>
@@ -121,8 +121,8 @@
                 int pinPot = A0; <br>
                 int val = 0; <br>
                 int ledpin = 3;<br>
-                 
-                
+
+
                 // the setup function runs once when you press reset or power the board<br>
                 void setup() {<br>
                  &emsp; pinMode(ledpin, OUTPUT);   // sets the pin as output <br>
@@ -140,12 +140,12 @@
 
               <h3> Parallax Servos </h3>
               <p>During this portion of the lab we practiced using servo motors in different ways with the aim of becoming more comfortable and experienced. Our chosen exercises were particularly the degree of control we had over the angle. In the first code was written to obtain a general understanding of what how servo motors moved. Accoridng to the documentation, the servo would stop at value of 90. We then use this value to calibrate the servo using the small screw on the side of it. Note that when connected to the Aruidno board, the servos must be connected to the PWM pins.</p>
-              
+
               <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab1/part 5.png" alt="">
               <code>
                 #include Servo.h<br>
                 <br>
-                Servo servo_1;<br>          
+                Servo servo_1;<br>
                 int pos = 0;<br>
                 <br>
                 // the setup function runs once when you press reset or power the board<br>
@@ -231,7 +231,7 @@
               </code>
 
               <h3> Work Distribution </h3>
-              <p> The Lab 1 Work Distribution is as follows: <br> 
+              <p> The Lab 1 Work Distribution is as follows: <br>
                   &emsp; - On 8/31, Nathalia, Priya and Vini worked on steps 1-5 and began part 6.<br>
                   &emsp; - On 9/4, Priya and Nathalia attended open Lab to complete Part 6.<br>
                   &emsp; - On 9/7, Joyce reassembled the robot.<br>
@@ -248,16 +248,16 @@
         </div>
       </div>
 
-    
+
 
     <!-- Footer -->
     <footer>
       <div class="container">
         <div class="row">
           <div class="col-md-4">
-            <span class="copyright">Copyright &copy; Your Website 2018</span>
+            <span class="copyright">Copyright &copy; 2018 ECE 3400 Team 26</span>
           </div>
-          <div class="col-md-4">
+          <!--<div class="col-md-4">
             <ul class="list-inline social-buttons">
               <li class="list-inline-item">
                 <a href="#">
@@ -285,12 +285,12 @@
                 <a href="#">Terms of Use</a>
               </li>
             </ul>
-          </div>
+        </div>-->
         </div>
       </div>
     </footer>
 
- 
+
 
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
