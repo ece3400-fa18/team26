@@ -1,10 +1,9 @@
- /*
+/*
 fft_adc_serial.pde
 guest openmusiclabs.com 7.7.14
 example sketch for testing the fft library.
 it takes in data on ADC0 (Analog0) and processes them
-with the fft. the data is sent out over the serial
-port at 115.2kb.
+with the fft. the data is sent out over the serial port at 115.2kb.
 */
 
 #define LOG_OUT 1 // use the log output function
@@ -12,21 +11,17 @@ port at 115.2kb.
 
 #include <Servo.h>
 #include <FFT.h>
-
-Servo left_servo;
-Servo right_servo;
+#include <SPI.h>
+#include "nRF24L01.h"
+#include "RF24.h"
+#include "printf.h"
 
 /***********************************************************************
  *        Variable Declarations 
  ***********************************************************************/
-
-// Pin Assignments 
-const int LW = 5; // Servo1
-const int RW = 6; // Servo2
-const int right_turn  =  A5;
-const int left_turn   =  A4;
-const int front_wall  =  A2;
-const int left_wall   =  A3;
+Servo left_servo;
+Servo right_servo;
+RF24 radio(9,10);
 
 #define SERVO_BRAKE          90
 #define SERVO_L_FORWARD_MAX  95.0
@@ -35,35 +30,48 @@ const int left_wall   =  A3;
 #define SERVO_R_INCR_FORWARD -2.0
 
 // Thresholds for each sensor to determine when over a line
-#define WHITE       700
+#define WHITE   700
 #define ERROR_RANGE 100
-#define left        0
-#define forward     1
-#define right       2
+#define left    0
+#define forward 1
+#define right   2
 
-// Control Variables for line following
+//pins
+const int LW = 5; // Servo1
+const int RW = 6; // Servo2
+const int right_turn  = A5;
+const int left_turn   = A4;
+const int front_wall  = A2;
+
+// Control variables for line following
 float error           = 0;
 float error_magnitude = 0;
 int   i = 0;
-
 // Line sensor values
 int right_turn_val  = 0;
 int left_turn_val   = 0;
-
-// Control variables for turning
+//control variables for turning
 int turn_count = 0;
+
 const int irBinNum  = 44;
 const int irThresh  = 50;
 const int micBinNum = 17;
-const int micThresh = 135;
+const int micThresh = 140;
 
-// Location and Direction values
-volatile int unsigned long x = 0; //initial x 
-volatile int unsigned long y = -1; //initial y 
-int facing = 3; //initially facing NORTH
-int direction = 0; //initially going straight
+// location and direction values
+volatile int unsigned long x = 0; //initial x location
+volatile int unsigned long y = 0; //initial y location
+int facing = 3;     //initially facing NORTH
+int direction = 0;  //initially going straight
 volatile int unsigned long d = 0;
 int unsigned long updates[3] = {x,y,d};
+
+
+// Radio pipe addresses for the 2 nodes to communicate. and additional radio assignments
+const uint64_t pipes[2] = { 0x0000000070LL, 0x0000000071LL };
+typedef enum { role_ping_out = 1, role_pong_back } role_e;
+const char* role_friendly_name[] = { "invalid", "Ping out", "Pong back"};
+role_e role = role_pong_back;
 
 
 /***********************************************************************
@@ -78,25 +86,29 @@ void servos_stop(){
 
 void read_turn(){
   right_turn_val = analogRead(right_turn); //signal from outer right sensor
-  left_turn_val = analogRead(left_turn);  //signal from outer left sensor 
+  left_turn_val = analogRead(left_turn); //signal from outer left sensor 
 }
 
 void move(int direction){
   // Turn if requested
     if(direction == right){
+      Serial.println("begin turn right");
       updateFacing(&facing, 0);
       left_servo.write(95);
       right_servo.write(95);
       while(analogRead(left_turn) > WHITE);
       while(analogRead(left_turn) < WHITE);
+      Serial.println("done turn right");
     }
     
     if(direction == left){
+      Serial.println("begin turn left");
       updateFacing(&facing, 1);
       left_servo.write(85);
       right_servo.write(85);
       while(analogRead(right_turn) > WHITE);
       while(analogRead(right_turn) < WHITE);
+      Serial.println("done turn left");
     }
 }
 
@@ -104,7 +116,7 @@ void find_intersection(){
   //look for intersection
     if (left_turn_val < WHITE && right_turn_val < WHITE){
       while(left_turn_val > WHITE && right_turn_val > WHITE);
-      //Serial.println("found intersection");
+      Serial.println("found intersection");
       //intersection cross
 //       i = 0;
 //       Serial.println("found intersection");
@@ -113,17 +125,20 @@ void find_intersection(){
 //         i++;
 //       }
 //       break; //both turn sensors are on white line
-      //UPDATE LOCATION HERE
       updateLocation(facing);
-//      Serial.println("........INTERSECTION......");
-//      Serial.println(x);
-//      Serial.println(y);
-//      Serial.println("..........................");
+
+
+      Serial.println("...................INTERSECTION.................");
+      Serial.println(x);
+      Serial.println(y);
+      Serial.println("................................................");
     }
 }
 
 void go_straight(){
   find_intersection();
+  //modified from solution code
+  //following straight line
   read_turn();
   error = left_turn_val - right_turn_val; // Positive position to right of line
 
@@ -146,26 +161,25 @@ void go_straight(){
     left_servo.write(SERVO_L_FORWARD_MAX - error_magnitude*SERVO_L_INCR_FORWARD);
     right_servo.write(SERVO_R_FORWARD_MAX + error_magnitude*SERVO_R_INCR_FORWARD);
   }
+
   delay(10);
 }
 
+
 bool wallDetected(){
   int distance = analogRead(front_wall);
-  if (distance > 290){
-    Serial.println("front wall sensed");
-    Serial.println(analogRead(left_wall));
-    if (analogRead(left_wall) > 260) {
-      move(right);
-      //delay(500);
-      Serial.println("left wall sensed");
-    }
-    else move(left);
-    
+  //Serial.println(distance);
+  if (distance > 305){
     d = 10000000;
-    if (facing == 3){ d = d|1000; } 
-    else if (facing == 2){ d = d|100; } 
-    else if (facing == 1){ d = d|10;  } 
-    else if (facing == 0){ d = d|1;   }
+    if (facing == 3){
+      d = d|1000;
+    } else if (facing == 2){
+      d = d|100;
+    } else if (facing == 1){
+      d = d|10;
+    } else if (facing == 0){
+      d = d|1;
+    }
   }
   updates[0] = x;
   updates[1] = y;
@@ -184,6 +198,7 @@ void detectAudio(){
   ADMUX = 0x40; // use adc0
   DIDR0 = 0x01; // turn off the digital input for adc0
   while(1){
+    Serial.println("while1");
     for (int i = 0 ; i < 512 ; i += 2) { // save 256 samples
       while (!(ADCSRA & 0x10)); // wait for adc to be ready
       ADCSRA = 0xf7; // restart adc
@@ -200,9 +215,8 @@ void detectAudio(){
     fft_run(); // process the data in the fft
     fft_mag_log(); // take the output of the fft
     sei();
-    //Serial.println(fft_log_out[micBinNum]);
+    Serial.println(fft_log_out[micBinNum]);
    if (fft_log_out[micBinNum] > micThresh){
-    Serial.println("SOUND");
     Serial.println(fft_log_out[micBinNum]);
     break;
    } 
@@ -214,12 +228,20 @@ void detectAudio(){
 }
 
 void updateLocation(int facing){
-  //based on the previous (x,y) and direction robot is facing,
+  //based on the previous (x,y) location and the direction the robot is facing,
   //update the new (x,y) coordinates
-  if (facing == 3){ y = y+1; } //facing north
-  if (facing == 2){ x = x+1; } //facing east
-  if (facing == 1){ y = y-1; } //facing south
-  if (facing ==0) { x = x-1; } //facing west
+  if (facing == 3){ //facing north
+    y = y+1;
+  }
+  if (facing == 2){ //facing east
+    x = x+1;
+  }
+  if (facing == 1){ //facing south
+    y = y-1;
+  }
+  if (facing ==0){ //facing west
+    x = x-1;
+  }
 }
 
 void updateFacing(int *facing, int turningDirection){
@@ -255,6 +277,44 @@ void updateFacing(int *facing, int turningDirection){
      }
 }
 
+void radioSetUp(){
+  Serial.begin(57600);
+  printf_begin();
+  printf("\n\rRF24/examples/GettingStarted/\n\r");
+  printf("ROLE: %s\n\r",role_friendly_name[role]);
+  printf("*** PRESS 'T' to begin transmitting to the other node\n\r");
+
+  // Setup and configure rf radio
+  radio.begin();
+
+  // optionally, increase the delay between retries & # of retries
+  radio.setRetries(15,15);
+  radio.setAutoAck(true);
+  radio.setChannel(0x50);
+  // RF24_PA_MIN=-18dBm, RF24_PA_LOW=-12dBm, RF24_PA_MED=-6dBM, and RF24_PA_HIGH=0dBm.
+  radio.setPALevel(RF24_PA_MIN);
+  //RF24_250KBPS for 250kbs, RF24_1MBPS for 1Mbps, or RF24_2MBPS for 2Mbps
+  radio.setDataRate(RF24_250KBPS);
+
+  // optionally, reduce the payload size. improve reliability
+  //radio.setPayloadSize(8);
+
+  if ( role == role_ping_out )
+  {
+    radio.openWritingPipe(pipes[0]);
+    radio.openReadingPipe(1,pipes[1]);
+  }
+  else
+  {
+    radio.openWritingPipe(pipes[1]);
+    radio.openReadingPipe(1,pipes[0]);
+  }
+
+  radio.startListening();
+  radio.printDetails();
+}
+
+
 
 /***********************************************************************
  *        Main Set Up and Loop
@@ -262,23 +322,37 @@ void updateFacing(int *facing, int turningDirection){
 void setup() {
   Serial.begin(9600); // use the serial port
   detectAudio();
+  
   right_servo.attach(RW);
   left_servo.attach(LW);
+
+  //line sensor
   pinMode(right_turn, INPUT);
   pinMode(left_turn, INPUT); 
   pinMode(front_wall, INPUT);
-  pinMode(left_wall, INPUT);
 }
 
 void loop() {
   if (wallDetected()){
-//    Serial.println(".......UPDATE.......");
-//    Serial.println(updates[0]);
-//    Serial.println(updates[1]);
-//    Serial.println(updates[2]);
-//    Serial.println("....................");
-  }
-  else{
+    Serial.println("...........update...........");
+    Serial.println(updates[0]);
+    Serial.println(updates[1]);
+    Serial.println(updates[2]);
+    Serial.println("............................");
+    //Serial.println(turn_count);
+    if(turn_count == 0){
+      move(right);
+    }else if(turn_count == 1){
+      move(left);
+      move(left);
+    }else if(turn_count == 2){
+      //reach dead end
+      move(right);
+      turn_count = 0;
+    }
+    turn_count++;
+  }else{
     go_straight();
+    //turn_count = 0;
   }
 }
