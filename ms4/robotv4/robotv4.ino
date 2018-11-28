@@ -314,6 +314,20 @@ void radioSetUp(){
   radio.printDetails();
 }
 
+void decrypt (unsigned long message[3]){
+    char answer[256];
+    
+    strcat(answer, message[0] + ",");   //x coordinate
+    strcat(answer, message[1]);         //y coordinate
+
+    int data = message[2];
+    if (data % 10) strcat(answer, ",west=true");
+    if ((data >> 1) % 10) strcat(answer, ",south=true");
+    if ((data >> 2) % 10) strcat(answer, ",west=true");
+    if ((data >> 3) % 10) strcat(answer, ",north=true");
+
+    Serial.println(answer);
+}
 
 
 /***********************************************************************
