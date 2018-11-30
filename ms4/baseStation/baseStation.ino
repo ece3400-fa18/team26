@@ -158,7 +158,7 @@ void loop(void)
       radio.read( &got_message, sizeof(unsigned long)*3);
 
       // Spew it
-      printf("Got response %lu, round-trip delay: %lu\n\r",got_message,millis());
+      printf("Got response %lu, round-trip delay: %lu\n\r",got_message[0],millis());
     }
 
     // Try again 1s later

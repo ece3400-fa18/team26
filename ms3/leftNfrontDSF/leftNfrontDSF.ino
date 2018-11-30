@@ -101,11 +101,11 @@ int dir = 1; //pointer to direction || N = 1, E = 3, S = 2, W = 4
  * else if (dir == W)
  *     B = A - 1;
 */
-int path[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+int path[81] = {};
 int curpath = 0; //pointer to path, gives indice that corresponds to currentlocation in path
 int lastBranch = 0;//pointer to path, gives indice that corresponds to latest frontier
 int numTraversed = 0;
-int frontier[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+int frontier[81] = {};
 int curfront = 0;//pointer to frontier
 
 /***********************************************************************
@@ -338,28 +338,48 @@ void newDir(int pos){ //if all directions lead to old or blocked by wall returns
   int w = pos - 1;
   flag = -1;//if all possibilities are either blocked by walls or already traversed
   if (dir == 1){
-    if(L && isNew(w,1)){
+    if (R && isNew(e, 1)){
+      turn(right);
+      dir = 3;
+      flag = 0;
+    }
+    else if(L && isNew(w,1)){
       turn(left);
       dir = 4;
       flag = 0;
     }
   }
   else if(dir == 2){
-    if(L && isNew(e,1)){
+    if (R && isNew(w, 1)){
+      turn(right);
+      dir = 4;
+      flag = 0;
+    }
+    else if(L && isNew(e,1)){
       turn(left);
       dir = 3;
       flag = 0;
     }
   }
   else if(dir == 3){
-    if(L && isNew(n,1)){
+    if (R && isNew(s, 1)){
+      turn(right);
+      dir = 2;
+      flag = 0;
+    }
+    else if(L && isNew(n,1)){
       turn(left);
       dir = 1;
       flag = 0;
     }  
   }
   else if(dir == 4){
-    if(L && isNew(s,1)){
+    if (R && isNew(n, 1)){
+      turn(right);
+      dir = 1;
+      flag = 0;
+    }
+    else if(L && isNew(s,1)){
       turn(left);
       dir = 2;
       flag = 0;
@@ -370,7 +390,7 @@ void newDir(int pos){ //if all directions lead to old or blocked by wall returns
 int isPossible(int pos, int NSEW){
   bool ispos = 0; //default is not possible
   bool F = frontdetectWall();
-//  bool R = rightdetectWall();
+  bool R = rightdetectWall();
   bool L = leftdetectWall();
   int n = pos + 9;
   int s = pos - 9;
@@ -387,9 +407,9 @@ int isPossible(int pos, int NSEW){
       ispos = 1;
     }
     else if(NSEW == 3){
-//      if(R){
+      if(R){
         ispos = 1;
-//      }
+      }
     }
     else if(NSEW == 4){
       if(L){
@@ -407,9 +427,9 @@ int isPossible(int pos, int NSEW){
       ispos = 1;
     }
     else if(NSEW == 4){
-//      if(R){
+      if(R){
         ispos = 1;
-//      }
+      }
     }
     else if(NSEW == 3){
       if(L){
@@ -427,9 +447,9 @@ int isPossible(int pos, int NSEW){
       ispos = 1;
     }
     else if(NSEW == 2){
-//      if(R){
+      if(R){
         ispos = 1;
-//      }
+      }
     }
     else if(NSEW == 1){
       if(L){
@@ -447,9 +467,9 @@ int isPossible(int pos, int NSEW){
       ispos = 1;
     }
     else if(NSEW == 1){
-//      if(R){
+      if(R){
         ispos = 1;
-//      }
+      }
     }
     else if(NSEW == 2){
       if(L){
@@ -626,7 +646,7 @@ void moveDSF(){
 
 void setup() {
   // put your setup code here, to run once:
-//  Serial.begin(9600); // use the serial port
+  Serial.begin(9600); // use the serial port
   detectAudio();
   right_servo.attach(RW);
   left_servo.attach(LW);

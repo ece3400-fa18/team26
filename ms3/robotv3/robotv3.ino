@@ -87,16 +87,18 @@ void move(int direction){
       updateFacing(&facing, 0);
       left_servo.write(95);
       right_servo.write(95);
-      while(analogRead(left_turn) > WHITE);
-      while(analogRead(left_turn) < WHITE);
+      delay(650);
+      //while(analogRead(left_turn) > WHITE);
+      //while(analogRead(left_turn) < WHITE);
     }
     
     if(direction == left){
       updateFacing(&facing, 1);
       left_servo.write(85);
       right_servo.write(85);
-      while(analogRead(right_turn) > WHITE);
-      while(analogRead(right_turn) < WHITE);
+      delay(650);
+      //while(analogRead(right_turn) > WHITE);
+      //while(analogRead(right_turn) < WHITE);
     }
 }
 
@@ -154,7 +156,7 @@ bool wallDetected(){
   if (distance > 290){
     Serial.println("front wall sensed");
     Serial.println(analogRead(left_wall));
-    if (analogRead(left_wall) > 260) {
+    if (analogRead(left_wall) > 250) {
       move(right);
       //delay(500);
       Serial.println("left wall sensed");
@@ -271,6 +273,12 @@ void setup() {
 }
 
 void loop() {
+//  if (analogRead(front_wall) > 290){
+//    if (analogRead(left_wall) > 250) {
+//      Serial.println("move right");
+//    }
+//    else Serial.println("move left");
+//  } 
   if (wallDetected()){
 //    Serial.println(".......UPDATE.......");
 //    Serial.println(updates[0]);
