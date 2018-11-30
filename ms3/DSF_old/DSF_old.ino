@@ -119,16 +119,16 @@ void move(int direction){
       updateFacing(&facing, 0);
       left_servo.write(95);
       right_servo.write(95);
-      while(analogRead(left_turn) > WHITE);
-      //while(analogRead(left_turn) < WHITE);
+      //while(analogRead(left_turn) > WHITE);
+      while(analogRead(left_turn) < WHITE);
     }
     
     if(direction == left){
       updateFacing(&facing, 1);
       left_servo.write(85);
       right_servo.write(85);
-      while(analogRead(right_turn) > WHITE);
-      //while(analogRead(right_turn) < WHITE);
+      //while(analogRead(right_turn) > WHITE);
+      while(analogRead(right_turn) < WHITE);
     }
 
 }
