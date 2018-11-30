@@ -272,6 +272,7 @@ void setup() {
   pinMode(left_wall, INPUT);
 }
 
+
 void loop() {
 //  if (analogRead(front_wall) > 290){
 //    if (analogRead(left_wall) > 250) {
