@@ -1,5 +1,5 @@
 #define LOG_OUT 1 // use the log output function
-#define FFT_N 128 // set to 256 point fft
+#define FFT_N 256 // set to 256 point fft
 
 #include <Servo.h>
 #include <FFT.h>
@@ -194,7 +194,6 @@ void detectAudio(){
   ADMUX = 0x40; // use adc0
   DIDR0 = 0x01; // turn off the digital input for adc0
   while(1){
-    //Serial.println("while1");
     for (int i = 0 ; i < 512 ; i += 2) { // save 256 samples
       while (!(ADCSRA & 0x10)); // wait for adc to be ready
       ADCSRA = 0xf7; // restart adc
@@ -212,8 +211,9 @@ void detectAudio(){
     fft_mag_log(); // take the output of the fft
     sei();
     //Serial.println(fft_log_out[micBinNum]);
-    if (fft_log_out[micBinNum] > micThresh){
-    //Serial.println(fft_log_out[micBinNum]);
+   if (fft_log_out[micBinNum] > micThresh){
+    Serial.println("SOUND");
+    Serial.println(fft_log_out[micBinNum]);
     break;
    } 
   }
