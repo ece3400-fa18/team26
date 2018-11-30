@@ -626,7 +626,7 @@ void moveDSF(){
 
 void setup() {
   // put your setup code here, to run once:
-//  Serial.begin(9600); // use the serial port
+  Serial.begin(9600); // use the serial port
   detectAudio();
   right_servo.attach(RW);
   left_servo.attach(LW);
