@@ -127,30 +127,40 @@ always @ (VGA_PIXEL_X, VGA_PIXEL_Y) begin
 			VGA_READ_MEM_EN = 1'b1;
 
 			/* test pattern*/
-			if (VGA_PIXEL_X==VGA_PIXEL_Y) pixel_data_RGB332 = RED;
-			else  pixel_data_RGB332 = GREEN;
+			//if (VGA_PIXEL_X==VGA_PIXEL_Y) pixel_data_RGB332 = RED;
+			// else  pixel_data_RGB332 = GREEN;
 				
 		end
 end
 
 //DOWNSAMPLER Module
-reg high;
-initial high = 0;
+reg high = 1'b0;
+reg prevHREF;
+reg prevVSYNC;
 
-always @(posedge VSYNC or negedge HREF) begin
-	if((VSYNC) Y_ADDR = 0;
-	else Y_ADDR = Y_ADDR+1;
-end
+// always @(posedge VSYNC or negedge HREF) begin
+// 	if((VSYNC) Y_ADDR = 0;
+// 	else Y_ADDR = Y_ADDR+1;
+// end
 
 //store data and update x address
 always @(posedge PCLK) begin
-	if(VSYNC) begin
+	if(VSYNC && !prevVSYNC) begin
 		W_EN = 0;
 		X_ADDR = 0;
+		Y_ADDR = 0;
 		high = 0;
-		pixel_data_RGB332 = 0;
+		pixel_data_RGB332[7:0] = 0;
+	end
+	else if (!HREF && prevHREF) begin
+		X_ADDR = 0;
+		Y_ADDR = Y_ADDR+1;
+		high = 0;
+		W_EN = 0;
+		pixel_data_RGB332[7:0] = 0;
 	end
 	else begin
+		Y_ADDR = Y_ADDR;
 		if (HREF) begin
 			if(!high) begin
 				W_EN = 0;
@@ -167,12 +177,15 @@ always @(posedge PCLK) begin
 			end
 		end
 		else begin
-			W_EN = 0;
+			// W_EN = 0;
+			// X_ADDR = 0;
+			// high = 0;
+			// pixel_data_RGB332 = 0;
 			X_ADDR = 0;
-			high = 0;
-			pixel_data_RGB332 = 0;
 		end
 	end
+	prevHREF = HREF;
+	prevVSYNC = VSYNC;
 end
 
 	

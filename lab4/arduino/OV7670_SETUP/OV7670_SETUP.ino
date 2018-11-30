@@ -4,11 +4,11 @@
 //read: 
 #define CC7 0x12  //Common Control 7
 #define CC3 0x0C  //Common Control 3
-#define IC 0x11   //Internal Clock
+#define IC   0x11   //Internal Clock
 #define CC15 0x40 //Common Control 15
-#define CC14 0x3E //Common Control 14
+#define CC14 0x3E //Common Control 14 * 
 #define CC17 0x42 //Common Control 17
-#define MVFP 0x1E //MVFP
+#define MVFP 0x14 //MVFP 1E
 
 
 ///////// Main Program //////////////
@@ -16,21 +16,54 @@ void setup() {
   Wire.begin();
   Serial.begin(9600);
   // TODO: READ KEY REGISTERS
-  OV7670_write_register(CC7, 0x80);//setting to 1 resets all registers
+  //OV7670_write_register(CC7, 0x80);//setting to 1 resets all registers
   read_key_registers();
 
   delay(100);
   
   // TODO: WRITE KEY REGISTERS
   write_key_registers();
+
   set_color_matrix();
   read_key_registers();
 
+  pinMode(8, INPUT);
+  pinMode(9, INPUT);
+  pinMode(10, INPUT);
 }
 
-void loop(){
+int MSB = 0;
+int LSB = 0;
+int B = 0;
 
- }
+void loop(){
+  MSB = digitalRead(8);
+  B = digitalRead(9);
+  LSB = digitalRead(10);
+
+  if(MSB == LOW && B == LOW && LSB == LOW){ //nothing
+    Serial.println("no color");
+  }
+  else if(MSB == LOW && B == LOW && LSB == HIGH){
+    Serial.println("BLUE TRIANGLE");
+  }
+  else if(MSB == LOW && B == HIGH && LSB == LOW){
+    Serial.println("BLUE DIAMOND");
+  }
+  else if(MSB == LOW && B == HIGH && LSB == HIGH){
+    Serial.println("BLUE SQUARE");
+  }
+  else if(MSB == HIGH && B == LOW && LSB == LOW){
+    Serial.println("RED TRIANGLE");
+  }
+  else if(MSB == HIGH && B == LOW && LSB == HIGH){
+    Serial.println("RED DIAMOND");
+  }
+  else if(MSB == HIGH && B == HIGH && LSB == LOW){
+    Serial.println("RED SQUARE");
+  }
+  Serial.println( "loop" );
+}
 
 
 ///////// Function Definition //////////////
@@ -90,16 +123,19 @@ String OV7670_write_register(int reg_address, byte data){
   return OV7670_write(reg_address, &data, 1);
  }
 
+
+
+
 String write_key_registers(){
   OV7670_write_register(CC7, 0x80);   //setting to 1 resets all registers
   delay(100);
-  OV7670_write_register(CC3, 0x08);   //setting to 1 enables scale control
-  OV7670_write_register(IC, 0xC0);    //IC selection
-  OV7670_write_register(MVFP, 0x30);  //Vertical & mirror flip
-  OV7670_write_register(CC7, 0x0C);   //Color & RGB bar selection
-  OV7670_write_register(CC15, 0xD0);  //Color Pixel
-  //OV7670_write_register(CC17, 0x00);//Color Bar IF DOESN'T WORK TRY 0C
 
+  OV7670_write_register(IC, 0xC0);    //IC selection
+  OV7670_write_register(CC3, 0x08);  //Vertical & mirror flip
+  OV7670_write_register(CC7, 0x0C);   //Color & RGB bar selection 0E
+  OV7670_write_register(CC15, 0xD0);  //Color Pixel
+  OV7670_write_register(CC17, 0x00);//Color Bar 08
+  OV7670_write_register(MVFP, 0x0B);
  }
 
 void set_color_matrix(){
