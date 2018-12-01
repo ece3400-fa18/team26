@@ -53,8 +53,27 @@
             
   
               <h3> Maze Algorithm </h3>
-              <p><br>
+              <p>We created a Matlab simulation of the robot traversing the maze. Each intersection is mapped as a xy coordinate with the first intersection denoted as (1,1). Since stacks can not be searched, we opted to use an array with a pointer. The search order was N,E,S,W. The pseudocode for the maze traversal displayed in the simulation is as follows:</p><br>
               <br>
+              <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">if</span>( next_pos <span style="color: #000000; font-weight: bold">is</span> new <span style="color: #333333">&amp;&amp;</span> next_pos <span style="color: #000000; font-weight: bold">not</span> blocked by wall){
+    advance to next_pos
+    update path <span style="color: #000000; font-weight: bold">and</span> cur_pos
+    flag <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">0</span>
+}
+<span style="color: #008800; font-weight: bold">else</span> <span style="color: #008800; font-weight: bold">if</span>(next_pos <span style="color: #000000; font-weight: bold">is</span> old <span style="color: #333333">||</span> blocked by wall){
+    change direction 
+    <span style="color: #333333">//</span>(<span style="color: #008800; font-weight: bold">if</span> current <span style="color: #007020">dir</span> N <span style="color: #333333">=&gt;</span> E, <span style="color: #008800; font-weight: bold">if</span> E <span style="color: #333333">=&gt;</span>S, etc<span style="color: #333333">.</span>)
+    flag <span style="color: #333333">=</span> flag <span style="color: #333333">+</span><span style="color: #0000DD; font-weight: bold">1</span> <span style="color: #333333">//</span> flag <span style="color: #000000; font-weight: bold">is</span> how many times direction changed
+    <span style="color: #008800; font-weight: bold">if</span>(flag <span style="color: #333333">==</span> <span style="color: #0000DD; font-weight: bold">4</span>) <span style="color: #333333">//</span><span style="color: #007020">all</span> options are either blocked <span style="color: #000000; font-weight: bold">or</span> old
+<span style="color: #008800; font-weight: bold">from</span> <span style="color: #0e84b5; font-weight: bold">non</span> <span style="color: #0e84b5; font-weight: bold">blocked</span> <span style="color: #0e84b5; font-weight: bold">options</span>, choose oldest, so robot will spend less 
+<span style="color: #000000; font-weight: bold">in</span> returning to position where it goes to a new square 
+        end
+}
+</pre></div>
+
+              <p> To get a better understanding of the robot’s mapping capabilities, we mapped what the robot would ‘see’ if it had only a front wall sensor vs if it had three wall sensors (front, left and right). We found that it is necessary that the robot have three sensors in order to properly map the maze. </p>
+              
+              <p> A updated and more efficient maze traversal algorithm is currently in progress, and will be continually optimized until the competition. The key difference between the two algorithms is how the robot reacts when all the neighboring points are either blocked by walls or have already been traversed. The new algorithm has a frontier array with a pointer (curfront); when the robot is in the situation described above, it traverses back until is able to reach the latest point in the frontier and advances accordingly from there.</p>
               
               <iframe width="560" height="315" src="https://www.youtube.com/embed/vkiufB1gQF8" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
@@ -62,6 +81,73 @@
               <h3> Radio Communication/GUI </h3>
               <p>Originally, we had been powering the radios with a power source in order to keep the voltage at 3.3V. Since the robot needs to be able to move around, we added a voltage regulator. This allows only 3.3V to be sent to the radio from the arduino, so the radio is able to function and the robot is no longer tethered to the power source.<br>
               The maze information is sent to the base station in a message that describes the data at each square. The main thing that is displayed on the GUI are the walls at each node. When the front and left wall sensors see a wall, they will update the corresponding bits to show that. We send the data to the base station in the following function: </p>
+              <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">void sendMessage(unsigned <span style="color: #007020">long</span> message[<span style="color: #0000DD; font-weight: bold">3</span>]){
+  <span style="color: #333333">//</span> Ping out role<span style="color: #333333">.</span>  
+  <span style="color: #008800; font-weight: bold">if</span> (role <span style="color: #333333">==</span> role_ping_out)
+  {
+    radio<span style="color: #333333">.</span>stopListening();
+    printf(<span style="background-color: #fff0f0">&quot;now sending </span><span style="background-color: #eeeeee">%lu</span><span style="background-color: #fff0f0">...&quot;</span>,message);
+    <span style="color: #007020">bool</span> ok <span style="color: #333333">=</span> radio<span style="color: #333333">.</span>write(<span style="color: #333333">&amp;</span>message, sizeof(unsigned <span style="color: #007020">long</span>)<span style="color: #333333">*</span><span style="color: #0000DD; font-weight: bold">3</span>);
+    <span style="color: #008800; font-weight: bold">if</span> (ok)
+      printf(<span style="background-color: #fff0f0">&quot;ok...&quot;</span>);
+    <span style="color: #008800; font-weight: bold">else</span>
+      printf(<span style="background-color: #fff0f0">&quot;failed.</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\n\r</span><span style="background-color: #fff0f0">&quot;</span>);
+    radio<span style="color: #333333">.</span>startListening();
+
+    <span style="color: #333333">//</span> Wait here until we get a response, <span style="color: #000000; font-weight: bold">or</span> timeout (<span style="color: #0000DD; font-weight: bold">250</span>ms)
+    unsigned <span style="color: #007020">long</span> started_waiting_at <span style="color: #333333">=</span> millis();
+    <span style="color: #007020">bool</span> timeout <span style="color: #333333">=</span> false;
+    <span style="color: #008800; font-weight: bold">while</span> ( <span style="color: #FF0000; background-color: #FFAAAA">!</span> radio<span style="color: #333333">.</span>available() <span style="color: #333333">&amp;&amp;</span> <span style="color: #FF0000; background-color: #FFAAAA">!</span> timeout )
+      <span style="color: #008800; font-weight: bold">if</span> (millis() <span style="color: #333333">-</span> started_waiting_at <span style="color: #333333">&gt;</span> <span style="color: #0000DD; font-weight: bold">200</span> )
+        timeout <span style="color: #333333">=</span> true;
+
+    <span style="color: #333333">//</span> Describe the results
+    <span style="color: #008800; font-weight: bold">if</span> ( timeout )
+      printf(<span style="background-color: #fff0f0">&quot;Failed, response timed out.</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\n\r</span><span style="background-color: #fff0f0">&quot;</span>);
+    <span style="color: #008800; font-weight: bold">else</span>
+    {
+      <span style="color: #333333">//</span> Grab the response, compare, <span style="color: #000000; font-weight: bold">and</span> send to debugging spew
+      unsigned <span style="color: #007020">long</span> got_message[<span style="color: #0000DD; font-weight: bold">3</span>];
+      radio<span style="color: #333333">.</span>read( <span style="color: #333333">&amp;</span>got_message, sizeof(unsigned <span style="color: #007020">long</span>)<span style="color: #333333">*</span><span style="color: #0000DD; font-weight: bold">3</span>);
+      <span style="color: #333333">//</span> Spew it
+      printf(<span style="background-color: #fff0f0">&quot;Got response </span><span style="background-color: #eeeeee">%lu</span><span style="background-color: #fff0f0">, round-trip delay: </span><span style="background-color: #eeeeee">%lu</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\n\r</span><span style="background-color: #fff0f0">&quot;</span>,got_message,millis());
+    }
+    <span style="color: #333333">//</span> Try again <span style="color: #0000DD; font-weight: bold">1</span>s later
+    delay(<span style="color: #0000DD; font-weight: bold">1000</span>);
+  }
+
+
+  <span style="color: #333333">//</span> Pong back role<span style="color: #333333">.</span>  Receive each packet, dump it out, <span style="color: #000000; font-weight: bold">and</span> send it back
+  <span style="color: #008800; font-weight: bold">if</span> ( role <span style="color: #333333">==</span> role_pong_back )
+  {
+    <span style="color: #333333">//</span> <span style="color: #008800; font-weight: bold">if</span> there <span style="color: #000000; font-weight: bold">is</span> data ready
+    <span style="color: #008800; font-weight: bold">if</span> ( radio<span style="color: #333333">.</span>available() )
+    {
+      <span style="color: #333333">//</span> Dump the payloads until we<span style="background-color: #fff0f0">&#39;ve gotten everything</span>
+      unsigned <span style="color: #007020">long</span> got_message[<span style="color: #0000DD; font-weight: bold">3</span>];
+      <span style="color: #007020">bool</span> done <span style="color: #333333">=</span> false;
+      <span style="color: #008800; font-weight: bold">while</span> (<span style="color: #FF0000; background-color: #FFAAAA">!</span>done)
+      {
+        <span style="color: #333333">//</span> Fetch the payload, <span style="color: #000000; font-weight: bold">and</span> see <span style="color: #008800; font-weight: bold">if</span> this was the last one<span style="color: #333333">.</span>
+        done <span style="color: #333333">=</span> radio<span style="color: #333333">.</span>read( <span style="color: #333333">&amp;</span>got_message, sizeof(unsigned <span style="color: #007020">long</span>)<span style="color: #333333">*</span><span style="color: #0000DD; font-weight: bold">3</span> );
+        <span style="color: #333333">//</span> Spew it <span style="color: #000000; font-weight: bold">and</span> decryption to GUI
+        printf(<span style="background-color: #fff0f0">&quot;Got payload </span><span style="background-color: #eeeeee">%lu</span><span style="background-color: #fff0f0">...&quot;</span>,got_message);
+        <span style="color: #333333">//</span>decrypt(got_message);
+        <span style="color: #333333">//</span> Delay just a little bit to let the other unit
+        <span style="color: #333333">//</span> make the transition to receiver
+        delay(<span style="color: #0000DD; font-weight: bold">20</span>);
+
+      }
+
+      radio<span style="color: #333333">.</span>stopListening();
+      <span style="color: #333333">//</span> Send the final one back<span style="color: #333333">.</span>
+      radio<span style="color: #333333">.</span>write( <span style="color: #333333">&amp;</span>got_message, sizeof(unsigned <span style="color: #007020">long</span>)<span style="color: #333333">*</span><span style="color: #0000DD; font-weight: bold">3</span> );
+      printf(<span style="background-color: #fff0f0">&quot;Sent response.</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\n\r</span><span style="background-color: #fff0f0">&quot;</span>);
+      radio<span style="color: #333333">.</span>startListening();
+    }
+  }
+</pre></div>
+
               
 <br>
               <p> Then, the actual traversal of the maze is shown in the video below: </p>
