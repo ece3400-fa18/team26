@@ -63,7 +63,7 @@
 
               <h3> Shape Detection </h3>
               <p>
-                The shape detection result is produced once the image processor detects there is either red or blue color detected in the frame. The algorithm is fairly strighrforward. We get three rows of data from each frame: top, middle, bottom, each row is 10 vertical pixel apart. Using the middle row as reference, we compare the size of the top and bottom row relative to the middle row. If they are approximately the same width, then there is a square. If top is less than middle and bottom is greater than middle, then there is a triangle. If both top and bottom are less than middle, then there is a diamond. This additional piece of code is integrated into image processor.
+                The shape detection result is produced once the image processor detects there is either red or blue color detected in the frame. The algorithm is fairly strightforward. We get three rows of data from each frame: top, middle, bottom, each row is 10 vertical pixel apart. Using the middle row as reference, we compare the size of the top and bottom row relative to the middle row. If they are approximately the same width, then there is a square. If top is less than middle and bottom is greater than middle, then there is a triangle. If both top and bottom are less than middle, then there is a diamond. This additional piece of code is integrated into image processor.
               </p>
 
               <h3> Result </h3>
