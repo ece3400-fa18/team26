@@ -50,14 +50,19 @@
               <h2 class="text-uppercase text-left">Milestone 3: Maze Exploration</h2>
               <p class="item-intro text-muted"> The goal of this lab is to make the robot capable of maze exploration using DFS, BFS, Dijkstra, or A* (show that your robot can do different maze configurations, with at least one of them to be a minimum size of 4x5). In addition, the robot is also able to update the GUI.</p>  
 
-              <img class="img-fluid d-block mx-auto" width="600" height="100" src="./img/ms1/robot_side.jpg" alt="">
-              
+            
   
-              <h3> Maze Traversal </h3>
-              <p>There are four line sensors attached to the front of the robot. Two line sensors are in the middle and two line sensors are on the outer side. For this part, we only need the middle ones for controlling the robot. The middle line sensors are on top of a white tape for following the straight line and making corrections. If either of them detects a value above the white tape threshold value, it means that the the robot is leaning towards one side. In this situation, the robot will make a slight correction by slowing one of the servo by how much the robot is out of bound. The magnitude of how much the robot is out of bound is determined by the difference between the right middle sensor and the left middle sensor.<br>
+              <h3> Maze Algorithm </h3>
+              <p><br>
               <br>
-
               
+              <iframe width="560" height="315" src="https://www.youtube.com/embed/vkiufB1gQF8" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+              <h3> Maze Traversal </h3>
+              <p>Originally, we had been powering the radios with a power source in order to keep the voltage at 3.3V. Since the robot needs to be able to move around, we added a voltage regulator. This allows only 3.3V to be sent to the radio from the arduino, so the radio is able to function and the robot is no longer tethered to the power source.
+              The maze information is sent to the base station in a message that describes the data at each square. The main thing that is displayed on the GUI are the walls at each node. When the front and left wall sensors see a wall, they will update the corresponding bits to show that. We send the data to the base station in the following function: </p>
+<br>
+              <br>
         
 
 
