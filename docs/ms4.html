@@ -52,22 +52,28 @@
 
               <img class="img-fluid d-block mx-auto" width="600" height="100" src="./img/ms1/robot_side.jpg" alt="">
 
-              <div style="position:relative;height:0;padding-bottom:75.0%"><iframe src="./img/ms4/triangle.MOV" width="400" height="300" frameborder="0" allow="autoplay; encrypted-media" style="position:absolute;width:100%;height:100%;left:0" allowfullscreen></iframe></div>
-
-              <div style="position:relative;height:0;padding-bottom:75.0%"><iframe src="./img/ms4/square.MOV" width="400" height="300" frameborder="0" allow="autoplay; encrypted-media" style="position:absolute;width:100%;height:100%;left:0" allowfullscreen></iframe></div>
-              
               <h3> Color Detection </h3>
               <p> 
-
+                To image is discolored. We were not able to get the color bar to be in the correct order. The blue color is turning into black and the red color is turning into blue, as shown in the image below
               </p>
+
+              <img class="img-fluid d-block mx-auto" width="600" height="100" src="./img/ms1/robot_side.jpg" alt="">
+
+              <p>As a result, we simply switch the color detected to be black and blue instead of blue and red. This is more or less hacking the solution. However, since the Arduino only needs to know whether there is treasure, there is no need to change the color in order for the arduino to get the correct result. The color detected is then indicated by the setting the MSB in a three-bit-result register. This result is send back to the Arudino to digital pin 5, 6, 7.</p>
 
               <h3> Shape Detection </h3>
               <p>
-                
+                The shape detection result is produced once the image processor detects there is either red or blue color detected in the frame. The algorithm is fairly strighrforward. We get three rows of data from each frame: top, middle, bottom, each row is 10 vertical pixel apart. Using the middle row as reference, we compare the size of the top and bottom row relative to the middle row. If they are approximately the same width, then there is a square. If top is less than middle and bottom is greater than middle, then there is a triangle. If both top and bottom are less than middle, then there is a diamond. This additional piece of code is integrated into image processor.
               </p>
 
+              <h3> Result </h3>
+              <p>
+                The end result is as shown in the following videos. THe first one is detecting a red triangle and the second one is detecing a blue square.
+              </p>
 
+              <div style="position:relative;height:0;padding-bottom:75.0%"><iframe src="https://drive.google.com/file/d/1HDEjebJwOLgqRoXui5944lbO7V9-HX1Z/view?usp=sharing" width="400" height="300" frameborder="0" allow="autoplay; encrypted-media" style="position:absolute;width:100%;height:100%;left:0" allowfullscreen></iframe></div>
 
+              <div style="position:relative;height:0;padding-bottom:75.0%"><iframe src="https://drive.google.com/file/d/154JWC2EfcLuGw0Gm2mQNSnIXYrj70p9S/view?usp=sharing" width="400" height="300" frameborder="0" allow="autoplay; encrypted-media" style="position:absolute;width:100%;height:100%;left:0" allowfullscreen></iframe></div>
                         
               
               <h3> Work Distribution </h3>
