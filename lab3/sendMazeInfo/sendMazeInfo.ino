@@ -129,7 +129,7 @@ void loop(void)
     //sending hard-coded message
     unsigned long message[3] = {0,0,10000000};
     printf("now sending %lu...",message);
-    bool ok = radio.write(&message, sizeof(unsigned long)*3);
+    bool ok = radio.write(&message, sizeof(message));
 
     if (ok)
       printf("ok...");
@@ -155,7 +155,7 @@ void loop(void)
     {
       // Grab the response, compare, and send to debugging spew
       unsigned long got_message[3];
-      radio.read( &got_message, sizeof(unsigned long)*3);
+      radio.read( &got_message, sizeof(got_message));
 
       // Spew it
       printf("Got response %lu, round-trip delay: %lu\n\r",got_message,millis());
@@ -180,7 +180,7 @@ void loop(void)
       while (!done)
       {
         // Fetch the payload, and see if this was the last one.
-        done = radio.read( &got_message, sizeof(unsigned long)*3 );
+        done = radio.read( &got_message, sizeof(got_message));
 
         // Spew it and decryption to GUI
         printf("Got payload %lu...",got_message);
@@ -196,7 +196,7 @@ void loop(void)
       radio.stopListening();
 
       // Send the final one back.
-      radio.write( &got_message, sizeof(unsigned long)*3 );
+      radio.write( &got_message, sizeof(got_message));
       printf("Sent response.\n\r");
 
       // Now, resume listening so we catch the next packets.
