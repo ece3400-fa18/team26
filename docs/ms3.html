@@ -150,39 +150,40 @@
 
               
 <br>
-              <p> Then, the actual traversal of the maze is shown in the video below: </p>
-              <iframe width="560" height="315" src="https://www.youtube.com/embed/JNo0f9WABNs" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+              <p> Then, the actual traversal of the maze, along with GUI updates, is shown in the video below: </p>
+              <iframe width="560" height="315" src="https://www.youtube.com/embed/h3LwFu3tdN0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
               
-              <p> Unfortunately at the last minute, the GUI was not able to run. However, we were still able to test the communication between the two radios, package the data, and decrypt the array of data into the following print statements as expected. A more in depth explanation is in Lab 3. </p>
-              <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">  Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;reset&quot;</span>);
+              <p> This clip tests the full functionality of the communication between the two radios, the packaging of the data, and decryption the array of data into the following print statements as expected (NOTE: not all print statements shown for the sake of condesing code length). A more in depth explanation is in Lab 3. </p>
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">  Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;reset&quot;</span>);
   delay(<span style="color: #0000DD; font-weight: bold">1000</span>);
   Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;0,0,west=false&quot;</span>);
   delay(<span style="color: #0000DD; font-weight: bold">1000</span>);
-  Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;1,1,west=true&quot;</span>);
+  Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;1,0,south=true,west=true&quot;</span>);
   delay(<span style="color: #0000DD; font-weight: bold">1000</span>);
-  Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;0,0,west=true,south=true&quot;</span>);
+  Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;0,0,west=true,north=true&quot;</span>);
   delay(<span style="color: #0000DD; font-weight: bold">1000</span>);
-  Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;1,0,north=true,west=true&quot;</span>);
+  Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;0,1,north=true,east=true&quot;</span>);
   delay(<span style="color: #0000DD; font-weight: bold">1000</span>);
   Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;1,1,west=false&quot;</span>);
   delay(<span style="color: #0000DD; font-weight: bold">1000</span>);
-  Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;1,2,west=true,north=true&quot;</span>);
+  Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;2,1,west=false&quot;</span>);  
   delay(<span style="color: #0000DD; font-weight: bold">1000</span>);
-  Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;1,3,east=true,west=true&quot;</span>);
+  Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;3,1,south=true&quot;</span>);  
   delay(<span style="color: #0000DD; font-weight: bold">1000</span>);
-  Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;0,3,east=true,south=true&quot;</span>);
+  Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;3,0,west=true,south=true&quot;</span>);  
   delay(<span style="color: #0000DD; font-weight: bold">1000</span>);
-  Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;0,2,south=true,west=true,north=true&quot;</span>);
+  Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;2,0,north=true,west=true,east=true&quot;</span>);  
   delay(<span style="color: #0000DD; font-weight: bold">1000</span>);
-  Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;0,3,east=true,south=true&quot;</span>);  
+  Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;3,0,west=true,south=true&quot;</span>);  
   delay(<span style="color: #0000DD; font-weight: bold">1000</span>);
-  Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;1,3,east=true,east=true&quot;</span>);
+  Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;3,1,south=true&quot;</span>);  
   delay(<span style="color: #0000DD; font-weight: bold">1000</span>);
-  Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;2,3,north=true,east=true&quot;</span>);
+  Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;3,2,east=true,south=true&quot;</span>);  
+  delay(<span style="color: #0000DD; font-weight: bold">1000</span>);
+  Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;3,1,south=true&quot;</span>);  
 </pre></div>
 
-              <br>
-        
+              <br>    
 
 
               
