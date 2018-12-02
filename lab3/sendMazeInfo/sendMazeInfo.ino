@@ -175,15 +175,23 @@ void loop(void)
     if ( radio.available() )
     {
       // Dump the payloads until we've gotten everything
-      unsigned long got_message[3];
+      unsigned char got_message[3];
       bool done = false;
       while (!done)
       {
         // Fetch the payload, and see if this was the last one.
         done = radio.read( &got_message, sizeof(got_message));
 
+        unsigned char rx = got_message[0];
+        unsigned char ry = got_message[1];
+        unsigned char rd = got_message[2];
         // Spew it and decryption to GUI
-        printf("Got payload %lu...",got_message);
+//        printf(rx);
+        printf("Got payload ...");
+        Serial.println(rx);
+        Serial.println(ry);
+        Serial.println(rd);
+        
         //decrypt(got_message);
 
         // Delay just a little bit to let the other unit
