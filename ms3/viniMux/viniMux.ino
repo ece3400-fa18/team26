@@ -1,3 +1,4 @@
+//http://www.ti.com/lit/ds/symlink/cd74hc4053.pdf
 const byte sensor = A2;  // where the multiplexer in/out port is connected
 int val = 0; 
 int i = 0; 
