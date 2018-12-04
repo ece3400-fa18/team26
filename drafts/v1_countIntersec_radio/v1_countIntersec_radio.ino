@@ -14,9 +14,14 @@ port at 115.2kb.
 
 #include <Servo.h>
 #include <FFT.h>
+#include <SPI.h>
+#include "nRF24L01.h"
+#include "RF24.h"
+#include "printf.h"
 
 Servo left_servo;
 Servo right_servo;
+RF24 radio(9,10);
 
 /***********************************************************************
  *        Variable Declarations 
@@ -63,8 +68,6 @@ const int micThresh = 135;
 bool interflag = 0;
 bool updateFlag = 1;
 bool errorflag = 0;
-
-//
 int intersec = 0;
 
 const byte mux = A2;
@@ -72,19 +75,26 @@ const byte mux = A2;
 const byte addressA = 2; // low-order bit S0
 const byte addressB = 3; // S1
 const byte addressC = 4; // high-order bit S2
+
+
+// Radio pipe addresses for the 2 nodes to communicate.
+const uint64_t pipes[2] = { 0x0000000070LL, 0x0000000071LL };
+typedef enum { role_ping_out = 1, role_pong_back } role_e;
+const char* role_friendly_name[] = { "invalid", "Ping out", "Pong back"};
+role_e role = role_pong_back;
+
+
 /***********************************************************************
  *        Subroutines/Helper Functions
  ***********************************************************************/
 
-int readSensor (const byte which)
-  {
+int readSensor (const byte which){
   // select correct MUX channel
   digitalWrite (addressA, (which & 1) ? HIGH : LOW);  // low-order bit
   digitalWrite (addressB, (which & 2) ? HIGH : LOW);
   digitalWrite (addressC, (which & 4) ? HIGH : LOW);  // high-order bit
-  // now read the sensor
   return analogRead (mux);
-  }  // end of readSensor
+} 
  
 void servos_stop(){
   Serial.println("stop");
@@ -189,10 +199,8 @@ void detectAudio(){
     fft_run(); // process the data in the fft
     fft_mag_log(); // take the output of the fft
     sei();
-    //Serial.println(fft_log_out[micBinNum]);
    if (fft_log_out[micBinNum] > micThresh){
     Serial.println("SOUND");
-    //Serial.println(fft_log_out[micBinNum]);
     break;
    } 
   }
@@ -202,14 +210,113 @@ void detectAudio(){
   DIDR0 = prevDIDR0;
 }
 
+int convert(char *s) {
+  int result = 0;
+  while(*s) {
+    result <<= 1;
+    if(*s++ == '1') result |= 1;
+  }
+  return result;
+}
+
+
+void radioSetup(void){
+  printf_begin();
+  printf("\n\rRF24/examples/GettingStarted/\n\r");
+  printf("ROLE: %s\n\r",role_friendly_name[role]);
+  printf("*** PRESS 'T' to begin transmitting to the other node\n\r");
+  radio.begin();
+
+  // optionally, increase the delay between retries & # of retries
+  radio.setRetries(15,15);
+  radio.setAutoAck(true);
+  radio.setChannel(0x50);
+  radio.setPALevel(RF24_PA_MIN);
+  radio.setDataRate(RF24_250KBPS);
+
+  if ( role == role_ping_out )
+  {
+    radio.openWritingPipe(pipes[0]);
+    radio.openReadingPipe(1,pipes[1]);
+  }
+  else
+  {
+    radio.openWritingPipe(pipes[1]);
+    radio.openReadingPipe(1,pipes[0]);
+  }
+  radio.startListening();
+  radio.printDetails();
+}
+
+
+void transmit(void){
+  role = role_ping_out;
+    
+  // Ping out role
+  if (role == role_ping_out)
+  {
+    radio.stopListening();
+    
+    //sending message
+    char d[129];
+    itoa(10010,d,2);
+    unsigned char message[3] = {0,0,convert(d)};
+    unsigned char tx = message[0];
+    unsigned char ty = message[1];
+    unsigned char td = message[2];
+    Serial.println(tx);
+    Serial.println(ty);
+    Serial.println(td);
+    bool ok = radio.write(&message, sizeof(message));
+
+    if (ok) printf("ok...");
+    else printf("failed.\n\r");
+
+    // Now, continue listening
+    radio.startListening();
+    unsigned long started_waiting_at = millis();
+    bool timeout = false;
+    while ( ! radio.available() && ! timeout )
+      if (millis() - started_waiting_at > 200 )
+        timeout = true;
+
+    // Describe the results
+    if ( timeout )
+      printf("Failed, response timed out.\n\r");
+    else
+    {
+      // Grab the response, compare, and send to debugging spew
+      unsigned long got_message[3];
+      radio.read( &got_message, sizeof(got_message));
+      printf("Got response %lu, round-trip delay: %lu\n\r",got_message,millis());
+    }
+    delay(1000);
+  }
+
+  if ( Serial.available() )
+  {
+    char c = 'T';
+    role = role_pong_back;
+    
+    if ( c == 'T' && role == role_pong_back )
+    {
+      printf("*** CHANGING TO TRANSMIT ROLE -- PRESS 'R' TO SWITCH BACK\n\r");
+      role = role_ping_out;
+      radio.openWritingPipe(pipes[0]);
+      radio.openReadingPipe(1,pipes[1]);
+    }
+  }
+}
+
 
 
 /***********************************************************************
  *        Main Set Up and Loop
  ***********************************************************************/
 void setup() {
-  Serial.begin(9600); // use the serial port
+  Serial.begin(9600);
   detectAudio();
+  radioSetup();
   right_servo.attach(RW);
   left_servo.attach(LW);
   pinMode(right_turn, INPUT);
@@ -227,11 +334,6 @@ void loop() {
     checkIntersection();
     if(interflag && updateFlag && ~errorflag){
       intersec = intersec + 1; 
-      //Serial.println(intersec);
-      //Serial.flush();
-      //turn(right);
-      //Serial.println("turn");
-      //Serial.flush();
       updateFlag = 0;
       if(intersec == 1||intersec == 6 || intersec == 7 || intersec == 8){
         turn(right);

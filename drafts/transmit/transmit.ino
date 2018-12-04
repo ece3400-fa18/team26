@@ -67,18 +67,20 @@ int convert(char *s) {
   }
   return result;
 }
-    
+
+
 void loop(void)
 {
   role = role_ping_out;
-    
   // Ping out role
   if (role == role_ping_out)
   {
     radio.stopListening();
     
-    //sending hard-coded message
-    unsigned char message[3] = {0,0,convert("10000010")};
+    //sending message
+    char d[129];
+    itoa(10010,d,2);
+    unsigned char message[3] = {0,0,convert(d)};
     
     unsigned char tx = message[0];
     unsigned char ty = message[1];
