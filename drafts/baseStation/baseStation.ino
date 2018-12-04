@@ -32,8 +32,6 @@ role_e role = role_pong_back;
 
 void setup(void)
 {
-
-
   Serial.begin(9600);
   printf_begin();
   printf("\n\rRF24/examples/GettingStarted/\n\r");
