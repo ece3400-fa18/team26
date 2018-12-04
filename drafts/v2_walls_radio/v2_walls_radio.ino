@@ -216,83 +216,83 @@ void go_straight(){
 }
 
 
-bool frontdetectWall(){ //if no wall in front of robot, returns true 
-  //sends radio of front wall
-  int distance = readSensor(front_wall_sensor);
-  bool L = leftdetectWall();
-  bool R = rightdetectWall();
-  Serial.println(distance);
-  if (distance > 140){
-    servos_stop();
-    if (R) {
-      turn(right); 
-      if (dir == 1){
-        dir = 3;
-      }
-      else if(dir == 2){
-        dir = 4;
-      }
-      else if(dir == 3){
-        dir = 2; 
-      }
-      else if(dir == 4){
-        dir = 1;
-      }         
-    }
-    else if((L){
-      turn(left);
-      if (dir == 1){
-        dir = 4;
-      }
-      else if(dir == 2){
-        dir = 3;
-      }
-      else if(dir == 3){
-        dir = 1; 
-      }
-      else if(dir == 4){
-        dir = 2;
-      }  
-    }
-    else if((!L && !R)){
-      turn(right);
-      turn(right);
-      if (dir == 1){
-        dir = 2;
-      }
-      else if(dir == 2){
-        dir = 1;
-      }
-      else if(dir == 3){
-        dir = 4; 
-      }
-      else if(dir == 4){
-        dir = 3;
-      }  
-    }
-    
-    return 0;
-  }
-  else{
-    return 1;
-  }
-}
-
 // bool frontdetectWall(){ //if no wall in front of robot, returns true 
 //   //sends radio of front wall
-
 //   int distance = readSensor(front_wall_sensor);
+//   bool L = leftdetectWall();
+//   bool R = rightdetectWall();
 //   Serial.println(distance);
 //   if (distance > 140){
 //     servos_stop();
-//     if (leftdetectWall()) {
-//       turn(right);
-//       return 0;
+//     if (R) {
+//       turn(right); 
+//       if (dir == 1){
+//         dir = 3;
+//       }
+//       else if(dir == 2){
+//         dir = 4;
+//       }
+//       else if(dir == 3){
+//         dir = 2; 
+//       }
+//       else if(dir == 4){
+//         dir = 1;
+//       }         
 //     }
+//     else if((L){
+//       turn(left);
+//       if (dir == 1){
+//         dir = 4;
+//       }
+//       else if(dir == 2){
+//         dir = 3;
+//       }
+//       else if(dir == 3){
+//         dir = 1; 
+//       }
+//       else if(dir == 4){
+//         dir = 2;
+//       }  
+//     }
+//     else if((!L && !R)){
+//       turn(right);
+//       turn(right);
+//       if (dir == 1){
+//         dir = 2;
+//       }
+//       else if(dir == 2){
+//         dir = 1;
+//       }
+//       else if(dir == 3){
+//         dir = 4; 
+//       }
+//       else if(dir == 4){
+//         dir = 3;
+//       }  
+//     }
+    
+//     return 0;
 //   }
-//   else
+//   else{
 //     return 1;
+//   }
 // }
+
+bool frontdetectWall(){ //if no wall in front of robot, returns true 
+  //sends radio of front wall
+
+  int distance = readSensor(front_wall_sensor);
+  Serial.println(distance);
+  if (distance > 140){
+    servos_stop();
+    if (leftdetectWall()) {
+      turn(right);
+      return 0;
+    }
+  }
+  else
+    return 1;
+}
 
 bool leftdetectWall(){ //if no wall in front of robot, returns true 
   //sends radio of walls on left side
