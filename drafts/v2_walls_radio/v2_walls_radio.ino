@@ -2,10 +2,15 @@
 #define FFT_N 256 // set to 256 point fft
 
 #include <Servo.h>
-#include <FFT.h>
+//#include <FFT.h>
+#include <SPI.h>
+#include "nRF24L01.h"
+#include "RF24.h"
+#include "printf.h"
 
 Servo left_servo;
 Servo right_servo;
+RF24 radio(9,10);
 
 /***********************************************************************
  *        Variable Declarations 
@@ -63,11 +68,15 @@ const int micThresh = 135;
 bool interflag = 0;
 bool updateFlag = 1;
 bool errorflag = 0;
-
-//go to intersection
 bool reached = 0;
 
-//DSF values
+// Radio pipe addresses for the 2 nodes to communicate.
+const uint64_t pipes[2] = { 0x0000000070LL, 0x0000000071LL };
+typedef enum { role_ping_out = 1, role_pong_back } role_e;
+const char* role_friendly_name[] = { "invalid", "Ping out", "Pong back"};
+role_e role = role_pong_back;
+
+//DFS values
 int flag = 0; //corresponds to how many directions did not lead to a new position, used to decide direction
 int dir = 1; //pointer to direction || N = 1, E = 3, S = 2, W = 4
 /*
@@ -209,25 +218,19 @@ void go_straight(){
 bool frontdetectWall(){ //if no wall in front of robot, returns true 
   //sends radio of front wall
   int distance = readSensor(front_wall_sensor);
-  if (distance > 180){
-    //servos_stop();
+  if (distance > 180)
     return 0;
-  }
-  else{
+  else
     return 1;
-  }
 }
 
 bool leftdetectWall(){ //if no wall in front of robot, returns true 
   //sends radio of walls on left side
   int distance = readSensor(left_wall_sensor);
-  if (distance > 190) {
-      //servos_stop();
+  if (distance > 190)
       return 0;
-    }
-    else{
+  else
       return 1;
-    }
 }
 
 bool rightdetectWall(){ //if no wall in front of robot, returns true 
@@ -243,52 +246,150 @@ bool rightdetectWall(){ //if no wall in front of robot, returns true
 }
 
 void detectAudio(){
-  byte prevTIMSK0 = TIMSK0;
-  byte prevADCSRA = ADCSRA;
-  byte prevADMUX = ADMUX;
-  byte prevDIDR0 = DIDR0;
-
-  TIMSK0 = 0; // turn off timer0 for lower jitter
-  ADCSRA = 0xe5; // set the adc to free running mode
-  ADMUX = 0x40; // use adc0
-  DIDR0 = 0x01; // turn off the digital input for adc0
+//  byte prevTIMSK0 = TIMSK0;
+//  byte prevADCSRA = ADCSRA;
+//  byte prevADMUX = ADMUX;
+//  byte prevDIDR0 = DIDR0;
+//
+//  TIMSK0 = 0; // turn off timer0 for lower jitter
+//  ADCSRA = 0xe5; // set the adc to free running mode
+//  ADMUX = 0x40; // use adc0
+//  DIDR0 = 0x01; // turn off the digital input for adc0
   while(1){
-    for (int i = 0 ; i < 512 ; i += 2) { // save 256 samples
-      while (!(ADCSRA & 0x10)); // wait for adc to be ready
-      ADCSRA = 0xf7; // restart adc
-      byte m = ADCL; // fetch adc data
-      byte j = ADCH;
-      int k = (j << 8) | m; // form into an int
-      k -= 0x0200; // form into a signed int
-      k <<= 6; // form into a 16b signed int
-      fft_input[i] = k; // put real data into even bins
-      fft_input[i + 1] = 0; // set odd bins to 0
-    }
-    fft_window(); // window the data for better frequency response
-    fft_reorder(); // reorder the data before doing the fft
-    fft_run(); // process the data in the fft
-    fft_mag_log(); // take the output of the fft
-    sei();
-    //Serial.println(fft_log_out[micBinNum]);
-   if (fft_log_out[micBinNum] > micThresh){
-    //Serial.println("SOUND");
-    //Serial.println(fft_log_out[micBinNum]);
-    break;
-   }
+//    for (int i = 0 ; i < 512 ; i += 2) { // save 256 samples
+//      while (!(ADCSRA & 0x10)); // wait for adc to be ready
+//      ADCSRA = 0xf7; // restart adc
+//      byte m = ADCL; // fetch adc data
+//      byte j = ADCH;
+//      int k = (j << 8) | m; // form into an int
+//      k -= 0x0200; // form into a signed int
+//      k <<= 6; // form into a 16b signed int
+//      fft_input[i] = k; // put real data into even bins
+//      fft_input[i + 1] = 0; // set odd bins to 0
+//    }
+//    fft_window(); // window the data for better frequency response
+//    fft_reorder(); // reorder the data before doing the fft
+//    fft_run(); // process the data in the fft
+//    fft_mag_log(); // take the output of the fft
+//    sei();
+//    //Serial.println(fft_log_out[micBinNum]);
+//   if (fft_log_out[micBinNum] > micThresh){
+//    //Serial.println("SOUND");
+//    //Serial.println(fft_log_out[micBinNum]);
+//    break;
+//   }
+    Serial.println(digitalRead(pushbutton));
    if (digitalRead(pushbutton) == HIGH){
     break;
    }
   }
-  TIMSK0 = prevTIMSK0;
-  ADCSRA = prevADCSRA;
-  ADMUX = prevADMUX;
-  DIDR0 = prevDIDR0;
+//  TIMSK0 = prevTIMSK0;
+//  ADCSRA = prevADCSRA;
+//  ADMUX = prevADMUX;
+//  DIDR0 = prevDIDR0;
+}
+
+int convert(char *s) {
+  int result = 0;
+  while(*s) {
+    result <<= 1;
+    if(*s++ == '1') result |= 1;
+  }
+  return result;
+}
+
+void radioSetup(void)
+{
+  printf_begin();
+  printf("\n\rRF24/examples/GettingStarted/\n\r");
+  printf("ROLE: %s\n\r",role_friendly_name[role]);
+  printf("*** PRESS 'T' to begin transmitting to the other node\n\r");
+  radio.begin();
+
+  // optionally, increase the delay between retries & # of retries
+  radio.setRetries(15,15);
+  radio.setAutoAck(true);
+  radio.setChannel(0x50);
+  radio.setPALevel(RF24_PA_MIN);
+  radio.setDataRate(RF24_250KBPS);
+
+  if ( role == role_ping_out )
+  {
+    radio.openWritingPipe(pipes[0]);
+    radio.openReadingPipe(1,pipes[1]);
+  }
+  else
+  {
+    radio.openWritingPipe(pipes[1]);
+    radio.openReadingPipe(1,pipes[0]);
+  }
+  radio.startListening();
+  radio.printDetails();
+}
+
+void transmit(int x, int y)
+{
+  role = role_ping_out;
+  // Ping out role
+  if (role == role_ping_out)
+  {
+    radio.stopListening();
+    
+    //sending message
+    char d[129];
+    itoa(10010,d,2);
+    unsigned char message[3] = {x,y,convert(d)};
+    
+    unsigned char tx = message[0];
+    unsigned char ty = message[1];
+    unsigned char td = message[2];
+    Serial.println(tx);
+    Serial.println(ty);
+    Serial.println(td);
+    bool ok = radio.write(&message, sizeof(message));
+
+    if (ok) printf("ok...");
+    else printf("failed.\n\r");
+
+    // Now, continue listening
+    radio.startListening();
+    unsigned long started_waiting_at = millis();
+    bool timeout = false;
+    while ( ! radio.available() && ! timeout )
+      if (millis() - started_waiting_at > 200 )
+        timeout = true;
+
+    // Describe the results
+    if ( timeout )
+      printf("Failed, response timed out.\n\r");
+    else
+    {
+      // Grab the response, compare, and send to debugging spew
+      unsigned long got_message[3];
+      radio.read( &got_message, sizeof(got_message));
+      printf("Got response %lu, round-trip delay: %lu\n\r",got_message,millis());
+    }
+    delay(1000);
+  }
+
+  if ( Serial.available() )
+  {
+    char c = 'T';
+    role = role_pong_back;
+    
+    if ( c == 'T' && role == role_pong_back )
+    {
+      printf("*** CHANGING TO TRANSMIT ROLE -- PRESS 'R' TO SWITCH BACK\n\r");
+      role = role_ping_out;
+      radio.openWritingPipe(pipes[0]);
+      radio.openReadingPipe(1,pipes[1]);
+    }
+  }
 }
 
 
-
 /***********************************************************************
- *       DSF HELPER FUNCTIONS
+ *       DFS HELPER FUNCTIONS
  ***********************************************************************/
 
 int getX(int pos){
@@ -303,21 +404,11 @@ int getY(int pos){
 }
  
 void nextPos(int curpos){
-  if (curpos == 0){
-    newpos = 10;
-  }
-  else if (dir == 1){
-    newpos = curpos +9;
-  }
-  else if(dir == 2){
-    newpos = curpos -9;
-  }
-  else if(dir == 3){
-    newpos = curpos +1;
-  }
-  else if(dir == 4){
-    newpos = curpos -1;
-  }
+  if (curpos == 0) newpos = 10;
+  else if (dir == 1)newpos = curpos +9;
+  else if (dir == 2)newpos = curpos -9;
+  else if (dir == 3)newpos = curpos +1;
+  else if (dir == 4)newpos = curpos -1;
 }
 
 int sidePosL(int curpos){
@@ -363,9 +454,7 @@ bool isNew(int pos, bool IsPath){ //if array is path, put 1, if frontier put 0, 
     }
     else {
       for (int i=0; i<=curpath; i++) {
-        if(path[i] == pos){
-          tf = 0;
-        }
+        if(path[i] == pos) tf = 0;
       }
     }
   }
@@ -418,16 +507,19 @@ void newDir(int pos){ //if all directions lead to old or blocked by wall returns
     //update radio 
     int X = getX(pos);
     int Y = getX(pos);
+    transmit(X,Y);
   }
   if(~R){ // check for IR
     //update radio
     int X = getX(pos);
     int Y = getX(pos);
+    transmit(X,Y);
   }
   if(~L){ // check for IR
     //update radio
     int X = getX(pos);
     int Y = getX(pos);
+    transmit(X,Y);
   }
   int n = pos + 9;
   int s = pos - 9;
@@ -598,18 +690,10 @@ int findOldest(int pos){//returns oldest position from avaible options
   int s = 0; 
   int e = 0; 
   int w = 0; 
-  if (isPossible(pos, 1)){
-    n = pos + 9;
-  }
-  if (isPossible(pos, 2)){
-    s = pos - 9;
-  }
-  if (isPossible(pos, 3)){
-    e = pos +1;
-  }
-  if (isPossible(pos, 4)){
-    w = pos - 1;
-  }
+  if (isPossible(pos, 1)) n = pos + 9;
+  if (isPossible(pos, 2)) s = pos - 9;
+  if (isPossible(pos, 3)) e = pos + 1;
+  if (isPossible(pos, 4)) w = pos - 1;
   int tot[4] = {n,s,e,w};
   for (int i = 0; i <= 3;i++){
     if (tot[i] != 0){
@@ -619,9 +703,8 @@ int findOldest(int pos){//returns oldest position from avaible options
         }
       }
     }
-    else if(tot[i] == 0){
+    else if(tot[i] == 0)
       tot[i] = 100;
-    }
   }
 
   //get minimum value
@@ -740,7 +823,7 @@ void goUntilIntersec(){
 }
 
 
-void moveDSF(){
+void moveDFS(){
   int curpos = path[curpath];//where you currently
   int branch = path[lastBranch];//the point you will traverse to
   int newfront = frontier[curfront];//the new point
@@ -766,8 +849,10 @@ void moveDSF(){
   curpath = numTraversed-1;
   flag = 0;
 }
+
+
 /***********************************************************************
- *       DSF MAIN FUNCTIONS
+ *       DFS MAIN FUNCTIONS
  ***********************************************************************/
 
 void updatePath(){
@@ -829,14 +914,20 @@ void decideNextDir(){
   int curpos = path[curpath];
   newDir(curpos);
   if(flag == -1){
-    moveDSF();
+    moveDFS();
   }
 }
 
+
+/***********************************************************************
+ *       MAIN SETUP AND LOOP
+ ***********************************************************************/
+ 
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600); // use the serial port
   detectAudio();
+  radioSetup();
   right_servo.attach(RW);
   left_servo.attach(LW);
   pinMode(pushbutton, INPUT);
