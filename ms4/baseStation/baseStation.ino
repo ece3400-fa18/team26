@@ -20,41 +20,19 @@
 #include "RF24.h"
 #include "printf.h"
 
-//
-// Hardware configuration
-//
-
-// Set up nRF24L01 radio on SPI bus plus pins 9 & 10
 RF24 radio(9,10);
-
-//
-// Topology
-//
 
 // Radio pipe addresses for the 2 nodes to communicate.
 const uint64_t pipes[2] = { 0x0000000070LL, 0x0000000071LL };
 
-//
-// Role management
-//
-// Set up role.  This sketch uses the same software for all the nodes
-// in this system.  Doing so greatly simplifies testing.
-//
-
 // The various roles supported by this sketch
 typedef enum { role_ping_out = 1, role_pong_back } role_e;
-
-// The debug-friendly names of those roles
 const char* role_friendly_name[] = { "invalid", "Ping out", "Pong back"};
-
-// The role of the current running sketch
 role_e role = role_pong_back;
 
 void setup(void)
 {
-  //
-  // Print preamble
-  //
+
 
   Serial.begin(9600);
   printf_begin();
@@ -62,35 +40,19 @@ void setup(void)
   printf("ROLE: %s\n\r",role_friendly_name[role]);
   printf("*** PRESS 'T' to begin transmitting to the other node\n\r");
 
-  //
-  // Setup and configure rf radio
-  //
-
   radio.begin();
 
   // optionally, increase the delay between retries & # of retries
   radio.setRetries(15,15);
   radio.setAutoAck(true);
-  // set the channel
   radio.setChannel(0x50);
-  // set the power
   // RF24_PA_MIN=-18dBm, RF24_PA_LOW=-12dBm, RF24_PA_MED=-6dBM, and RF24_PA_HIGH=0dBm.
   radio.setPALevel(RF24_PA_MIN);
   //RF24_250KBPS for 250kbs, RF24_1MBPS for 1Mbps, or RF24_2MBPS for 2Mbps
   radio.setDataRate(RF24_250KBPS);
 
-  // optionally, reduce the payload size.  seems to
-  // improve reliability
+  // optionally, reduce the payload size.  seems to improve reliability
   //radio.setPayloadSize(8);
-
-  //
-  // Open pipes to other nodes for communication
-  //
-
-  // This simple sketch opens two pipes for these two nodes to communicate
-  // back and forth.
-  // Open 'our' pipe for writing
-  // Open the 'other' pipe for reading, in position #1 (we can have up to 5 pipes open for reading)
 
   if ( role == role_ping_out )
   {
@@ -103,16 +65,7 @@ void setup(void)
     radio.openReadingPipe(1,pipes[0]);
   }
 
-  //
-  // Start listening
-  //
-
   radio.startListening();
-
-  //
-  // Dump the configuration of the rf unit for debugging
-  //
-
   radio.printDetails();
 }
 
@@ -243,11 +196,20 @@ void decrypt (unsigned char myMessage[]){
     answer += ",";
     answer += (String) myMessage[1];
 
-    int data = myMessage[2];
+    int data = convert(myMessage[2]);
     if (data % 10) (answer += ",west=true");
     if ((data >> 1) % 10) (answer += ",south=true");
     if ((data >> 2) % 10) (answer += ",east=true");
     if ((data >> 3) % 10) (answer += ",north=true");
 
     Serial.println(answer);
+}
+
+
+int convert(int dec){
+  String myStr;
+  for (int i=0; i<10; i++) 
+    myStr = myStr + "0";
+  myStr = myStr + String(dec,BIN); 
+  return myStr.toInt();
 }
