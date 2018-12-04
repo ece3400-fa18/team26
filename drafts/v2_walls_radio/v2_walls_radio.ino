@@ -44,7 +44,7 @@ float error_magnitude = 0;
 int right_turn_val  = 0;
 int left_turn_val   = 0;
 
-#define front_wall_sensor 2 //if greater than 180
+#define front_wall_sensor 2 //if greater than 140
 #define left_wall_sensor 4 //if greater than 190 
 #define right_wall_sensor 0 // greater than 200
 #define third_line_sensor 6 // threshold if less than 100 is white
@@ -217,9 +217,16 @@ void go_straight(){
 
 bool frontdetectWall(){ //if no wall in front of robot, returns true 
   //sends radio of front wall
+
   int distance = readSensor(front_wall_sensor);
-  if (distance > 180)
-    return 0;
+  Serial.println(distance);
+  if (distance > 140){
+    servos_stop();
+    if (leftdetectWall()) {
+      turn(right);
+      return 0;
+    }
+  }
   else
     return 1;
 }
@@ -278,7 +285,6 @@ void detectAudio(){
 //    //Serial.println(fft_log_out[micBinNum]);
 //    break;
 //   }
-    Serial.println(digitalRead(pushbutton));
    if (digitalRead(pushbutton) == HIGH){
     break;
    }
