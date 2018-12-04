@@ -57,7 +57,7 @@ void setup(void)
   // Print preamble
   //
 
-  Serial.begin(57600);
+  Serial.begin(9600);
   printf_begin();
   printf("\n\rRF24/examples/GettingStarted/\n\r");
   printf("ROLE: %s\n\r",role_friendly_name[role]);
@@ -117,6 +117,15 @@ void setup(void)
   radio.printDetails();
 }
 
+//int readBinaryString(char *s) {
+//  int result = 0;
+//  while(*s) {
+//    result <<= 1;
+//    if(*s++ == '1') result |= 1;
+//  }
+//  return result;
+//}
+    
 void loop(void)
 {
   // Ping out role.  Repeatedly send the current time
@@ -127,8 +136,17 @@ void loop(void)
     radio.stopListening();
     
     //sending hard-coded message
-    unsigned long message[3] = {0,0,10000000};
-    printf("now sending %lu...",message);
+    unsigned char message[3] = {0,0,0b10001000};
+    char binary = message[2];
+    //int td = readBinaryString(binary);
+    
+    //unsigned char message[3] = {0,0,130};
+    unsigned char tx = message[0];
+    unsigned char ty = message[1];
+    unsigned char td = message[2];
+    Serial.println(tx);
+    Serial.println(ty);
+    Serial.println(td);
     bool ok = radio.write(&message, sizeof(message));
 
     if (ok)
