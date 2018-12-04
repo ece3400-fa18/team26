@@ -119,21 +119,13 @@ void find_intersection(){
 //       }
 //       break; //both turn sensors are on white line
       updateLocation(facing);
-
-
-//      Serial.println("...................INTERSECTION.................");
-//      Serial.println(x);
-//      Serial.println(y);
-//      Serial.println("................................................");
     }
 }
 
 void go_straight(){
   find_intersection();
-  //modified from solution code
-  //following straight line
   read_turn();
-  error = left_turn_val - right_turn_val; // Positive position to right of line
+  error = left_turn_val - right_turn_val; 
 
   // Correct robot's driving direction according to position error
   if (abs(error) <= ERROR_RANGE){
@@ -154,7 +146,6 @@ void go_straight(){
     left_servo.write(SERVO_L_FORWARD_MAX - error_magnitude*SERVO_L_INCR_FORWARD);
     right_servo.write(SERVO_R_FORWARD_MAX + error_magnitude*SERVO_R_INCR_FORWARD);
   }
-
   delay(10);
 }
 
@@ -260,10 +251,7 @@ void radioSetUp(){
   printf("ROLE: %s\n\r",role_friendly_name[role]);
   printf("*** PRESS 'T' to begin transmitting to the other node\n\r");
 
-  //
   // Setup and configure rf radio
-  //
-
   radio.begin();
 
   // optionally, increase the delay between retries & # of retries
@@ -277,18 +265,8 @@ void radioSetUp(){
   //RF24_250KBPS for 250kbs, RF24_1MBPS for 1Mbps, or RF24_2MBPS for 2Mbps
   radio.setDataRate(RF24_250KBPS);
 
-  // optionally, reduce the payload size.  seems to
-  // improve reliability
+  // optionally, reduce the payload size.  seems to improve reliability
   //radio.setPayloadSize(8);
-
-  //
-  // Open pipes to other nodes for communication
-  //
-
-  // This simple sketch opens two pipes for these two nodes to communicate
-  // back and forth.
-  // Open 'our' pipe for writing
-  // Open the 'other' pipe for reading, in position #1 (we can have up to 5 pipes open for reading)
 
   if ( role == role_ping_out )
   {
@@ -301,16 +279,7 @@ void radioSetUp(){
     radio.openReadingPipe(1,pipes[0]);
   }
 
-  //
-  // Start listening
-  //
-
   radio.startListening();
-
-  //
-  // Dump the configuration of the rf unit for debugging
-  //
-
   radio.printDetails();
 }
 
