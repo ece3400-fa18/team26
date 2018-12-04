@@ -189,25 +189,24 @@ void loop(void)
 
 void decrypt (unsigned char myMessage[]){
     String answer = "";
-
     answer += (String) myMessage[0];
     answer += ",";
     answer += (String) myMessage[1];
 
-    int data = convert(myMessage[2]);
-    if (data % 10) (answer += ",west=true");
-    if ((data >> 1) % 10) (answer += ",south=true");
-    if ((data >> 2) % 10) (answer += ",east=true");
-    if ((data >> 3) % 10) (answer += ",north=true");
+    String data = convert(myMessage[2]);
+    if (data[17]=='1') (answer += ",west=true");
+    if (data[16]=='1') (answer += ",south=true");
+    if (data[15]=='1') (answer += ",east=true");
+    if (data[14]=='1') (answer += ",north=true");
 
     Serial.println(answer);
 }
 
 
-int convert(int dec){
+String convert(int dec){
   String myStr;
   for (int i=0; i<10; i++) 
     myStr = myStr + "0";
   myStr = myStr + String(dec,BIN); 
-  return myStr.toInt();
+  return myStr;
 }
