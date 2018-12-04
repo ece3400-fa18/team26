@@ -90,33 +90,7 @@ int dir = 1; //pointer to direction || N = 1, E = 3, S = 2, W = 4
  * 10  11  12  13  14  15  16  17  18
  * 1   2   3    4   5   6   7   8   9
 */
-/*path is a 1x81 array of zeros. When a new location is traversed, the corresponding number to that 
- * location replaces the zero. 
- * Example: 5 points have been traversed and no wall encountered, path[81] = {1,10, 19, 28, 37, 0, 0...0}
- * curpath = 4 
- * curpath is the pointer to path (gives the indice that corresponds to the current position, curpos = path[curpath]
- * This was done because dynamic memory allocation is difficult and computationally expensive in Arduino
- * To get the coordinate position for any location, use the following formula:
- * WHERE 1 = (0,0)|| WHERE 1 = (1,1)
- * X = rem(#,9)-1 ||    X = rem(#,9)              
- * Y = floor(#/9) ||    Y = floor(#/9) + 1
- * frontier path is also an array (this was to avoid adding the same value to the frontier multiple times, as stacks can not be searched)
- * curfront is the pointer to the frontier
- * In the above example (assuming that 2, 11, 20, 29, 38 do not contain any walls), the frontier and curfront would be:
- * frontier = {2, 11, 20, 29, 38, 0, 0...0} and curfront = 4
- * numTraversed is the total number of new points traversed by the robot at any given moment, at this point it would be 5
- * 
- * FINDING NEW POSITION
- * for any current position A, to find new position B
- * if (dir == N)
- *     B = A + 9; 
- * else if (dir == S)
- *     B = A - 9;
- * else if (dir == E)
- *     B = A + 1;
- * else if (dir == W)
- *     B = A - 1;
-*/
+
 int path[81] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 int curpath = 0; //pointer to path, gives indice that corresponds to currentlocation in path
 int lastBranch = 0;//pointer to path, gives indice that corresponds to latest frontier
@@ -215,80 +189,13 @@ void go_straight(){
   delay(10);
 }
 
-
-// bool frontdetectWall(){ //if no wall in front of robot, returns true 
-//   //sends radio of front wall
-//   int distance = readSensor(front_wall_sensor);
-//   bool L = leftdetectWall();
-//   bool R = rightdetectWall();
-//   Serial.println(distance);
-//   if (distance > 140){
-//     servos_stop();
-//     if (R) {
-//       turn(right); 
-//       if (dir == 1){
-//         dir = 3;
-//       }
-//       else if(dir == 2){
-//         dir = 4;
-//       }
-//       else if(dir == 3){
-//         dir = 2; 
-//       }
-//       else if(dir == 4){
-//         dir = 1;
-//       }         
-//     }
-//     else if((L){
-//       turn(left);
-//       if (dir == 1){
-//         dir = 4;
-//       }
-//       else if(dir == 2){
-//         dir = 3;
-//       }
-//       else if(dir == 3){
-//         dir = 1; 
-//       }
-//       else if(dir == 4){
-//         dir = 2;
-//       }  
-//     }
-//     else if((!L && !R)){
-//       turn(right);
-//       turn(right);
-//       if (dir == 1){
-//         dir = 2;
-//       }
-//       else if(dir == 2){
-//         dir = 1;
-//       }
-//       else if(dir == 3){
-//         dir = 4; 
-//       }
-//       else if(dir == 4){
-//         dir = 3;
-//       }  
-//     }
-    
-//     return 0;
-//   }
-//   else{
-//     return 1;
-//   }
-// }
-
 bool frontdetectWall(){ //if no wall in front of robot, returns true 
   //sends radio of front wall
-
   int distance = readSensor(front_wall_sensor);
   Serial.println(distance);
   if (distance > 140){
     servos_stop();
-    if (leftdetectWall()) {
-      turn(right);
-      return 0;
-    }
+    return 0;
   }
   else
     return 1;
@@ -316,46 +223,12 @@ bool rightdetectWall(){ //if no wall in front of robot, returns true
 }
 
 void detectAudio(){
-//  byte prevTIMSK0 = TIMSK0;
-//  byte prevADCSRA = ADCSRA;
-//  byte prevADMUX = ADMUX;
-//  byte prevDIDR0 = DIDR0;
-//
-//  TIMSK0 = 0; // turn off timer0 for lower jitter
-//  ADCSRA = 0xe5; // set the adc to free running mode
-//  ADMUX = 0x40; // use adc0
-//  DIDR0 = 0x01; // turn off the digital input for adc0
   while(1){
-//    for (int i = 0 ; i < 512 ; i += 2) { // save 256 samples
-//      while (!(ADCSRA & 0x10)); // wait for adc to be ready
-//      ADCSRA = 0xf7; // restart adc
-//      byte m = ADCL; // fetch adc data
-//      byte j = ADCH;
-//      int k = (j << 8) | m; // form into an int
-//      k -= 0x0200; // form into a signed int
-//      k <<= 6; // form into a 16b signed int
-//      fft_input[i] = k; // put real data into even bins
-//      fft_input[i + 1] = 0; // set odd bins to 0
-//    }
-//    fft_window(); // window the data for better frequency response
-//    fft_reorder(); // reorder the data before doing the fft
-//    fft_run(); // process the data in the fft
-//    fft_mag_log(); // take the output of the fft
-//    sei();
-//    //Serial.println(fft_log_out[micBinNum]);
-//   if (fft_log_out[micBinNum] > micThresh){
-//    //Serial.println("SOUND");
-//    //Serial.println(fft_log_out[micBinNum]);
-//    break;
-//   }
    if (digitalRead(pushbutton) == HIGH){
     break;
    }
   }
-//  TIMSK0 = prevTIMSK0;
-//  ADCSRA = prevADCSRA;
-//  ADMUX = prevADMUX;
-//  DIDR0 = prevDIDR0;
+
 }
 
 int convert(char *s) {
@@ -369,18 +242,43 @@ int convert(char *s) {
 
 void radioSetup(void)
 {
+  //
+  // Print preamble
+  //
   printf_begin();
   printf("\n\rRF24/examples/GettingStarted/\n\r");
   printf("ROLE: %s\n\r",role_friendly_name[role]);
   printf("*** PRESS 'T' to begin transmitting to the other node\n\r");
+
+  //
+  // Setup and configure rf radio
+  //
+
   radio.begin();
 
   // optionally, increase the delay between retries & # of retries
   radio.setRetries(15,15);
   radio.setAutoAck(true);
+  // set the channel
   radio.setChannel(0x50);
+  // set the power
+  // RF24_PA_MIN=-18dBm, RF24_PA_LOW=-12dBm, RF24_PA_MED=-6dBM, and RF24_PA_HIGH=0dBm.
   radio.setPALevel(RF24_PA_MIN);
+  //RF24_250KBPS for 250kbs, RF24_1MBPS for 1Mbps, or RF24_2MBPS for 2Mbps
   radio.setDataRate(RF24_250KBPS);
+
+  // optionally, reduce the payload size.  seems to
+  // improve reliability
+  //radio.setPayloadSize(8);
+
+  //
+  // Open pipes to other nodes for communication
+  //
+
+  // This simple sketch opens two pipes for these two nodes to communicate
+  // back and forth.
+  // Open 'our' pipe for writing
+  // Open the 'other' pipe for reading, in position #1 (we can have up to 5 pipes open for reading)
 
   if ( role == role_ping_out )
   {
@@ -392,7 +290,17 @@ void radioSetup(void)
     radio.openWritingPipe(pipes[1]);
     radio.openReadingPipe(1,pipes[0]);
   }
+
+  //
+  // Start listening
+  //
+
   radio.startListening();
+
+  //
+  // Dump the configuration of the rf unit for debugging
+  //
+
   radio.printDetails();
 }
 
