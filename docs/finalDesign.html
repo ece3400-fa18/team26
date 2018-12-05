@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>ECE 3400 Team 26</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+
+    <!-- Custom styles for this template -->
+    <link href="css/agency.css" rel="stylesheet">
+
+  </head>
+
+  <body id="page-top">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="index.html">Home</a>
+
+      </div>
+    </nav>
+
+    <!-- Header -->
+     <div class="pagehead">
+      <div class="container">
+        <h2>  </h2>
+      </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+            <div class="lab-page">
+              <!-- Project Details Go Here -->
+              <h2 class="text-uppercase text-left">Final Design</h2>
+              <p class="item-intro text-muted"> FINALLY. The final design. All the </p>
+
+              <p> [Final Competition Video] </p>
+
+              <h3> Communicating between Uno and IDE </h3>
+              <p>In order to test the Arduino UNO and the IDE, we used example code “Blink.” This program caused an LED on the Arduino to blink on and off every other second. The LED on board is connected to pin13, which is also defined as LED_BUILTIN in the macro. The delay loop takes the value of 1000 which corresponds to 1 second.</p>
+              <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab1/part 1.png" alt="">
+              <code>
+                // the setup function runs once when you press reset or power the board <br>
+                void setup() {<br>
+                  &emsp; // initialize digital pin LED_BUILTIN as an output.<br>
+                  &emsp; pinMode(LED_BUILTIN, OUTPUT);<br>
+                }<br>
+                <br>
+                // the loop function runs over and over again forever<br>
+                void loop() {<br>
+                  &emsp; digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)<br>
+                  &emsp; delay(1000);                       // wait for a second<br>
+                  &emsp; digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW<br>
+                  &emsp; delay(1000);                       // wait for a second<br>
+                }
+              </code>
+
+              <h3> Modify the blink sketch </h3>
+              <p>We modified the example code blink.ino so that it would work for an external LED. We tested the digital input ports 2-12 to make sure they were all functional. In order to switch which port is being sent information, we need to change LED_BUILTIN to the number of the port we need to access. The below code is set to work for an LED connected to port 2.
+              (Note: When testing the different ports, we attempted to use ports 0 and 1 but were unable to do so -- we discovered that this is because ports 0 and 1 are typically used for serial communication.)</p>
+              <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab1/part 2.png" alt="">
+              <code>
+                // the setup function runs once when you press reset or power the board<br>
+                void setup() {<br>
+                  &emsp; // initialize digital pin LED_BUILTIN as an output.<br>
+                  &emsp; pinMode(2, OUTPUT);<br>
+                  // int PINNAME = A2<br>
+                }<br>
+                <br>
+                // the loop function runs over and over again forever<br>
+                void loop() {<br>
+                  &emsp; digitalWrite(2, HIGH);   // turn the LED on (HIGH is the voltage level)<br>
+                  &emsp; delay(1000);             // wait for a second<br>
+                  &emsp; digitalWrite(2, LOW);    // turn the LED off by making the voltage LOW<br>
+                  &emsp; delay(1000);             // wait for a second<br>
+                }
+              </code>
+
+
+              <h3> The Serial Monitor and the Analog Pins </h3>
+              <p>We used a potentiometer to measure the analog voltages from the input pins. To write to the serial monitor we first opened the serial port at 9600 bits per a second as per the documentation. We then used the inbuilt analogRead method to collect readings from the potentiometer. These values were then printed to the serial interface through the println method. The delay method takes input in milliseconds so to get a reading every half second we set a delay of 500. </p>
+              <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab1/part 3.png" alt="">
+              <code>
+                int pinPot = A0;    <br>
+                int val = 0; <br>
+                <br>
+                // the setup function runs once when you press reset or power the board<br>
+                void setup() {<br>
+                  &emsp; Serial.begin(9600);      // open the serial port at 9600 bps: <br>
+                }<br>
+                <br>
+                // the loop function runs over and over again forever<br>
+                void loop() {<br>
+                   &emsp; val = analogRead(pinPot);   // read the input pin<br>
+                   &emsp; Serial.println(val);<br>
+                   &emsp; delay (500);<br>
+                }<br>
+              </code>
+
+              <h3> Analog Output </h3>
+              <p>This was an extension of Part 3. Here, as before we used analogRead to get values from the potentiometer. We then used the analogWrite function so that the brightness of the LED would be dependant on the potentiometer readings. As in the modified blink code, the pin corresponding to the LED was set to output in the setup. To compensate for the difference in the range of possible analogRead (0-1023)  and analogWrite (0-255) values the value assigned to the LED was one-fourth the value read by the potentiometer; thus while there was a direct relationship between the potentiometer readings and brightness it was not one-to-one.</p>
+              <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab1/part 4.png" alt="">
+              <code>
+                int pinPot = A0; <br>
+                int val = 0; <br>
+                int ledpin = 3;<br>
+
+
+                // the setup function runs once when you press reset or power the board<br>
+                void setup() {<br>
+                 &emsp; pinMode(ledpin, OUTPUT);   // sets the pin as output <br>
+                 &emsp; Serial.begin(9600);      // open the serial port at 9600 bps: <br>
+                }<br>
+                <br>
+                // the loop function runs over and over again forever<br>
+                void loop() {<br>
+                   &emsp; val = analogRead(pinPot);   // read the input pin<br>
+                   &emsp; Serial.println(val);<br>
+                   &emsp; analogWrite(ledpin, val / 4);  // analogRead values go from 0 to 1023, analogWrite values from 0 to 255<br>
+                   &emsp; delay (100);c
+                }<br>
+              </code>
+
+              <h3> Parallax Servos </h3>
+              <p>During this portion of the lab we practiced using servo motors in different ways with the aim of becoming more comfortable and experienced. Our chosen exercises were particularly the degree of control we had over the angle. In the first code was written to obtain a general understanding of what how servo motors moved. Accoridng to the documentation, the servo would stop at value of 90. We then use this value to calibrate the servo using the small screw on the side of it. Note that when connected to the Aruidno board, the servos must be connected to the PWM pins.</p>
+
+              <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab1/part 5.png" alt="">
+              <code>
+                #include Servo.h<br>
+                <br>
+                Servo servo_1;<br>
+                int pos = 0;<br>
+                <br>
+                // the setup function runs once when you press reset or power the board<br>
+                void setup() {<br>
+                  &emsp; Serial.begin(9600);<br>
+                  &emsp; servo_1.attach(9);<br>
+                  &emsp; //servo_1.write(90);  // set servo to mid-point: <br>
+                }<br>
+                <br>
+                // the loop function runs over and over again forever<br>
+                void loop() {<br>
+                 //servo_1.attached();<br>
+                  for (pos= 0; pos <= 180; pos+=1){<br>
+                     &emsp; servo_1.write(pos);<br>
+                     &emsp; Serial.println(pos);<br>
+                     &emsp; delay (100);<br>
+                  }<br>
+                  for (pos = 180; pos >= 0; pos-=1){<br>
+                     &emsp; servo_1.write(pos);<br>
+                     &emsp; Serial.println(pos);<br>
+                     &emsp; delay (100);<br>
+                   }<br>
+                }<br>
+                <br>
+                *****************************************************************<br>
+                <br>
+                #include Servo.h<br>
+                <br>
+                Servo servo_1;<br>
+                int pos = 0;<br>
+                <br>
+                // the setup function runs once when you press reset or power the board<br>
+                void setup() {<br>
+                  &emsp; Serial.begin(9600);<br>
+                  &emsp; servo_1.attach(9);<br>
+                  &emsp; //servo_1.write(90);  // set servo to mid-point: <br>
+                }<br>
+                <br>
+                // the loop function runs over and over again forever<br>
+                void loop() {<br>
+                  &emsp; //servo_1.attached();<br>
+                  &emsp; for (pos= 0; pos <= 89; pos+=1){<br>
+                     &emsp; servo_1.write(pos);<br>
+                     &emsp; Serial.println(pos);<br>
+                     &emsp; //delay (100);<br>
+                  }<br>
+                  for (pos = 89; pos >= 0; pos-=1){<br>
+                       &emsp; servo_1.write(pos);<br>
+                       &emsp; Serial.println(pos);<br>
+                       &emsp; //delay (100);<br>
+                   }<br>
+                }<br>
+              </code>
+
+              <h3> Assemble the Robot </h3>
+              <p> Our robot has a purple base plate, and green feet that hold servo motors, which are attached to the wheels. The Arduino UNO is attached to the top of the base plate, and the mini-breadboard is connected to the robot by the wires of the servo motors. The power bank is attached to the front of the robot in order to keep it stable. It is held steady by green wires that tie it to the base plate.
+              The following code is the movement demonstrated in the video. The robot goes in one direction for 3 seconds, turns right for 3 seconds, and continues repeating that pattern.</p>
+              <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab1/part 6.png" alt="">
+              <code>
+                #include Servo.h<br>
+                Servo servo_L;<br>
+                Servo servo_R;<br>
+                <br>
+                int pos = 0;<br>
+                <br>
+                void setup() {<br>
+                  &emsp; // put your setup code here, to run once:<br>
+                  &emsp; Serial.begin(9600);<br>
+                  &emsp; servo_L.attach(3);<br>
+                  &emsp; servo_R.attach(4);<br>
+                }<br>
+                <br>
+                void loop() {<br>
+                  &emsp; // put your main code here, to run repeatedly:<br>
+                  &emsp; // make the robot move in a straight line<br>
+                  &emsp; servo_L.write(180);<br>
+                  &emsp; servo_R.write(0);    // for 3 seconds<br>
+                  &emsp; delay(3000);         // make the robot turn right<br>
+                  &emsp; servo_R.write(90);<br>
+                  &emsp; servo_L.write(180);  // for 3 seconds<br>
+                  &emsp; delay(3000);<br>
+                }<br>
+              </code>
+
+              <h3> Work Distribution </h3>
+              <p> The Lab 1 Work Distribution is as follows: <br>
+                  &emsp; - On 8/31, Nathalia, Priya and Vini worked on steps 1-5 and began part 6.<br>
+                  &emsp; - On 9/4, Priya and Nathalia attended open Lab to complete Part 6.<br>
+                  &emsp; - On 9/7, Joyce reassembled the robot.<br>
+                  The Lab Report Work Distribution is as follows: <br>
+                  &emsp; - Vini: Part 3, Part 4, Part 5, code snippets<br>
+                  &emsp; - Priya: Materials Used, Part 1, Part 2, Part 6, code snippets<br>
+                  &emsp; - Nathalia: All Pictures and Videos<br>
+                  The website work distribution is as follows: <br>
+                  &emsp; - Nathalia: Website Set Up and Lab 1<br>
+                  &emsp; - Joyce: Overview, Website Design, index.html and css<br>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4">
+            <span class="copyright">Copyright &copy; 2018 ECE 3400 Team 26</span>
+          </div>
+          <!--<div class="col-md-4">
+            <ul class="list-inline social-buttons">
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fab fa-twitter"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fab fa-facebook-f"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fab fa-linkedin-in"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="col-md-4">
+            <ul class="list-inline quicklinks">
+              <li class="list-inline-item">
+                <a href="#">Privacy Policy</a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">Terms of Use</a>
+              </li>
+            </ul>
+        </div>-->
+        </div>
+      </div>
+    </footer>
+
+
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Contact form JavaScript -->
+    <script src="js/jqBootstrapValidation.js"></script>
+    <script src="js/contact_me.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="js/agency.min.js"></script>
+
+  </body>
+
+</html>
