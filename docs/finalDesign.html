@@ -48,199 +48,81 @@
             <div class="lab-page">
               <!-- Project Details Go Here -->
               <h2 class="text-uppercase text-left">Final Design</h2>
-              <p class="item-intro text-muted"> FINALLY. The final design. All the </p>
+              <p class="item-intro text-muted"> FINALLY. The final design. All the blood, sweat, and tears this semester culminating up to this one point...</p>
 
+              <p> This semester in ECE 3400, we created our robot, lovingly named NVR! (Which stands for Nice Voyager Robot). NVR can follow lines, avoid walls, and send his explorations to a nearby base station! Read on to learn about what NVR can do and how he does it!</p>
               <p> [Final Competition Video] </p>
 
-              <h3> Communicating between Uno and IDE </h3>
-              <p>In order to test the Arduino UNO and the IDE, we used example code “Blink.” This program caused an LED on the Arduino to blink on and off every other second. The LED on board is connected to pin13, which is also defined as LED_BUILTIN in the macro. The delay loop takes the value of 1000 which corresponds to 1 second.</p>
-              <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab1/part 1.png" alt="">
-              <code>
-                // the setup function runs once when you press reset or power the board <br>
-                void setup() {<br>
-                  &emsp; // initialize digital pin LED_BUILTIN as an output.<br>
-                  &emsp; pinMode(LED_BUILTIN, OUTPUT);<br>
-                }<br>
-                <br>
-                // the loop function runs over and over again forever<br>
-                void loop() {<br>
-                  &emsp; digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)<br>
-                  &emsp; delay(1000);                       // wait for a second<br>
-                  &emsp; digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW<br>
-                  &emsp; delay(1000);                       // wait for a second<br>
-                }
-              </code>
+              
+<!-- HARDWARE DESCRIPTION -->  
+              <h3> Hardware Unit Description </h3>
+              
+              <!-- LAYER 0 -->  
+              <h5> Layer Zero </h5>
+              <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/final/Layer 0.jpg" alt="">
+              
+              <p>Layer zero holds the servos and the line sensors. The battery is also fastened on this level. The servos make the wheels turn, to help NVR explore the maze. The line sensors keep NVR on track during his adventures.<br>
+              The servos are connected to digital pins 5 and 6. Setting different values to the servos determines how fast and in what direction the servo moves. We connected each servo to a wheel. Thus, the servos allow NVR to move. Here’s an example of how we control how NVR travels: </p>
+              
 
-              <h3> Modify the blink sketch </h3>
-              <p>We modified the example code blink.ino so that it would work for an external LED. We tested the digital input ports 2-12 to make sure they were all functional. In order to switch which port is being sent information, we need to change LED_BUILTIN to the number of the port we need to access. The below code is set to work for an LED connected to port 2.
-              (Note: When testing the different ports, we attempted to use ports 0 and 1 but were unable to do so -- we discovered that this is because ports 0 and 1 are typically used for serial communication.)</p>
-              <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab1/part 2.png" alt="">
-              <code>
-                // the setup function runs once when you press reset or power the board<br>
-                void setup() {<br>
-                  &emsp; // initialize digital pin LED_BUILTIN as an output.<br>
-                  &emsp; pinMode(2, OUTPUT);<br>
-                  // int PINNAME = A2<br>
-                }<br>
-                <br>
-                // the loop function runs over and over again forever<br>
-                void loop() {<br>
-                  &emsp; digitalWrite(2, HIGH);   // turn the LED on (HIGH is the voltage level)<br>
-                  &emsp; delay(1000);             // wait for a second<br>
-                  &emsp; digitalWrite(2, LOW);    // turn the LED off by making the voltage LOW<br>
-                  &emsp; delay(1000);             // wait for a second<br>
-                }
-              </code>
+              <!-- LAYER 1 -->  
+              <h3> Layer One </h3>
+              <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/final/Layer 1.jpg" alt="">
+              
+              <p>On layer one you can find the acoustic circuit, IR circuit, the wall sensors, and the radio. This level also houses the arduino, which is NVR’s brain. The acoustic circuit searches for a 660Hz signal that tells NVR it’s time to begin his travels. The IR circuit helps NVR communicate with other robots, so he doesn’t run into them on his journey, and they don’t run into him. The wall sensors help NVR avoid walls and help him decide which way to go. The radio allows NVR to map out his journey. Here’s how everything works: <br>
+              In order to detect the 660Hz tone, we added the acoustic circuit, whose schematic is pictured below. This microphone detects sound and the frequency is amplified. We look at the frequencies by organizing them into bins. The 660Hz tone appears in bin 17. Therefore, if 660Hz tone is playing, the magnitude of bin 17 will be greater than if there was just noise. Therefore, if this magnitude reaches a certain threshold value, NVR can tell if the tone is being played, and he will start exploring. We’ve found that NVR usually hears the sound, but just in case he doesn’t, we’ve also added a pushbutton that will also us to manually tell NVR to start exploring. The pushbutton circuit and functionality is described on layer 2.
+              </p>
+              
+              <p> -describe IR detection<br>
 
+              The walls in the maze limit the directions that NVR is allowed to travel. In order to give him a wide view of the maze, we added 3 wall sensors. With a line sensor on each the front, left and right, NVR is able to look at all possible paths. If we had less wall sensors, NVR would have to turn in order to know which paths are available. Therefore, having all 3 sensors will reduce unnecessary turning and help NVR make decisions faster. However, NVR often has to make a decision on which path to take. To learn more about how NVR decides between multiple paths, check out our description of maze traversal, below.<br>
+              [code snippet from wallDetected()]<br>
+              
+              -describe radio communication
+              </p>
+            
+            
+              <!-- LAYER 2 -->  
+              <h3> Layer Two </h3>
+              <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/final/Layer 2.jpg" alt="">
+              <p>Layer three holds the Multiplexer (mux) and the push button. It also holds the IR hat. The mux provides extra places for analog inputs, and the push button provides a backup to the acoustic circuit, so just in case NVR doesn’t hear the 660Hz signal, we can directly tell him to begin his journey. Here’s how everything works: <br>
 
-              <h3> The Serial Monitor and the Analog Pins </h3>
-              <p>We used a potentiometer to measure the analog voltages from the input pins. To write to the serial monitor we first opened the serial port at 9600 bits per a second as per the documentation. We then used the inbuilt analogRead method to collect readings from the potentiometer. These values were then printed to the serial interface through the println method. The delay method takes input in milliseconds so to get a reading every half second we set a delay of 500. </p>
-              <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab1/part 3.png" alt="">
-              <code>
-                int pinPot = A0;    <br>
-                int val = 0; <br>
-                <br>
-                // the setup function runs once when you press reset or power the board<br>
-                void setup() {<br>
-                  &emsp; Serial.begin(9600);      // open the serial port at 9600 bps: <br>
-                }<br>
-                <br>
-                // the loop function runs over and over again forever<br>
-                void loop() {<br>
-                   &emsp; val = analogRead(pinPot);   // read the input pin<br>
-                   &emsp; Serial.println(val);<br>
-                   &emsp; delay (500);<br>
-                }<br>
-              </code>
+              We added a mux in order to have more analog input pins, so NVR has more sensors to learn about the maze he is exploring. The mux allows us to add a third wall sensor and a third line sensor. The mux works by setting its select pins. Setting the individual select pins HIGH or LOW allow us to read the values of the sensors connected at each of its input pins. Each select pin (A,B,C) connects to a digit input (2,3 and 4), and the mux output (COM OUT/IN) connects to analog pin A2. The wall sensors are connected to [insert pins the wall sensors connect to]. The third line sensor connects to [insert pin the line sensor connects to]. </p>
+              
+              <p> The pushbutton has two wires that connect to NVR. The the red wire connects to the 5V power. The grey wire connects to digital pin 7 on the arduino. That row on the breadboard also connects a 10KΩ Resistor to ground. As is, the pushbutton sends 0 to the arduino. However, when the button is pressed, the pushbutton sends 1 to the arduino. We have added this functionality to the detectAudio() function, as a second way to break out of the infinite while loop. <br>
 
-              <h3> Analog Output </h3>
-              <p>This was an extension of Part 3. Here, as before we used analogRead to get values from the potentiometer. We then used the analogWrite function so that the brightness of the LED would be dependant on the potentiometer readings. As in the modified blink code, the pin corresponding to the LED was set to output in the setup. To compensate for the difference in the range of possible analogRead (0-1023)  and analogWrite (0-255) values the value assigned to the LED was one-fourth the value read by the potentiometer; thus while there was a direct relationship between the potentiometer readings and brightness it was not one-to-one.</p>
-              <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab1/part 4.png" alt="">
-              <code>
-                int pinPot = A0; <br>
-                int val = 0; <br>
-                int ledpin = 3;<br>
+              [insert pushbutton code]
+              [and closer picture of the pushbutton circuit]
+              </p>
+              
+              
+<!-- SOFTWARE DESCRIPTION -->  
+              <h3> Software Unit Description </h3>
+              
+              
+              <h3> Intersection Tracking </h3>
+              <p>-describe line following + intersection tracking</p>
+              <!--<img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab1/part 4.png" alt="">-->
 
 
-                // the setup function runs once when you press reset or power the board<br>
-                void setup() {<br>
-                 &emsp; pinMode(ledpin, OUTPUT);   // sets the pin as output <br>
-                 &emsp; Serial.begin(9600);      // open the serial port at 9600 bps: <br>
-                }<br>
-                <br>
-                // the loop function runs over and over again forever<br>
-                void loop() {<br>
-                   &emsp; val = analogRead(pinPot);   // read the input pin<br>
-                   &emsp; Serial.println(val);<br>
-                   &emsp; analogWrite(ledpin, val / 4);  // analogRead values go from 0 to 1023, analogWrite values from 0 to 255<br>
-                   &emsp; delay (100);c
-                }<br>
-              </code>
 
-              <h3> Parallax Servos </h3>
-              <p>During this portion of the lab we practiced using servo motors in different ways with the aim of becoming more comfortable and experienced. Our chosen exercises were particularly the degree of control we had over the angle. In the first code was written to obtain a general understanding of what how servo motors moved. Accoridng to the documentation, the servo would stop at value of 90. We then use this value to calibrate the servo using the small screw on the side of it. Note that when connected to the Aruidno board, the servos must be connected to the PWM pins.</p>
+              <h3> Maze Traversal </h3>
+              <p> As NVR travels through the maze, he has to make decisions. He uses walls to determine where he’s allowed to turn, but often has more than one possible direction to travel in. Here’s how NVR makes decisions on where to go when he has many options: <br>
 
-              <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab1/part 5.png" alt="">
-              <code>
-                #include Servo.h<br>
-                <br>
-                Servo servo_1;<br>
-                int pos = 0;<br>
-                <br>
-                // the setup function runs once when you press reset or power the board<br>
-                void setup() {<br>
-                  &emsp; Serial.begin(9600);<br>
-                  &emsp; servo_1.attach(9);<br>
-                  &emsp; //servo_1.write(90);  // set servo to mid-point: <br>
-                }<br>
-                <br>
-                // the loop function runs over and over again forever<br>
-                void loop() {<br>
-                 //servo_1.attached();<br>
-                  for (pos= 0; pos <= 180; pos+=1){<br>
-                     &emsp; servo_1.write(pos);<br>
-                     &emsp; Serial.println(pos);<br>
-                     &emsp; delay (100);<br>
-                  }<br>
-                  for (pos = 180; pos >= 0; pos-=1){<br>
-                     &emsp; servo_1.write(pos);<br>
-                     &emsp; Serial.println(pos);<br>
-                     &emsp; delay (100);<br>
-                   }<br>
-                }<br>
-                <br>
-                *****************************************************************<br>
-                <br>
-                #include Servo.h<br>
-                <br>
-                Servo servo_1;<br>
-                int pos = 0;<br>
-                <br>
-                // the setup function runs once when you press reset or power the board<br>
-                void setup() {<br>
-                  &emsp; Serial.begin(9600);<br>
-                  &emsp; servo_1.attach(9);<br>
-                  &emsp; //servo_1.write(90);  // set servo to mid-point: <br>
-                }<br>
-                <br>
-                // the loop function runs over and over again forever<br>
-                void loop() {<br>
-                  &emsp; //servo_1.attached();<br>
-                  &emsp; for (pos= 0; pos <= 89; pos+=1){<br>
-                     &emsp; servo_1.write(pos);<br>
-                     &emsp; Serial.println(pos);<br>
-                     &emsp; //delay (100);<br>
-                  }<br>
-                  for (pos = 89; pos >= 0; pos-=1){<br>
-                       &emsp; servo_1.write(pos);<br>
-                       &emsp; Serial.println(pos);<br>
-                       &emsp; //delay (100);<br>
-                   }<br>
-                }<br>
-              </code>
+              -describe maze traversal
+              </p>
 
-              <h3> Assemble the Robot </h3>
-              <p> Our robot has a purple base plate, and green feet that hold servo motors, which are attached to the wheels. The Arduino UNO is attached to the top of the base plate, and the mini-breadboard is connected to the robot by the wires of the servo motors. The power bank is attached to the front of the robot in order to keep it stable. It is held steady by green wires that tie it to the base plate.
-              The following code is the movement demonstrated in the video. The robot goes in one direction for 3 seconds, turns right for 3 seconds, and continues repeating that pattern.</p>
-              <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab1/part 6.png" alt="">
-              <code>
-                #include Servo.h<br>
-                Servo servo_L;<br>
-                Servo servo_R;<br>
-                <br>
-                int pos = 0;<br>
-                <br>
-                void setup() {<br>
-                  &emsp; // put your setup code here, to run once:<br>
-                  &emsp; Serial.begin(9600);<br>
-                  &emsp; servo_L.attach(3);<br>
-                  &emsp; servo_R.attach(4);<br>
-                }<br>
-                <br>
-                void loop() {<br>
-                  &emsp; // put your main code here, to run repeatedly:<br>
-                  &emsp; // make the robot move in a straight line<br>
-                  &emsp; servo_L.write(180);<br>
-                  &emsp; servo_R.write(0);    // for 3 seconds<br>
-                  &emsp; delay(3000);         // make the robot turn right<br>
-                  &emsp; servo_R.write(90);<br>
-                  &emsp; servo_L.write(180);  // for 3 seconds<br>
-                  &emsp; delay(3000);<br>
-                }<br>
-              </code>
 
               <h3> Work Distribution </h3>
-              <p> The Lab 1 Work Distribution is as follows: <br>
-                  &emsp; - On 8/31, Nathalia, Priya and Vini worked on steps 1-5 and began part 6.<br>
-                  &emsp; - On 9/4, Priya and Nathalia attended open Lab to complete Part 6.<br>
-                  &emsp; - On 9/7, Joyce reassembled the robot.<br>
+              <p> The Final Design Distribution is as follows: <br>
+                  &emsp; - <br>
+                  <!--&emsp; - <br>-->
+                  <!--&emsp; - <br>-->
                   The Lab Report Work Distribution is as follows: <br>
-                  &emsp; - Vini: Part 3, Part 4, Part 5, code snippets<br>
-                  &emsp; - Priya: Materials Used, Part 1, Part 2, Part 6, code snippets<br>
+                  &emsp; - Priya: Started the initial report draft <br>
                   &emsp; - Nathalia: All Pictures and Videos<br>
                   The website work distribution is as follows: <br>
-                  &emsp; - Nathalia: Website Set Up and Lab 1<br>
-                  &emsp; - Joyce: Overview, Website Design, index.html and css<br>
+                  &emsp; - Nathalia: Website Set Up and Maintenance<br>
               </p>
             </div>
           </div>
