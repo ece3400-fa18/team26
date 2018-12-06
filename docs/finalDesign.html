@@ -50,7 +50,7 @@
               <h2 class="text-uppercase text-left">Final Design</h2>
               <p class="item-intro text-muted"> FINALLY. The final design. All the blood, sweat, and tears this semester culminating up to this one point...</p>
 
-              <p> This semester in ECE 3400, we created our robot, lovingly named NVR! (Which stands for Nice Voyager Robot). NVR can follow lines, avoid walls, and send his explorations to a nearby base station! Read on to learn about what NVR can do and how he does it!</p>
+              <p> This semester in ECE 3400, we created our robot, lovingly named NVR (which stands for Nice Voyager Robot). NVR can follow lines, avoid walls, and send his explorations to a nearby base station! Read on to learn about what NVR can do and how he does it!</p>
               <p> [Final Competition Video] </p>
 
               
@@ -62,7 +62,39 @@
               <p>Layer zero holds the servos and the line sensors. The battery is also fastened on this level. The servos make the wheels turn, to help NVR explore the maze. The line sensors keep NVR on track during his adventures.</p>
               <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/final/Layer 0.jpg" alt="">
               
-              <p>The servos are connected to digital pins 5 and 6. Setting different values to the servos determines how fast and in what direction the servo moves. We connected each servo to a wheel. Thus, the servos allow NVR to move. Here’s an example of how we control how NVR travels: </p>
+              <p>The servos are connected to digital pins 5 and 6. Setting different values to the servos determines how fast and in what direction the servo moves. We connected each servo to a wheel, thus allowing NVR to move. Here’s an example of how we control how NVR travels: </p>
+              <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">void move(<span style="color: #007020">int</span> direction){
+  <span style="color: #333333">//</span>look <span style="color: #008800; font-weight: bold">for</span> intersection
+  <span style="color: #008800; font-weight: bold">while</span>(<span style="color: #0000DD; font-weight: bold">1</span>){
+    Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;looking&quot;</span>);
+    read_turn();
+    <span style="color: #008800; font-weight: bold">if</span> (left_turn_val <span style="color: #333333">&lt;</span> WHITE <span style="color: #333333">&amp;&amp;</span> right_turn_val <span style="color: #333333">&lt;</span> WHITE){
+      i <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">0</span>;
+      Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;found intersection&quot;</span>);
+      <span style="color: #008800; font-weight: bold">while</span>(i <span style="color: #333333">&lt;</span> <span style="color: #0000DD; font-weight: bold">30</span>){
+        go_straight();
+        i<span style="color: #333333">++</span>;
+      }
+      <span style="color: #008800; font-weight: bold">break</span>;
+    }
+    go_straight();
+    delay(<span style="color: #0000DD; font-weight: bold">10</span>);
+  }<span style="color: #333333">//</span>close <span style="color: #008800; font-weight: bold">while</span>, found intersection
+  
+  <span style="color: #333333">//</span> Turn <span style="color: #008800; font-weight: bold">if</span> requested, white<span style="color: #333333">=</span><span style="color: #0000DD; font-weight: bold">700</span>
+    <span style="color: #008800; font-weight: bold">if</span>(direction <span style="color: #333333">==</span> right){
+      Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;TURN RIGHT&quot;</span>);
+      left_servo<span style="color: #333333">.</span>write(<span style="color: #0000DD; font-weight: bold">95</span>);
+      right_servo<span style="color: #333333">.</span>write(<span style="color: #0000DD; font-weight: bold">95</span>);
+      <span style="color: #008800; font-weight: bold">while</span>(analogRead(left_turn) <span style="color: #333333">&gt;</span> WHITE);
+      <span style="color: #008800; font-weight: bold">while</span>(analogRead(left_turn) <span style="color: #333333">&lt;</span> WHITE);
+      <span style="color: #008800; font-weight: bold">while</span>(analogRead(left_turn) <span style="color: #333333">&gt;</span> WHITE);
+      Serial<span style="color: #333333">.</span>println(<span style="background-color: #fff0f0">&quot;done turn right&quot;</span>);
+    }
+    <span style="color: #333333">//</span>similarly <span style="color: #008800; font-weight: bold">for</span> turning left
+}
+</pre></div>
+
               
 
               <!-- LAYER 1 -->  
@@ -70,21 +102,28 @@
               <p>On layer one you can find the acoustic circuit, IR circuit, the wall sensors, and the radio. This level also houses the arduino, which is NVR’s brain. The acoustic circuit searches for a 660Hz signal that tells NVR it’s time to begin his travels. The IR circuit helps NVR communicate with other robots, so he doesn’t run into them on his journey, and they don’t run into him. The wall sensors help NVR avoid walls and help him decide which way to go. The radio allows NVR to map out his journey. </p>
               <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/final/Layer 1.jpg" alt="">
               
-              <p>In order to detect the 660Hz tone, we added the acoustic circuit, whose schematic is pictured below. This microphone detects sound and the frequency is amplified. We look at the frequencies by organizing them into bins. The 660Hz tone appears in bin 17. Therefore, if 660Hz tone is playing, the magnitude of bin 17 will be greater than if there was just noise. Therefore, if this magnitude reaches a certain threshold value, NVR can tell if the tone is being played, and he will start exploring. We’ve found that NVR usually hears the sound, but just in case he doesn’t, we’ve also added a pushbutton that will also us to manually tell NVR to start exploring. The pushbutton circuit and functionality is described on layer 2.
+              <p>In order to detect the 660Hz tone, we added the acoustic circuit, whose schematic is pictured below. This microphone detects sound and the frequency is amplified. We look at the frequencies by organizing them into bins. The 660Hz tone appears in bin 17. Therefore, if 660Hz tone is playing, the magnitude of bin 17 will be greater than if there was just noise. Therefore, if this magnitude reaches a certain threshold value, NVR can tell if the tone is being played, and he will start exploring. We’ve found that NVR usually hears the sound, but just in case he doesn’t, we’ve also added a pushbutton that will also us to manually tell NVR to start exploring. The pushbutton circuit and functionality is described on layer 2.<br>
+              The IR hat will emit 18kHz for other robots to detect our robot. At the same time, the robot will detect other robots with the phototransistor. In the final design, the robot detection code is in main loop, polled continuously. This function needs to first disable the timer and then run the detection, then reset the timer. 
               </p>
               
-              <p> -describe IR detection<br>
+              <p>
+              The walls in the maze limit the directions that NVR is allowed to travel. In order to give him a wide view of the maze, we added 3 wall sensors. With a line sensor on each the front, left and right, NVR is able to look at all possible paths. If we had less wall sensors, NVR would have to turn in order to know which paths are available. Therefore, having all 3 sensors will reduce unnecessary turning and help NVR make decisions faster. However, NVR often has to make a decision on which path to take. To learn more about how NVR decides between multiple paths, check out our description of maze traversal further below.<br>
+              <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #007020">bool</span> wallDetected(){
+  <span style="color: #007020">int</span> distance <span style="color: #333333">=</span> analogRead(front_wall);
+  Serial<span style="color: #333333">.</span>println(distance);
 
-              The walls in the maze limit the directions that NVR is allowed to travel. In order to give him a wide view of the maze, we added 3 wall sensors. With a line sensor on each the front, left and right, NVR is able to look at all possible paths. If we had less wall sensors, NVR would have to turn in order to know which paths are available. Therefore, having all 3 sensors will reduce unnecessary turning and help NVR make decisions faster. However, NVR often has to make a decision on which path to take. To learn more about how NVR decides between multiple paths, check out our description of maze traversal, below.<br>
-              [code snippet from wallDetected()]<br>
+  <span style="color: #008800; font-weight: bold">return</span> (distance <span style="color: #333333">&gt;</span> <span style="color: #0000DD; font-weight: bold">305</span>);
+}
+</pre></div>
+
               
-              -describe radio communication
+              [describe radio communication]
               </p>
             
             
               <!-- LAYER 2 -->  
               <h5> Layer Two </h5>
-              <p>Layer three holds the Multiplexer (mux) and the push button. It also holds the IR hat. The mux provides extra places for analog inputs, and the push button provides a backup to the acoustic circuit, so just in case NVR doesn’t hear the 660Hz signal, we can directly tell him to begin his journey.</p>
+              <p>Layer two holds the Multiplexer (mux) and the push button. It also holds the IR hat. The mux provides extra places for analog inputs, and the push button provides a backup to the acoustic circuit, so just in case NVR doesn’t hear the 660Hz signal, we can directly tell him to begin his journey.</p>
               <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/final/Layer 2.jpg" alt="">
             
               <p>We added a mux in order to have more analog input pins, so NVR has more sensors to learn about the maze he is exploring. The mux allows us to add a third wall sensor and a third line sensor. The mux works by setting its select pins. Setting the individual select pins HIGH or LOW allow us to read the values of the sensors connected at each of its input pins. Each select pin (A,B,C) connects to a digit input (2,3 and 4), and the mux output (COM OUT/IN) connects to analog pin A2. The wall sensors are connected to [insert pins the wall sensors connect to]. The third line sensor connects to [insert pin the line sensor connects to]. </p>
@@ -101,15 +140,13 @@
               
               
               <h5> Intersection Tracking </h5>
-              <p>-describe line following + intersection tracking</p>
-              <!--<img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/lab1/part 4.png" alt="">-->
-
+              <p>The line following is implemented using two line sensors. The line sensors continuously monitor their value and make correction while traveling in a straight line. Upon detecting white values on both sensor, the robot will know that an intersection is found. Then it will make decisions about its traveling direction based on the maze information and the wall sensor information.</p>
 
 
               <h5> Maze Traversal </h5>
               <p> As NVR travels through the maze, he has to make decisions. He uses walls to determine where he’s allowed to turn, but often has more than one possible direction to travel in. Here’s how NVR makes decisions on where to go when he has many options: <br>
 
-              -describe maze traversal
+              [describe maze traversal]
               </p>
 
 
@@ -120,6 +157,7 @@
                   <!--&emsp; - <br>-->
                   The Lab Report Work Distribution is as follows: <br>
                   &emsp; - Priya: Started the initial report draft <br>
+                  &emsp; - Joyce, Nathalia, Vini: Added their contributions <br>
                   &emsp; - Nathalia: All Pictures and Videos<br>
                   The website work distribution is as follows: <br>
                   &emsp; - Nathalia: Website Set Up and Maintenance<br>
