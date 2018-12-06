@@ -59,20 +59,20 @@
               <h3> Hardware Unit Description </h3>
               
                <h5> Materials </h5>                          
-                <p>&nbsp;- 1 Arduino Uno
-                &nbsp;- 2 breadboards
-                &nbsp;- 1 Power Bank   
-                &nbsp;- 1 9V Battery
-                &nbsp;- 1 IR emitting hat
-                &nbsp;- 2 Parallax Continuous Rotation Servos
-                &nbsp;- 3 Line sensors
-                &nbsp;- 3 Wall sensors 
-                    &nbsp;&nbsp;(one short range, two long range IR proximity sensors)
-                &nbsp;- 1 Microphone
-                &nbsp;- 1 IR phototransistor
-                &nbsp;- 2 Radios (nRF24L01+) and breakout board
-                &nbsp;- 1 Pushbutton                
-                &nbsp;- Various resistors and capacitors
+                <p>&nbsp;- 1 Arduino Uno<br>
+                &nbsp;- 2 breadboards<br>
+                &nbsp;- 1 Power Bank   <br>
+                &nbsp;- 1 9V Battery<br>
+                &nbsp;- 1 IR emitting hat<br>
+                &nbsp;- 2 Parallax Continuous Rotation Servos<br>
+                &nbsp;- 3 Line sensors<br>
+                &nbsp;- 3 Wall sensors <br>
+                    &nbsp;&nbsp;(one short range, two long range IR proximity sensors)<br>
+                &nbsp;- 1 Microphone<br>
+                &nbsp;- 1 IR phototransistor<br>
+                &nbsp;- 2 Radios (nRF24L01+) and breakout board<br>
+                &nbsp;- 1 Pushbutton                <br>
+                &nbsp;- Various resistors and capacitors<br>
                 &nbsp;- Various mechanical components (wheels, mounts, etc.)</p>
               
               <!-- LAYER 0 -->  
@@ -179,7 +179,8 @@
               
               <h5> Intersection Tracking </h5>
               <p>The line following is implemented using three line sensors. The line sensors continuously monitor their value and make correction while traveling in a straight line. Upon detecting white values on all three sensors, the robot will know that an intersection is found. Then it will make decisions about its traveling direction based on the maze information and the wall sensor information.<br>
-However, there are two possible cases which can result in a false positive: the robot believing an intersection exists where none those: 1) when the robot reads the same intersection several times due to the baud rate being far larger than the speed of the robot, resulting the main loop being repeated several times 2) when the robot is self-correcting (usually after turning), as it attempts to regain it’s proper position and sweeps it’s sensors from left to right all of the line sensors sometimes read white. To this end, NVR has a system of three global flags that helps it seperate the false positive from the true positives. <br>
+However, there are two possible cases which can result in a false positive: the robot believing an intersection exists where none those:<br> 1) when the robot reads the same intersection several times due to the baud rate being far larger than the speed of the robot, resulting the main loop being repeated several times<br> 2) when the robot is self-correcting (usually after turning), as it attempts to regain it’s proper position and sweeps it’s sensors from left to right all of the line sensors sometimes read white. <br>
+                To this end, NVR has a system of three global flags that helps it seperate the false positive from the true positives. <br>
 interflag is instantiated as zero, and set to 1 when all three sensors read white; when all three sensors are not reading white, it is reset to 0. UpdateFlag represents whether or not that intersection has already been discovered, it begins as 1, and set to 0 after the first update completes, and is reset to 1 when all three sensors are no longer reading white. By making the condition for determining an intersection if (Interflag && UpdateFlag), NVR only updates the number of intersections the traversed the first time it senses it -- this resolves the first case discussed above. To resolve the second case NVR also has another flag, denoted errorflag. errorflag is instantiated as 0 and represents when the robot is in the process of self-correcting line following. In the line following function go_straight()there are three conditional statements that determine the robot’s behavior at any given moment: if (abs(error) <= ERROR_RANGE), else if (error > ERROR_RANGE),  else if (error < -(ERROR_RANGE)). The first condition represents that the robot correctly positioned over the line with minimum error, the second when the robot is too right and the third when the robot is too left. If the robot is either too right or too left, it will begin self correcting. Thus, errorflag is set to 1 in these conditions, and reset to 0 in the first condition where error is minute. NVR is able to only detect true intersections through the condition if(interflag && updateFlag && ~errorflag).</p>
 
 
