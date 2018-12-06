@@ -58,6 +58,23 @@
 <!-- HARDWARE DESCRIPTION -->  
               <h3> Hardware Unit Description </h3>
               
+               <h5> Materials </h5>                          
+                <p>&nbsp;- 1 Arduino Uno
+                &nbsp;- 2 breadboards
+                &nbsp;- 1 Power Bank   
+                &nbsp;- 1 9V Battery
+                &nbsp;- 1 IR emitting hat
+                &nbsp;- 2 Parallax Continuous Rotation Servos
+                &nbsp;- 3 Line sensors
+                &nbsp;- 3 Wall sensors 
+                    &nbsp;&nbsp;(one short range, two long range IR proximity sensors)
+                &nbsp;- 1 Microphone
+                &nbsp;- 1 IR phototransistor
+                &nbsp;- 2 Radios (nRF24L01+) and breakout board
+                &nbsp;- 1 Pushbutton                
+                &nbsp;- Various resistors and capacitors
+                &nbsp;- Various mechanical components (wheels, mounts, etc.)</p>
+              
               <!-- LAYER 0 -->  
               <h5> Layer Zero </h5>                          
               <p>Layer zero holds the servos and the line sensors. The battery is also fastened on this level. The servos make the wheels turn, to help NVR explore the maze. The line sensors keep NVR on track during his adventures.</p>
@@ -156,14 +173,46 @@
               
 <!-- SOFTWARE DESCRIPTION -->  
               <h3> Software Unit Description </h3>
-              
+            
+              <h5> Turn </h5>
+              <p>NVR keeps his sensors firmly on either side of the white line to follow it, thus, after writing to the servor motors it uses a small delay of 12 milliseconds combined with the <code>while(analogRead(left_turn) < WHITE)<code> to determine how long it should turn right, and <code>while(analogRead(right_turn) < WHITE)<code> to turn left. </p>
               
               <h5> Intersection Tracking </h5>
-              <p>The line following is implemented using two line sensors. The line sensors continuously monitor their value and make correction while traveling in a straight line. Upon detecting white values on both sensor, the robot will know that an intersection is found. Then it will make decisions about its traveling direction based on the maze information and the wall sensor information.</p>
+              <p>The line following is implemented using three line sensors. The line sensors continuously monitor their value and make correction while traveling in a straight line. Upon detecting white values on all three sensors, the robot will know that an intersection is found. Then it will make decisions about its traveling direction based on the maze information and the wall sensor information.<br>
+However, there are two possible cases which can result in a false positive: the robot believing an intersection exists where none those: 1) when the robot reads the same intersection several times due to the baud rate being far larger than the speed of the robot, resulting the main loop being repeated several times 2) when the robot is self-correcting (usually after turning), as it attempts to regain it’s proper position and sweeps it’s sensors from left to right all of the line sensors sometimes read white. To this end, NVR has a system of three global flags that helps it seperate the false positive from the true positives. <br>
+interflag is instantiated as zero, and set to 1 when all three sensors read white; when all three sensors are not reading white, it is reset to 0. UpdateFlag represents whether or not that intersection has already been discovered, it begins as 1, and set to 0 after the first update completes, and is reset to 1 when all three sensors are no longer reading white. By making the condition for determining an intersection if (Interflag && UpdateFlag), NVR only updates the number of intersections the traversed the first time it senses it -- this resolves the first case discussed above. To resolve the second case NVR also has another flag, denoted errorflag. errorflag is instantiated as 0 and represents when the robot is in the process of self-correcting line following. In the line following function go_straight()there are three conditional statements that determine the robot’s behavior at any given moment: if (abs(error) <= ERROR_RANGE), else if (error > ERROR_RANGE),  else if (error < -(ERROR_RANGE)). The first condition represents that the robot correctly positioned over the line with minimum error, the second when the robot is too right and the third when the robot is too left. If the robot is either too right or too left, it will begin self correcting. Thus, errorflag is set to 1 in these conditions, and reset to 0 in the first condition where error is minute. NVR is able to only detect true intersections through the condition if(interflag && updateFlag && ~errorflag).</p>
 
 
               <h5> Maze Traversal </h5>
-              <p> As NVR travels through the maze, he has to make decisions. He uses walls to determine where he’s allowed to turn, but often has more than one possible direction to travel in. More details about this is detailed in milestone 3.
+              <p> As NVR travels through the maze, he has to make decisions. He uses walls to determine where he’s allowed to turn, but often has more than one possible direction to travel in. NVR uses a DFS algorithm to determine his next position. Given his unique and vibrant personality, you will probably not be surprised to hear that NVR see the world in a very unique way. Consider the unexplored terrain of the final competition: the only thing known is that the strange land is nine squares in length, nine squares in width, and surrounded on all the perimeter with walls. But what lies inside is a mystery, one which fills NVR with unfathomable depths of wanderlust. However, NVR is picky: he want to go everywhere: explore each and every node in this mysterious land, take note of every wall, but he does not like to waste time by going nodes he has already visited.  <br>
+                
+                Each node has it’s own number. To determine the xy coordinates of the number simply use the following conversion: X = rem(#,9)-1; Y = floor(#/9) where the # represents the node number. Node 1 correlates to (0,0) Node 10 (0,1) and so on. To keep track of where he has gone, and where he wants to go, NVR has two 1x81 arrays of zeros (path and frontier), each of which has their own pointer (curpath and curfront). Path has a second pointer called lastBranch, a counter variable numTraversed that keeps track of how many nodes have been visited, and a global int newpos that describes the next position NVR will visit. 
+When a new location is traversed, the corresponding number to that location replaces the zero in path. 
+Example: 5 points have been traversed and no wall encountered, then path[81] = {1,10, 19, 28, 37, 0, 0...0}. and curpath = 4. curpath is the pointer to path (gives the indice that corresponds to the current position, curpos = path[curpath]. Frontier is also an array (this was to avoid adding the same value to the frontier multiple times, as stacks can not be searched) that keeps track of the points NVR wants to visit. curfront is the pointer to the frontier. In the above example (assuming that 2, 11, 20, 29, 38 do not contain any walls), the frontier = {2, 11, 20, 29, 38, 0, 0...0} and curfront = 4. lastBranch is a pointer to the indice in path that would led to the latest frontier point. numTraversed is the total number of new points traversed by the robot at any given moment (in the example it would be 5). This was done because dynamic memory allocation is difficult and computationally expensive in Arduino <br>
+                
+                The path begins with the indice 0 set to 1. This is because even though NVR did not technically see the node with his line followers, he is standing over it and feels that that is close enough. Really, NVR can be quite temperamental at times. 
+This is the main loop that determines NVR’s actions at any given moment:
+                <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">if</span>(path[curpath] <span style="color: #333333">==</span> <span style="color: #0000DD; font-weight: bold">1</span>){
+    updateFrontier();
+  } 
+  go_straight();
+  <span style="color: #008800; font-weight: bold">if</span>(interflag <span style="color: #333333">&amp;&amp;</span> updateFlag <span style="color: #333333">&amp;&amp;</span> <span style="color: #333333">~</span>errorflag){
+    updatePath();
+    updateFrontier();
+    decideNextDir();
+    updateFlag <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">0</span>;
+  }
+</pre></div>
+
+                NVR goes straight until reaching an intersection. After reaching an intersection, NVR checks if it’s new (by searching through path) and updates it’s path array so that the just traversed position has been added and that curpath points to it and numTraversed increased. To get the node number of the new position, NVR quickly checks his compass, the global variable dir (N = 1, S = 2, E = 3, W = 4). If he is currently traveling north, he adds 9 to to his current position (which is always path[curpath]), if south then subtracts 9, if east then adds 1, and if west then subtracts 1. There is no fear of NVR obtaining the wrong position when it on the edge of the board because the wall sensors disavow that coordinate as viable option. <br>
+
+NVR then updates frontier (the place he could have gone, and will go later) by checking for the presence of walls on the right and left and searches through the path and frontier array to ensure that the potential positions have not already been traversed. After ensuring that the left and/or right position was a new, viable option, it is added to the frontier. updateFrontier also included a call to updateFrontierWPath(), which checks if the point that was just traversed and added to path was also in the frontier. If it was it replaces it with 0, and shifter the frontier positions and pointer back to reflect the new frontier.
+If there is any new addition to the frontier, lastBranch is updated accordingly. <br>
+
+              <code>decideNextDir()<code> decides the next direction of NVR. It takes the current position and checks the front, left and right wall sensors. If it is possible (if the position is not blocked by a wall and has not yet been traversed) then NVR continues to go straight -- dir does not change. If there is a front wall or the position ahead is blocked, then NVR checks if it possible to turn right (N=>E, E=>S, S=>W, W=>N). If right is a viable option, dir is updated accordingly and turn(right) is called. If it is not possible to turn right (if it location is already traversed or blocked by a wall, NVR checks if he can turn left. Likewise if left is viable option then dir is updated and turn(left) is called. If NVR can not turn left, the function moveDFS() is called. decideNextDir() also leads where NVR sends back messages to his friend the PC about the walls he has seen. <br>
+
+  <code>moveDFS()<code>compares NVR’s current position (curpos = path[curpath]) and the last position where he could have options to go somewhere new (indicated by the frontier): branch = path[lastBranch]. The new location NVR wishes to go to is denoted newfront = frontier[curfront]. To get to this new position NVR begins his arduous journey. First, he determine which of his neighboring four points would be the best option by eliminating the ones blocked with walls and choosing the oldest of the remaining (nextloc = findOldest(curpos)). Then the function getDirnMove(curpos, nextloc) is called, this function get’s the direction and turns the robot accordingly so that it faces nextloc while it is situated on curpos. For an example if the nextloc was 5 and curpos was 4 the robot would turn right and set dir to 3 (East). The robot then moves forward until reaching the next intersection (which is nextloc). The curpath pointer is updated accordingly. From that point, the robot traversed backward until it reaches the position described by branch. After reaching branch NVR turns one last time so that he faces the newfront (the latest position in the frontier) and resets the curpath position (curpath = numTraversed-1). Now, the next time the loop begins, NVR will be facing an viable position that is new and not blocked by any wall. <br>
+
               </p>
 
 
