@@ -50,8 +50,9 @@
               <h2 class="text-uppercase text-left">Final Design</h2>
               <p class="item-intro text-muted"> FINALLY. The final design. All the blood, sweat, and tears this semester culminating up to this one point...</p>
 
-              <p> This semester in ECE 3400, we created our robot, lovingly named NVR (which stands for Nice Voyager Robot). NVR can follow lines, avoid walls, and send his explorations to a nearby base station! Read on to learn about what NVR can do and how he does it!</p>
-              <p> [Final Competition Video] </p>
+              <p> This semester in ECE 3400, we created our robot, lovingly named NVR (which stands for Nice Voyager Robot). NVR can follow lines, avoid walls, and send his explorations to a nearby base station! Read on to learn about what NVR can do and how he does it! <br></p>
+              
+              <iframe width="560" height="315" src="https://www.youtube.com/embed/Rp6_1zcMZjA" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
               
 <!-- HARDWARE DESCRIPTION -->  
@@ -107,7 +108,7 @@
               </p>
               
               <p>
-              The walls in the maze limit the directions that NVR is allowed to travel. In order to give him a wide view of the maze, we added 3 wall sensors. With a line sensor on each the front, left and right, NVR is able to look at all possible paths. If we had less wall sensors, NVR would have to turn in order to know which paths are available. Therefore, having all 3 sensors will reduce unnecessary turning and help NVR make decisions faster. However, NVR often has to make a decision on which path to take. To learn more about how NVR decides between multiple paths, check out our description of maze traversal further below.<br>
+              The walls in the maze limit the directions that NVR is allowed to travel. In order to give him a wide view of the maze, we added 3 wall sensors. With a line sensor on each the front, left and right, NVR is able to look at all possible paths. If we had less wall sensors, NVR would have to turn in order to know which paths are available. Therefore, having all 3 sensors will reduce unnecessary turning and help NVR make decisions faster. However, NVR often has to make a decision on which path to take. To learn more about how NVR decides between multiple paths, check out our description of maze traversal further below.</p>
               <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #007020">bool</span> wallDetected(){
   <span style="color: #007020">int</span> distance <span style="color: #333333">=</span> analogRead(front_wall);
   Serial<span style="color: #333333">.</span>println(distance);
@@ -116,9 +117,8 @@
 }
 </pre></div>
 
-              
-              [describe radio communication]
-              </p>
+              <p> The radio chip is also on this level. Specifically, we used Nordic nRF24L01. The hardware was decently simple, as the majority of the work to set it up is simply the voltage regulator from 5 volts to 3.3 volts. We set up a protocol for data sent between the robot and the base station - namely specific bits for x and y locations, and then additional bits for wall set ups. <br>
+              In the end, something we also thought to include was a pre-package to send from the robot. In other words, we set the robot to send packages of the entire maze outer walls. This was then read by the base station and allowed us to have some back up just in case traversal seriously failed. </p>
             
             
               <!-- LAYER 2 -->  
@@ -128,11 +128,29 @@
             
               <p>We added a mux in order to have more analog input pins, so NVR has more sensors to learn about the maze he is exploring. The mux allows us to add a third wall sensor and a third line sensor. The mux works by setting its select pins. Setting the individual select pins HIGH or LOW allow us to read the values of the sensors connected at each of its input pins. Each select pin (A,B,C) connects to a digit input (2,3 and 4), and the mux output (COM OUT/IN) connects to analog pin A2. The wall sensors are connected to [insert pins the wall sensors connect to]. The third line sensor connects to [insert pin the line sensor connects to]. </p>
               
-              <p> The pushbutton has two wires that connect to NVR. The the red wire connects to the 5V power. The grey wire connects to digital pin 7 on the arduino. That row on the breadboard also connects a 10KΩ Resistor to ground. As is, the pushbutton sends 0 to the arduino. However, when the button is pressed, the pushbutton sends 1 to the arduino. We have added this functionality to the detectAudio() function, as a second way to break out of the infinite while loop. <br>
+              <img class="img-fluid d-block mx-auto" width="300" height="60" src="./img/final/mux schematic.png" alt="">
 
-              [insert pushbutton code]<br>
-              [and closer picture of the pushbutton circuit]
-              </p>
+              <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #007020">int</span> readSensor (const byte which) {
+  <span style="color: #333333">//</span> select correct MUX channel
+  digitalWrite (addressA, (which <span style="color: #333333">&amp;</span> <span style="color: #0000DD; font-weight: bold">1</span>) <span style="color: #FF0000; background-color: #FFAAAA">?</span> HIGH : LOW);  <span style="color: #333333">//</span> low<span style="color: #333333">-</span>order bit
+  digitalWrite (addressB, (which <span style="color: #333333">&amp;</span> <span style="color: #0000DD; font-weight: bold">2</span>) <span style="color: #FF0000; background-color: #FFAAAA">?</span> HIGH : LOW);
+  digitalWrite (addressC, (which <span style="color: #333333">&amp;</span> <span style="color: #0000DD; font-weight: bold">4</span>) <span style="color: #FF0000; background-color: #FFAAAA">?</span> HIGH : LOW);  <span style="color: #333333">//</span> high<span style="color: #333333">-</span>order bit
+  <span style="color: #333333">//</span> now read the sensor
+  <span style="color: #008800; font-weight: bold">return</span> analogRead (mux);
+} 
+</pre></div>
+
+              
+              <p> The pushbutton has two wires that connect to NVR. The the red wire connects to the 5V power. The grey wire connects to digital pin 7 on the arduino. That row on the breadboard also connects a 10KΩ Resistor to ground. As is, the pushbutton sends 0 to the arduino. However, when the button is pressed, the pushbutton sends 1 to the arduino. We have added this functionality to the detectAudio() function, as a second way to break out of the infinite while loop. </p>
+
+              <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">while</span>(<span style="color: #0000DD; font-weight: bold">1</span>){
+   <span style="color: #008800; font-weight: bold">if</span> (digitalRead(pushbutton) <span style="color: #333333">==</span> HIGH){
+      <span style="color: #008800; font-weight: bold">break</span>;
+   }
+}
+</pre></div>
+
+              <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/final/mux.jpg" alt="">
               
               
 <!-- SOFTWARE DESCRIPTION -->  
