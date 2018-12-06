@@ -126,7 +126,8 @@
               <p>Layer two holds the Multiplexer (mux) and the push button. It also holds the IR hat. The mux provides extra places for analog inputs, and the push button provides a backup to the acoustic circuit, so just in case NVR doesn’t hear the 660Hz signal, we can directly tell him to begin his journey.</p>
               <img class="img-fluid d-block mx-auto" width="400" height="80" src="./img/final/Layer 2.jpg" alt="">
             
-              <p>We added a mux in order to have more analog input pins, so NVR has more sensors to learn about the maze he is exploring. The mux allows us to add a third wall sensor and a third line sensor. The mux works by setting its select pins. Setting the individual select pins HIGH or LOW allow us to read the values of the sensors connected at each of its input pins. Each select pin (A,B,C) connects to a digit input (2,3 and 4), and the mux output (COM OUT/IN) connects to analog pin A2. The wall sensors are connected to [insert pins the wall sensors connect to]. The third line sensor connects to [insert pin the line sensor connects to]. </p>
+              <p>We added a mux in order to have more analog input pins, so NVR has more sensors to learn about the maze he is exploring. The mux allows us to add a third wall sensor and a third line sensor. The mux works by setting its select pins. Setting the individual select pins HIGH or LOW allow us to read the values of the sensors connected at each of its input pins. Each select pin (A,B,C) connects to a digit input (2,3 and 4), and the mux output (COM OUT/IN) connects to analog pin A2. </p>
+              <!--The wall sensors are connected to [insert pins the wall sensors connect to]. The third line sensor connects to [insert pin the line sensor connects to].-->
               
               <img class="img-fluid d-block mx-auto" width="300" height="60" src="./img/final/mux schematic.png" alt="">
 
@@ -162,18 +163,12 @@
 
 
               <h5> Maze Traversal </h5>
-              <p> As NVR travels through the maze, he has to make decisions. He uses walls to determine where he’s allowed to turn, but often has more than one possible direction to travel in. Here’s how NVR makes decisions on where to go when he has many options: <br>
-
-              [describe maze traversal]
+              <p> As NVR travels through the maze, he has to make decisions. He uses walls to determine where he’s allowed to turn, but often has more than one possible direction to travel in. More details about this is detailed in milestone 3.
               </p>
 
 
               <h3> Work Distribution </h3>
-              <p> The Final Design Distribution is as follows: <br>
-                  &emsp; - <br>
-                  <!--&emsp; - <br>-->
-                  <!--&emsp; - <br>-->
-                  The Lab Report Work Distribution is as follows: <br>
+              <p> The Lab Report Work Distribution is as follows: <br>
                   &emsp; - Priya: Started the initial report draft <br>
                   &emsp; - Joyce, Nathalia, Vini: Added their contributions <br>
                   &emsp; - Nathalia: All Pictures and Videos<br>
